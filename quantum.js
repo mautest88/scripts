@@ -61,7 +61,7 @@ module.exports.getCookies = async () => {
         if (!env.Enable) {
             var m1 = `帐呺：${env.UserRemark || pt_pin}已经过期了，请重新获取提交吧！`;
             console.log(m1)
-            sendNotify(m1);
+            await sendNotify(m1);
         } else {
             cookies.push(env)
         }
@@ -178,8 +178,9 @@ module.exports.disableEnvs = async (envs) => {
  * @param {any} envType
  * @param {any} enable
  * @param {any} qlPanelId
+ * @param {any} userId
  */
-module.exports.allEnvs = async (key, envType, enable, qlPanelId) => {
+module.exports.allEnvs = async (key, envType, enable, qlPanelId,userId) => {
     const body = await api({
         url: 'api/env',
         method: 'get',
@@ -188,6 +189,7 @@ module.exports.allEnvs = async (key, envType, enable, qlPanelId) => {
             envType: envType,
             enable: enable,
             qlPanelId: qlPanelId,
+            UserId: userId,
             PageIndex: 1,
             PageSize: 999999999
         },
