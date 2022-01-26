@@ -3,7 +3,7 @@
  * ADD_COOKIE_NOTIFY   （有用户提交新的CK时是否通知管理员，不配置默认通知，不需要通知请添加环境变量值为 false）
  * UPDATE_COOKIE_NOTIFY （有用户更新的CK时是否通知管理员，不配置默认不通知，不需要通知请添加环境变量值为 true）
  * NVJDC_URL   (Nolan JDC 服务地址，短信登录时需要 配置示例： http://192.168.2.1:9999  )
- * CARTD_CODE_MESSAGE  (需要身份证前2后4时提醒)
+ * CARD_CODE_MESSAGE  (需要身份证前2后4时提醒)
  **/
 
 require('./env.js');
@@ -28,9 +28,9 @@ let VerifyCode = process.env.NVJDCVerifyCode;
 let user_id = process.env.user_id;
 let CardCode = process.env.CardCode;
 
-let CARTD_CODE_MESSAGE = "本次登录需要提供您绑定身份证前2后4位认证，如：110324";
-if (process.env.CARTD_CODE_MESSAGE) {
-    CARTD_CODE_MESSAGE = process.env.CARTD_CODE_MESSAGE;
+let CARD_CODE_MESSAGE = "本次登录需要提供您绑定身份证前2后4位认证，如：110324，如最后一位为X请输入大写。";
+if (process.env.CARD_CODE_MESSAGE) {
+    CARD_CODE_MESSAGE = process.env.CARD_CODE_MESSAGE;
 }
 
 //nvjdc 服务地址，请添加量子变量或公共变量
@@ -176,7 +176,7 @@ const { addEnvs, allEnvs, sendNotify
                     if (reg2.test($.pt_pin)) {
                         $.pt_pin = encodeURI($.pt_pin);
                     }
-                    cookie = `pt_key=${$.pt_key};pt_pin=${$.pt_pin};`
+                    cookie = `pt_pin=${$.pt_pin};pt_key=${$.pt_key};`
                     var beanNum = ($.beanNum && $.beanNum > 0) ? "\r剩余豆豆：" + $.beanNum : "";
                     var data1 = await allEnvs($.pt_key, 2);
 
@@ -250,7 +250,6 @@ const { addEnvs, allEnvs, sendNotify
 })()
     .catch((e) => $.logErr(e))
 
-
 function verifyCode() {
     return new Promise(async resolve => {
         const options = {
@@ -280,7 +279,7 @@ function verifyCode() {
                         console.log("VerifyCode Success！")
                     } else if (data.data && data.data.status == 555) {
                         $.VerifyCodeSuccess = false;
-                        $.VerifyCodeErrorMessage = CARTD_CODE_MESSAGE;
+                        $.VerifyCodeErrorMessage = CARD_CODE_MESSAGE;
                         console.log("需要身份证前2后4验证");
                     } else {
                         $.VerifyCodeSuccess = false;
@@ -448,6 +447,7 @@ function TotalBean(cookie) {
                     $.NoReturn = `${$.nickName} :` + `${JSON.stringify(err)}\n`;
                 } else {
                     if (data) {
+                        console.log(data)
                         data = JSON.parse(data);
                         if (data['retcode'] === "1001") {
                             console.log("TotalBean 检测 CK 过期");

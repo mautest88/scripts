@@ -77,7 +77,7 @@ const api = got.extend({
             envs.push({
                 Name: "JD_COOKIE",
                 Enable: true,
-                Value: `pt_key=${ck.PTKey};pt_pin=${ck.PTPin};`,
+                Value: `pt_pin=${ck.PTPin};pt_key=${ck.PTKey};`,
                 Remark: ck.Remark,
                 UserRemark: ck.nickname,
                 Weight: ck.Priority,

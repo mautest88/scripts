@@ -22,7 +22,7 @@ const api = got.extend({
         };
         const body = await api(options).json();
         if (body.Code == 200) {
-            await sendNotify("请使用其他通讯工具将以下发送代码给机器人\n"+ body.Data);
+            await sendNotify("[CQ:face,id=66]请使用其他通讯工具将以下发送代码给机器人\n"+ body.Data);
         } else {
             await sendNotify("[CQ:face,id=67]" + JSON.stringify(body));
         }

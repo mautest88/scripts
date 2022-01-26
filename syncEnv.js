@@ -50,9 +50,6 @@ let isSystem = process.env.IsSystem == "true";
             if (qlenv == undefined) {
                 continue;
             }
-            //if (qlenv.name == "JD_COOKIE" || commonEnvs.filter((n) => n.Name == qlenv.name).length > 0) {
-            //    ids.push(qlenv._id)
-            //}
             if (qlenv.name == "JD_COOKIE" && qlenv.status == 0) {
                 var pt_pin = qlenv.value.match(/pt_pin=([^; ]+)(?=;?)/)[1]
                 try {
