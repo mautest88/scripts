@@ -19,7 +19,9 @@ var message = process.env.OVERDUE_NOTIFY_MSG || "您的以下京东账号已经�
         ts.push(envs[i].UserRemark);
     }
     console.log(ts)
-    await sendNotify(message + "\n" + ts.join(","));
+    if (ts.length > 0) {
+        await sendNotify(message + "\n" + ts.join(","));
+    }
 })();
 
 
