@@ -11,7 +11,7 @@ let ManagerQQ = process.env.ManagerQQ; //管理员QQ
 let EnableConc = process.env.EnableConc == "True"; //是否开启并发
 let IsSystem = process.env.IsSystem == "true"; //是否系统执行。
 //------------- 量子助手系统环境变量部分 -------------
-let prefixUrl = process.env.serverAddres || 'http://localhost:5088';
+let prefixUrl = process.env.serverAddres || 'http://localhost:5089';
 
 
 const api = got.extend({

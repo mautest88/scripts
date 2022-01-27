@@ -1,5 +1,4 @@
 ﻿// 一言
-
 require('./env.js');
 const got = require('got');
 const {
@@ -11,8 +10,6 @@ const api = got.extend({
 });
 
 !(async () => {
-
-    var len = 20;
     await api({
         url: 'https://api.uixsj.cn/hitokoto/get',
         headers: {
