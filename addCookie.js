@@ -29,7 +29,7 @@ let Phone = process.env.NVJDCPhone;
 let VerifyCode = process.env.NVJDCVerifyCode;
 let user_id = process.env.user_id;
 let CardCode = process.env.CardCode;
-let JINGXIANGZHI = (process.env.JINGXIANGZHI || 1000) * 1;
+let JINGXIANGZHI = (process.env.JINGXIANGZHI || 3000) * 1;
 let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
 let CARD_CODE_MESSAGE = "本次登录需要提供您绑定身份证前2后4位认证，如：110324，如最后一位为X请输入大写。";
