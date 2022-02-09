@@ -4,6 +4,8 @@
  * UPDATE_COOKIE_NOTIFY （有用户更新的CK时是否通知管理员，不配置默认不通知，不需要通知请添加环境变量值为 true）
  * NVJDC_URL   (Nolan JDC 服务地址，短信登录时需要 配置示例： http://192.168.2.1:9999  )
  * CARD_CODE_MESSAGE  (需要身份证前2后4时提醒)
+ * JINGXIANGZHI     (京享值过滤，低于该值不允许提交)
+ * JINGXIANGZHI_MSG (京享值过低提醒)
  **/
 
 require('./env.js');
@@ -27,6 +29,8 @@ let Phone = process.env.NVJDCPhone;
 let VerifyCode = process.env.NVJDCVerifyCode;
 let user_id = process.env.user_id;
 let CardCode = process.env.CardCode;
+let JINGXIANGZHI = (process.env.CardCode || 1000) * 1;
+let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
 let CARD_CODE_MESSAGE = "本次登录需要提供您绑定身份证前2后4位认证，如：110324，如最后一位为X请输入大写。";
 if (process.env.CARD_CODE_MESSAGE) {
@@ -152,8 +156,12 @@ const { addEnvs, allEnvs, sendNotify
             $.error = '';
             $.NoReturn = '';
             $.nickName = $.UserName2;
+            $.JingXiang = "";
             console.log(`开始检测【京东账号${$.index}】${$.UserName2} ....\n`);
             await TotalBean(cookie);
+
+
+
             if ($.NoReturn) {
                 await isLoginByX1a0He(cookie);
             } else {
@@ -172,6 +180,22 @@ const { addEnvs, allEnvs, sendNotify
                 await sendNotify("CK检查异常，请稍后重试！", false)
             } else {
                 if ($.isLogin) {
+
+
+                    if (JINGXIANGZHI > 0) {
+                        console.log("判断用户京享值是否大于：" + JINGXIANGZHI);
+                        await TotalBean2(cookie);
+                        if ($.JingXiang) {
+                            console.log("用户京享值：" + $.JingXiang);
+                            $.JingXiang = $.JingXiang.replace("京享值", "") * 1;
+                            if ($.JingXiang < JINGXIANGZHI) {
+                                console.log("用户京享值：" + $.JingXiang + "小于设置值：" + JINGXIANGZHI);
+                                await sendNotify(`账号：${$.nickName}，京享值：${$.JingXiang}，提交失败！\r${JINGXIANGZHI_MSG}`)
+                                continue;
+                            }
+                        }
+                    }
+
                     var reg2 = new RegExp("[\\u4E00-\\u9FFF]+", "g");
                     if (reg2.test($.pt_pin)) {
                         $.pt_pin = encodeURI($.pt_pin);
@@ -239,6 +263,9 @@ const { addEnvs, allEnvs, sendNotify
 发生异常，系统错误：${data.Message}。`, true)
                         continue;
                     }
+                    if ($.levelName) {
+                        beanNum += "\r用户等级：" + $.levelName
+                    }
                     await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length), false);
                 }
                 else {
@@ -302,6 +329,7 @@ function verifyCode() {
         });
     });
 }
+
 
 function VerifyCardCode() {
     return new Promise(async resolve => {
@@ -424,6 +452,56 @@ function AutoCaptcha() {
     });
 }
 
+function TotalBean2(cookie) {
+    return new Promise(async (resolve) => {
+        const options = {
+            url: `https://wxapp.m.jd.com/kwxhome/myJd/home.json?&useGuideModule=0&bizId=&brandId=&fromType=wxapp&timestamp=${Date.now()}`,
+            headers: {
+                Cookie: cookie,
+                'content-type': `application/x-www-form-urlencoded`,
+                Connection: `keep-alive`,
+                'Accept-Encoding': `gzip,compress,br,deflate`,
+                Referer: `https://servicewechat.com/wxa5bf5ee667d91626/161/page-frame.html`,
+                Host: `wxapp.m.jd.com`,
+                'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.10(0x18000a2a) NetType/WIFI Language/zh_CN`,
+            },
+        };
+        $.post(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    $.logErr(err);
+                } else {
+                    if (data) {
+                        data = JSON.parse(data);
+                        if (!data.user) {
+                            $.isLogin = false; //cookie过期
+                            return;
+                        }
+                        const userInfo = data.user;
+
+                        if (userInfo) {
+                            if (!$.nickName)
+                                $.nickName = userInfo.petName;
+                            if ($.beanCount == 0) {
+                                $.beanCount = userInfo.jingBean;
+                                $.isPlusVip = 3;
+                            }
+                            $.JingXiang = userInfo.uclass;
+                        }
+                    } else {
+                        $.log('京东服务器返回空数据');
+                    }
+                }
+            } catch (e) {
+                $.logErr(e);
+            }
+            finally {
+                resolve();
+            }
+        });
+    });
+}
+
 function TotalBean(cookie) {
     return new Promise(async resolve => {
         const options = {
@@ -460,6 +538,8 @@ function TotalBean(cookie) {
                             console.log(JSON.stringify(data.data));
                             $.nickName = (data.data.userInfo.baseInfo.nickname) || data.data.userInfo.baseInfo.curPin || $.nickName;
                             $.pt_pin = data.data.userInfo.baseInfo.curPin;
+                            $.levelName = data.data.userInfo.baseInfo.levelName;
+
                         } else {
                             $.nickName = decodeURIComponent($.UserName);
                             console.log("Debug Code:" + data['retcode']);
