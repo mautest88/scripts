@@ -57,6 +57,7 @@ let isSystem = process.env.IsSystem == "true";
                     //如果青龙中的环境变量更新时间更晚,则使用青龙的环境变量.
                     if (qEnv && qEnv.Value != qlenv.value && Date.parse(qlenv.timestamp) > Date.parse(qEnv.UpdateTime)) {
                         qEnv.Value = qlenv.value;
+                        qEnv.Enable = true;
                         console.log(`容器：${ql.Name}中，pt_pin：${pt_pin} CK更新时间${qlenv.timestamp}，将青龙中的环境变量更新到量子。`);
                         newCKs.push(qEnv);
                     }
