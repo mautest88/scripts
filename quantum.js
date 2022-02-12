@@ -11,14 +11,14 @@ let ManagerQQ = process.env.ManagerQQ; //管理员QQ
 let EnableConc = process.env.EnableConc == "True"; //是否开启并发
 let IsSystem = process.env.IsSystem == "true"; //是否系统执行。
 //------------- 量子助手系统环境变量部分 -------------
-let prefixUrl = process.env.serverAddres || 'http://localhost:5088';
+let prefixUrl = process.env.serverAddres || 'http://localhost:5089';
 
 
 const api = got.extend({
     prefixUrl: prefixUrl,
     retry: { limit: 0 },
 });
-console.log("脚本库更新时间：2022年1月20日 20点40分");
+console.log("脚本库更新时间：2022年2月12日 20点40分");
 // 获取青龙面板信息
 module.exports.getQLPanels = async () => {
     const body = await api({
@@ -241,6 +241,7 @@ async function deleteEnvByIds(ids) {
  * @param {any} isManager 是否发送给管理员
  */
 async function sendNotify(content, isManager, userId) {
+    console.log(content)
     var uuid = user_id;
     if (isManager && !ManagerQQ) {
         console.log(`消息内容：
@@ -254,7 +255,6 @@ ${content}
     if (userId) {
         uuid = userId;
     }
-    console.log(user_id)
     if (serverAddres && user_id) {
         var b = JSON.stringify({
             message: `${content}`,
@@ -283,7 +283,6 @@ ${content}
     }
 }
 
-
 /**
  * 获取环境变量
  * @param {any} name 环境变量名称，全匹配 允许空
@@ -300,6 +299,14 @@ module.exports.getEnvs = getEnvs;
  * @param {any} userId 指定接受消息的用户ID
  */
 module.exports.sendNotify = sendNotify;
+
+/**
+ * 发送通知消息
+ * @param {any} content 发送消息内容
+ * @param {any} isManager 是否发送给管理员
+ * @param {any} userId 指定接受消息的用户ID
+ */
+module.exports.sendNotify2 = sendNotify;
 
 /**
  * 通过账号id集合删除环境变量

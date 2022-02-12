@@ -1,60 +1,50 @@
-// 删除过期CK
+
+/*
+ * 删除过期账号提醒
+ * 可配置环境变量名称：OVERDUE_DEL_NOTIFY_MSG  (删除过期提醒文字)
+ */
+
 require('./env.js');
 const {
-    sendNotify, getEnvs, deleteEnvByIds, syncEnv
+    sendNotify, allEnvs, syncEnv, deleteEnvByIds
 } = require('./quantum');
 
+var message = process.env.OVERDUE_DEL_NOTIFY_MSG || "您的以下京东账号已经过期，管理员已删除：";
+
 !(async () => {
-    //获取所有的CK 
-    var envs = await getEnvs("JD_COOKIE", "pt_key", 2, null);
-    envs = envs.filter((n) => !n.Enable);
-    console.log(`过期CK共${envs.length}个。`);
-    if (envs.length == 0) {
-        console.log("没有过期的CK.");
-        return;
-    }
-    //待删除的变量id
+    var envs = await allEnvs("JD_COOKIE", 2, false, "");
+    console.log("获取过期环境变量" + envs.length + "个");
+    var ts = [];
     var ids = [];
-    //待通知的用户
-    var userIds = [];
+
+
     for (var i = 0; i < envs.length; i++) {
-        var env = envs[i];
-        ids.push(env.Id);
-        var cookie = env.Value;
-        var pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
-        pt_pin = (cookie.match(/pt_pin=([^; ]+)(?=;?)/) && pt_pin)
-        if (env.UserId) {
-            var h = false;
-            for (var x = 0; x < userIds.length; x++) {
-                if (userIds[x].UserId == env.UserId) {
-                    userIds[x].CKs.push(env.UserRemark || pt_pin)
-                    h = true;
-                    break;
-                }
-            }
-            if (!h) {
-                userIds.push({
-                    UserId: env.UserId,
-                    CKs: [env.UserRemark || pt_pin]
-                })
+        ids.push(envs[i].Id);
+        if (t.UserId) {
+            if (ts.length > 0 && ts.filter((t) => t.UserId === envs[i].UserId).length > 0) {
+                ts.filter((t) => t.UserId === envs[i].UserId)[0].List.push(envs[i].UserRemark)
+            } else {
+                ts.push({
+                    UserId: envs[i].UserId,
+                    List: [envs[i].UserRemark]
+                });
             }
         }
     }
-    var body1 = await deleteEnvByIds(ids);
-    console.log("删除过期CK结果：" + JSON.stringify(body1));
-    var body2 = await syncEnv();
-    console.log("单项CK同步结果：" + JSON.stringify(body2));
-    sendNotify(`删除过期CK${envs.length}个。`, true);
-    console.log("开始给韭菜发通知了。");
-    for (var i = 0; i < userIds.length; i++) {
-        console.log(`给杖號：${userIds[i].UserId}发送杖號过期通知。`);
-        var message = "您的杖號过期了";
-        for (var x = 0; x < userIds[i].CKs.length; x++) {
-            message += "\r\n" + userIds[i].CKs[x];
+    if (ids.length > 0) {
+        var body1 = await deleteEnvByIds(ids);
+        console.log("删除过期CK结果：" + JSON.stringify(body1));
+        var body2 = await syncEnv();
+        console.log("单项CK同步结果：" + JSON.stringify(body2));
+        sendNotify(`删除过期CK${envs.length}个。`, true);
+        console.log("开始给韭菜发通知了。");
+        if (ts.length > 0) {
+            for (var i = 0; i < ts.length; i++) {
+                await sendNotify(message + "\n" + ts[i].List.join(","), false, ts[i].UserId);
+            }
         }
-        await sendNotify(message, false, userIds[i].UserId);
+    } else {
+        await sendNotify("没有过期的账号。", true);
     }
-    console.log(`一共给${userIds.length}个韭菜发送了CK 过期通知。`);
-})().catch((e) => {
-    console.log(e);
-});
+
+})();
