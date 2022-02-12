@@ -75,7 +75,7 @@ let isLogin = true;
                     var overdueDate = moment(t.UpdateTime).add(30, 'days');
                     var day = overdueDate.diff(new Date(), 'day');
                     userNotifyMessage += `【东东账号】：${UserName2}，有效！
-【预计失效】${day}天后，${moment(t.UpdateTime).format("MM月DD日")}失效。\n`
+【预计失效】${day}天后，${moment(t.overdueDate).format("MM月DD日")}失效。\n`
                 }
             }
             else {
