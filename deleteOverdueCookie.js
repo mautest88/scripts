@@ -3,8 +3,6 @@
  * 删除过期账号提醒
  * 可配置环境变量名称：OVERDUE_DEL_NOTIFY_MSG  (删除过期提醒文字)
  */
-
-require('./env.js');
 const {
     sendNotify, allEnvs, syncEnv, deleteEnvByIds
 } = require('./quantum');
@@ -20,7 +18,7 @@ var message = process.env.OVERDUE_DEL_NOTIFY_MSG || "您的以下京东账号已
 
     for (var i = 0; i < envs.length; i++) {
         ids.push(envs[i].Id);
-        if (t.UserId) {
+        if (envs[i].UserId) {
             if (ts.length > 0 && ts.filter((t) => t.UserId === envs[i].UserId).length > 0) {
                 ts.filter((t) => t.UserId === envs[i].UserId)[0].List.push(envs[i].UserRemark)
             } else {
