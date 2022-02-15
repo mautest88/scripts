@@ -6,9 +6,10 @@
  * CARD_CODE_MESSAGE  (需要身份证前2后4时提醒)
  * JINGXIANGZHI     (京享值过滤，低于该值不允许提交)
  * JINGXIANGZHI_MSG (京享值过低提醒)
+ * QuickSMS (量子短信服务)
  **/
 
-require('./env.js');
+var fs = require('fs'); // 引入fs模块
 const $ = new Env('添加并验证Cookie');
 let ADD_COOKIE = process.env.ADD_COOKIE || "";
 
@@ -25,11 +26,13 @@ if (process.env.UPDATE_COOKIE_NOTIFY) {
 }
 
 let NVJDCStart = process.env.NVJDCStart;
+let QS = process.env.QuickSMS;
 let Phone = process.env.NVJDCPhone;
 let VerifyCode = process.env.NVJDCVerifyCode;
 let user_id = process.env.user_id;
 let CardCode = process.env.CardCode;
-let JINGXIANGZHI = (process.env.JINGXIANGZHI || 1000) * 1;
+let QuickLogin = process.env.QuickLogin;
+let JINGXIANGZHI = (process.env.JINGXIANGZHI || 500) * 1;
 let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
 let CARD_CODE_MESSAGE = "本次登录需要提供您绑定身份证前2后4位认证，如：110324，如最后一位为X请输入大写。";
@@ -49,6 +52,8 @@ $.VerifyCodeSuccess = false;
 $.VerifyCodeErrorMessage = "";
 
 $.NVJDCMessage = "";
+$.QSMsg = "";
+$.QSData = "";
 
 
 let CommunicationType = process.env.CommunicationType; //通讯类型
@@ -120,6 +125,33 @@ const { addEnvs, allEnvs, sendNotify
         } else {
             await sendNotify("OK，请输入您的手机号码：");
             return;
+        }
+    }
+
+    if (QuickLogin) {
+        console.log(`QuickLogin：${QuickLogin}，Phone：${Phone}，VerifyCode：${VerifyCode}`)
+        if (Phone && VerifyCode) {
+            console.log("开始验证短信验证码")
+            await VerifyQS();
+            console.log("验证短信验证码结果：" + $.QSMsg)
+            if ($.QSData && $.QSData.indexOf("pt_key") > 0) {
+                cookies = [];
+                cookies.push($.QSData);
+            } else {
+                await sendNotify($.QSData);
+                return;
+            }
+
+        } else if (Phone) {
+            console.log("开始获取短信验证码")
+            await SendQS();
+            console.log("获取短信验证码结果：" + $.QSMsg)
+            if ($.QSMsg) {
+                await sendNotify($.QSMsg);
+            }
+            return;
+        } else {
+            await sendNotify("请回复您的手机号：");
         }
     }
     console.log("触发指令信息：" + ADD_COOKIE);
@@ -275,7 +307,10 @@ const { addEnvs, allEnvs, sendNotify
         }
     }
 })()
-    .catch((e) => $.logErr(e))
+    .catch((e) => {
+        console.log("出现异常");
+        $.logErr(e)
+    })
 
 function verifyCode() {
     return new Promise(async resolve => {
@@ -371,6 +406,49 @@ function VerifyCardCode() {
                 }
             } catch (e) {
                 console.log("SendSMS 请求异常：" + JSON.stringify(e))
+            } finally {
+                resolve();
+            }
+        });
+    });
+}
+
+
+function SendQS() {
+    return new Promise(async resolve => {
+        const options = {
+            url: QS + "/api/SMS/" + Phone,
+            headers: {
+                "Content-Type": "text/plain; charset=utf-8"
+            }
+        };
+        $.get(options, (err, resp, data) => {
+            try {
+                $.QSMsg = data
+                //sendNotify(data);
+            } catch (e) {
+                console.log("SendQS 请求异常：" + JSON.stringify(e))
+            } finally {
+                resolve();
+            }
+        });
+    });
+}
+
+function VerifyQS() {
+    return new Promise(async resolve => {
+        const options = {
+            url: QS + "/api/SMS/" + Phone + "/" + VerifyCode,
+            headers: {
+                "Content-Type": "text/plain; charset=utf-8"
+            }
+        };
+        $.get(options, (err, resp, data) => {
+            try {
+                $.QSData = data
+                //sendNotify(data);
+            } catch (e) {
+                console.log("VerifyQS 请求异常：" + JSON.stringify(e))
             } finally {
                 resolve();
             }
@@ -988,4 +1066,5 @@ function Env(t, e) {
     }
         (t, e)
 }
+
 
