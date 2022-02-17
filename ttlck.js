@@ -47,10 +47,9 @@ const api = got.extend({
                 EnvType: 3,
                 CommunicationType: CommunicationType
             }
-            var data1 = await allEnvs(mobile, 2);
+            var data1 = await allEnvs(mobile, 3);
             data1 = data1.filter((n) => n.Name == "ttlhd");
             if (data1.length > 0) {
-
                 c.Id = data1[0].Id;
                 c.Weight = data1[0].Weight;
                 c.QLPanelEnvs = data1[0].QLPanelEnvs;

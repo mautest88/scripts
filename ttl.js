@@ -2,83 +2,45 @@ const $ = new Env('太太乐');
 var request = require("request");
 let status;
 status = (status = ($.getval("ttlstatus") || "1")) > 1 ? `${status}` : ""; // 账号扩展字符
-let ttlhdArr = [], ttlcount = ''
+let ttlhdArr = []
 
-let ttlhd = $.isNode() ? (process.env.ttlhd ? process.env.ttlhd : "") : ($.getdata('ttlhd') ? $.getdata('ttlhd') : "")
 
-let ttlhds = ""
 const host = 'https://www.ttljf.com/ttl_chefHub/'
 
+
+const {
+    sendNotify, allEnvs
+} = require('./quantum');
+
+const got = require('got');
+
+
+const api = got.extend({
+    retry: { limit: 0 },
+});
+
+
 !(async () => {
-    if (typeof $request !== "undefined") {
-        await ttlck()
-    } else {
-        if (!$.isNode()) {
-            ttlhdArr.push($.getdata('ttlhd'))
-            let ttlcount = ($.getval('ttlcount') || '1');
-            for (let i = 2; i <= ttlcount; i++) {
-                ttlhdArr.push($.getdata(`ttlhd${i}`))
-            }
-            console.log(`------------- 共${ttlhdArr.length}个账号-------------\n`)
-            for (let i = 0; i < ttlhdArr.length; i++) {
-                if (ttlhdArr[i]) {
-                    ttlhd = ttlhdArr[i];
-                    $.index = i + 1;
-
-                    console.log(`\n开始【太太乐${$.index}】`)
-                    console.log(`\n如需抓token 打开微信小程序 太太乐餐饮服务\n请求头里面token\n 多账号@隔开\n如需换话费 下载太太乐APP积分兑换话费\n如果没库存了 自己隔天再看`)
-
-                    await sign()
-                    await blog()
-                    await my()
-                }
-            }
-        } else {
-            if (process.env.ttlhd && process.env.ttlhd.indexOf('&') > -1) {
-                ttlhdArr = process.env.ttlhd.split('&');
-            } else {
-                ttlhds = [process.env.ttlhd]
-            };
-            Object.keys(ttlhds).forEach((item) => {
-                if (ttlhds[item]) {
-                    ttlhdArr.push(ttlhds[item])
-                }
-            })
-            console.log(`共${ttlhdArr.length}个cookie`)
-            for (let k = 0; k < ttlhdArr.length; k++) {
-                $.message = ""
-                ttlhd = ttlhdArr[k]
-                $.index = k + 1;
-
-                console.log(`\n开始【太太乐${$.index}】`)
-                console.log(`\n如需抓token 打开微信小程序 太太乐餐饮服务\n请求头里面token\n 多账号@隔开\n如需换话费 下载太太乐APP积分兑换话费\n如果没库存了 自己隔天再看`)
-                await sign()
-                await blog()
-                await my()
-            }
-
-
-        }
+    if (process.env.ttlhd) {
+        ttlhdArr = process.env.ttlhd.split('&');
+    }
+    console.log(`共${ttlhdArr.length}个太太乐 token`)
+    console.log(`任务提示未登录请通过微信小程序“太太乐餐饮服务”登陆一次\n并且通过“太太乐餐饮服务”公众号 底部“积分商城”，“完善信息”`)
+    for (let k = 0; k < ttlhdArr.length; k++) {
+        $.message = ""
+        ttlhd = ttlhdArr[k]
+        console.log(`开始【太太乐${k + 1}】`)
+        await $.wait(5000);
+        await sign()
+        await $.wait(5000);
+        await blog()
+        await $.wait(5000);
+        await my()
     }
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
 
-
-function ttlck() {
-    if ($request.url.indexOf("user") > -1) {
-        const ttlhd = $request.url
-
-        if (ttlhd) $.setdata(ttlhd, `ttlhd${status}`)
-
-
-        $.log(ttlhd)
-        ttlhd = ttlhd.match(/loginToken=(.*?)&/)[1]
-        $.log(ttlhd)
-        $.msg($.name, "", '太太乐' + `${status}` + '数据获取成功！')
-
-    }
-}
 
 async function blog() {
     return new Promise((resolve) => {
@@ -89,15 +51,12 @@ async function blog() {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 }
-
                 data = JSON.parse(body);
                 if (data.code == 0) {
-                    console.log('\n分享任务：' + data.message)
-
+                    console.log('分享任务：' + data.message)
                 } else
                     if (data.code != 0) {
-                        console.log('\n分享任务：' + data.message)
-
+                        console.log('分享任务：' + data.message)
                     }
             } catch (e) {
                 $.logErr(e, resp)
@@ -118,12 +77,11 @@ async function sign() {
                 }
                 data = JSON.parse(body);
                 if (data.code == 0) {
-                    console.log('\n签到任务：' + data.message)
+                    console.log('签到任务：' + data.message)
 
                 } else
                     if (data.code != 0) {
-                        console.log('\n签到任务：' + data.message)
-
+                        console.log('签到任务：' + data.message)
                     }
             } catch (e) {
                 $.logErr(e, resp)
@@ -135,14 +93,13 @@ async function sign() {
 }
 function my() {
     return new Promise((resolve) => {
-
         $.get(ttlget('user/api/my'), async (err, resp, data) => {
 
             try {
                 if (err) {
                     console.log(`${JSON.stringify(err)}`)
                     console.log(`${$.name} API请求失败，请检查网路重试`)
-                }// else {
+                }
                 if (safeGet(data)) {
                     data = JSON.parse(data);
                     if (data.code == 0) {
@@ -154,8 +111,6 @@ function my() {
                     console.log(data.message)
 
                 }
-                //}
-
             } catch (e) {
                 $.logErr(e, resp)
             } finally {
@@ -168,7 +123,6 @@ function my() {
 
 function ttl(a, body) {
     return {
-
         url: `${host}${a}`,
         body: `${body}`,
         headers: {
@@ -211,17 +165,6 @@ function safeGet(data) {
         console.log(e);
         console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
         return false;
-    }
-}
-function jsonParse(str) {
-    if (typeof str == "string") {
-        try {
-            return JSON.parse(str);
-        } catch (e) {
-            console.log(e);
-            $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-            return [];
-        }
     }
 }
 
