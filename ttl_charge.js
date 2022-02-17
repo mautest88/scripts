@@ -31,7 +31,7 @@ const api = got.extend({
     var t = await allEnvs("ttlhd", 3, true);
     if (t.length > 0) {
         for (var c = 0; c < 5; c++) {
-            console.log(`开始第${i + 1}次兑换`);
+            console.log(`开始第${c + 1}次兑换`);
             for (var x = 0; x < t.length; x++) {
                 var r = JSON.parse(t[x].UserRemark)
                 for (var i = 0; i < ids.length; i++) {
