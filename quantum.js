@@ -241,7 +241,6 @@ async function deleteEnvByIds(ids) {
  * @param {any} isManager 是否发送给管理员
  */
 async function sendNotify(content, isManager, userId) {
-    console.log(content)
     var uuid = user_id;
     if (isManager && !ManagerQQ) {
         console.log(`消息内容：
