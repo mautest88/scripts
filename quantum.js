@@ -18,7 +18,7 @@ const api = got.extend({
     prefixUrl: prefixUrl,
     retry: { limit: 0 },
 });
-console.log("脚本库更新时间：2022年2月12日 20点40分");
+console.log("脚本库更新时间：2022年2月19日 21点30分");
 // 获取青龙面板信息
 module.exports.getQLPanels = async () => {
     const body = await api({
@@ -180,7 +180,7 @@ module.exports.disableEnvs = async (envs) => {
  * @param {any} qlPanelId
  * @param {any} userId
  */
-module.exports.allEnvs = async (key, envType, enable, qlPanelId,userId) => {
+module.exports.allEnvs = async (key, envType, enable, qlPanelId, userId) => {
     const body = await api({
         url: 'api/env',
         method: 'get',
@@ -240,7 +240,7 @@ async function deleteEnvByIds(ids) {
  * @param {any} content 发送消息内容
  * @param {any} isManager 是否发送给管理员
  */
-async function sendNotify(content, isManager, userId) {
+async function sendNotify(content, isManager, userId, groupId, communicationType) {
     var uuid = user_id;
     if (isManager && !ManagerQQ) {
         console.log(`消息内容：
@@ -253,6 +253,18 @@ ${content}
     }
     if (userId) {
         uuid = userId;
+    } else if (userId == "NULL") {
+        user_id = null
+    }
+    if (communicationType) {
+        CommunicationType = communicationType;
+    } else {
+        CommunicationType = process.env.CommunicationType
+    }
+    if (groupId) {
+        group_id = groupId;
+    } else {
+        group_id = process.env.group_id
     }
     if (serverAddres && user_id) {
         var b = JSON.stringify({
