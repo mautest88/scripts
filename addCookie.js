@@ -307,7 +307,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo
                         beanNum += "\r用户等级：" + $.levelName
                     }
                     await updateUserInfo(user);
-                    await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length), false);
+                    await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length) + '\n剩余积分：' + user.MaxEnvCount, false);
                 }
                 else {
                     await sendNotify(`提交失败，Cookie无效或已过期，请重新获取后发送。`)
