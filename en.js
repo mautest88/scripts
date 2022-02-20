@@ -1,4 +1,4 @@
-﻿// 骚话
+﻿// 每日英语
 
 const got = require('got');
 const {

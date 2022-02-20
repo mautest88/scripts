@@ -1,4 +1,5 @@
 ﻿
+const { createWriteStream } = require('fs');
 const got = require('got');
 //------------- 量子助手系统环境变量部分 -------------
 let serverAddres = process.env.serverAddres || 'http://localhost:5088'; //服务地址
@@ -222,6 +223,70 @@ async function getEnvs(name, key, envType, userId) {
     return body.Data;
 };
 
+
+async function getCustomData(type, startTime, endTime) {
+    if (!type) {
+        console.log("未指定type。");
+        return;
+    }
+    const body = await api({
+        url: 'api/CustomData/' + type,
+        method: 'get',
+        searchParams: {
+            createTimeStart: startTime,
+            createTimeEnd: endTime
+        },
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body.Data;
+};
+
+
+async function deleteCustomData(ids) {
+    const body = await api({
+        url: `api/CustomData`,
+        method: 'delete',
+        body: JSON.stringify(ids),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+}
+
+
+async function updateCustomData(data) {
+    const body = await api({
+        url: `api/CustomData`,
+        method: 'put',
+        body: JSON.stringify(data),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+}
+
+
+async function addCustomData(data) {
+    const body = await api({
+        url: `api/CustomData`,
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+}
+
+
 async function deleteEnvByIds(ids) {
     const body = await api({
         url: `api/env/deletes`,
@@ -234,6 +299,18 @@ async function deleteEnvByIds(ids) {
     }).json();
     return body;
 }
+
+
+function uuid(len, radix) {
+
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var uuid = [],
+        i;
+    radix = radix || chars.length;
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+    return uuid.join('');
+}
+
 
 /**
  * 发送通知消息
@@ -324,3 +401,58 @@ module.exports.sendNotify2 = sendNotify;
  * 通过账号id集合删除环境变量
  * */
 module.exports.deleteEnvByIds = deleteEnvByIds;
+
+/**
+ * 获取自定义数据
+ * @param {any} type 数据类型(必填)
+ * @param {any} startTime 开始时间
+ * @param {any} endTime 结束时间
+ */
+module.exports.getCustomData = getCustomData;
+
+/**
+ * 删除自定义数据
+ *
+ * @param {any} ids 数据id 集合
+ */
+module.exports.deleteCustomData = deleteCustomData;
+
+
+/**
+ * 修改数据
+ * @param {any} data
+ */
+module.exports.updateCustomData = updateCustomData;
+
+/**
+ * 添加自定义数据
+ * @param {any} data 集合
+ */
+module.exports.addCustomData = addCustomData;
+
+module.exports.uuid = uuid;
+
+module.exports.getUserInfo = async () => {
+    const body = await api({
+        url: 'api/User/' + user_id,
+        method: 'get',
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body.Data;
+}
+
+module.exports.updateUserInfo = async (user) => {
+    const body = await api({
+        url: 'api/User',
+        method: 'put',
+        body: JSON.stringify(user),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+}

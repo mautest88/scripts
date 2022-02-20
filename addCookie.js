@@ -7,9 +7,9 @@
  * JINGXIANGZHI     (京享值过滤，低于该值不允许提交)
  * JINGXIANGZHI_MSG (京享值过低提醒)
  * QuickSMS (量子短信服务)
+ * ADD_COOKIE_USE_SCORE  添加CK需要多少积分。（设置为0 或者 不设置时则表示不需要积分。）
  **/
 
-var fs = require('fs'); // 引入fs模块
 const $ = new Env('添加并验证Cookie');
 let ADD_COOKIE = process.env.ADD_COOKIE || "";
 
@@ -33,6 +33,10 @@ let user_id = process.env.user_id;
 let CardCode = process.env.CardCode;
 let QuickLogin = process.env.QuickLogin;
 let JINGXIANGZHI = (process.env.JINGXIANGZHI || 500) * 1;
+
+
+let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
+
 let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
 let CARD_CODE_MESSAGE = "本次登录需要提供您绑定身份证前2后4位认证，如：110324，如最后一位为X请输入大写。";
@@ -64,10 +68,19 @@ if (process.env.JD_COOKIE) {
 }
 
 var cookies = [];
-const { addEnvs, allEnvs, sendNotify
+const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo
 } = require('./quantum');
 
 !(async () => {
+    user = await getUserInfo();
+
+    if (ADD_COOKIE_USE_SCORE > 0) {
+        if (!user || user.MaxEnvCount < ADD_COOKIE_USE_SCORE) {
+            await sendNotify(`该操作需要${ADD_COOKIE_USE_SCORE}积分
+您当前积分剩余${user.MaxEnvCount}`)
+            return;
+        }
+    }
     cookies = ADD_COOKIE.split("&");
     if (NVJDCStart) {
         console.log("NVJDC_URL：" + NVJDC_URL);
@@ -127,7 +140,6 @@ const { addEnvs, allEnvs, sendNotify
             return;
         }
     }
-
     if (QuickLogin) {
         console.log(`QuickLogin：${QuickLogin}，Phone：${Phone}，VerifyCode：${VerifyCode}`)
         if (Phone && VerifyCode) {
@@ -192,8 +204,6 @@ const { addEnvs, allEnvs, sendNotify
             console.log(`开始检测【京东账号${$.index}】${$.UserName2} ....\n`);
             await TotalBean(cookie);
 
-
-
             if ($.NoReturn) {
                 await isLoginByX1a0He(cookie);
             } else {
@@ -212,8 +222,6 @@ const { addEnvs, allEnvs, sendNotify
                 await sendNotify("CK检查异常，请稍后重试！", false)
             } else {
                 if ($.isLogin) {
-
-
                     if (JINGXIANGZHI > 0) {
                         console.log("判断用户京享值是否大于：" + JINGXIANGZHI);
                         await TotalBean2(cookie);
@@ -227,7 +235,6 @@ const { addEnvs, allEnvs, sendNotify
                             }
                         }
                     }
-
                     var reg2 = new RegExp("[\\u4E00-\\u9FFF]+", "g");
                     if (reg2.test($.pt_pin)) {
                         $.pt_pin = encodeURI($.pt_pin);
@@ -235,8 +242,6 @@ const { addEnvs, allEnvs, sendNotify
                     cookie = `pt_pin=${$.pt_pin};pt_key=${$.pt_key};`
                     var beanNum = ($.beanNum && $.beanNum > 0) ? "\r剩余豆豆：" + $.beanNum : "";
                     var data1 = await allEnvs($.pt_key, 2);
-
-
                     var c = {
                         Name: "JD_COOKIE",
                         Enable: true,
@@ -246,11 +251,8 @@ const { addEnvs, allEnvs, sendNotify
                         EnvType: 2,
                         CommunicationType: CommunicationType
                     }
-
-
                     if (data1.length > 0) {
                         console.log("pt_key重复，更新用户信息。");
-
                         if (c.Id != data1[0].Id) {
                             jdCookies.push(cookie)
                         }
@@ -258,8 +260,6 @@ const { addEnvs, allEnvs, sendNotify
                         c.Weight = data1[0].Weight;
                         c.QLPanelEnvs = data1[0].QLPanelEnvs;
                         c.Remark = data1[0].Remark;
-
-
                     } else {
                         var data2 = await allEnvs($.pt_pin, 2);
                         if (data2.length > 0) {
@@ -285,19 +285,28 @@ const { addEnvs, allEnvs, sendNotify
                             console.log("全新韭菜上线拉！");
                         }
                     }
+                    user.MaxEnvCount -= ADD_COOKIE_USE_SCORE;
+                    if (ADD_COOKIE_USE_SCORE > 0 && user.MaxEnvCount < 0) {
+                        await sendNotify(`该操作需要${ADD_COOKIE_USE_SCORE}积分
+您当前积分剩余${(user.MaxEnvCount + ADD_COOKIE_USE_SCORE)}`)
+                        return;
+                    }
                     var data = await addEnvs([c]);
                     console.log("开始提交CK到量子数据库");
                     console.log("提交结果：" + JSON.stringify(data));
+
                     if (data.Code != 200) {
                         console.log("addEnvs Error ：" + JSON.stringify(data));
                         await sendNotify(`提交失败辣，pt_pin=${pt_pin}：发生异常，已通知管理员处理啦！`)
                         await sendNotify(`用户ID：${user_id}提交CK pt_pin=${pt_pin}
 发生异常，系统错误：${data.Message}。`, true)
+                        user.MaxEnvCount += ADD_COOKIE_USE_SCORE;
                         continue;
                     }
                     if ($.levelName) {
                         beanNum += "\r用户等级：" + $.levelName
                     }
+                    await updateUserInfo(user);
                     await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length), false);
                 }
                 else {
@@ -364,7 +373,6 @@ function verifyCode() {
         });
     });
 }
-
 
 function VerifyCardCode() {
     return new Promise(async resolve => {

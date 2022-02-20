@@ -2,8 +2,8 @@
 /*
  * 支持环境变量
  * 
- * JFID  京粉id
- * JFPTPIN 京粉转码 ck pt_pin
+ * JFID  京粉 联盟id（必填）
+ * JFPTPIN 京粉转码ck的 pt_pin 部分 （必填）
  * REBATE_QQGROUP 转链后转发QQ群（支持多个，或者用&符号隔开）
  * REBATE_WXGROUP 转链后转发微信群（支持多个，或者用&符号隔开）
  * 
@@ -86,6 +86,8 @@ if (!JFPTPIN) {
             } else {
                 console.log("未指定转发微信群");
             }
+        } else {
+            console.log(response.body);
         }
     });
 })();
