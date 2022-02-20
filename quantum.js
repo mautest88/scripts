@@ -251,11 +251,7 @@ ${content}
     if (isManager) {
         uuid = ManagerQQ;
     }
-    if (userId) {
-        uuid = userId;
-    } else if (userId == "NULL") {
-        user_id = null
-    }
+
     if (communicationType) {
         CommunicationType = communicationType;
     } else {
@@ -266,7 +262,12 @@ ${content}
     } else {
         group_id = process.env.group_id
     }
-    if (serverAddres && user_id) {
+    if (serverAddres && uuid) {
+        if (userId) {
+            uuid = userId;
+        } else if (userId == "NULL") {
+            uuid = null
+        }
         var b = JSON.stringify({
             message: `${content}`,
             title: "小助手通知",

@@ -25,7 +25,6 @@ let JFPTPIN = process.env.JFPTPIN;
 let QQGROUP = process.env.REBATE_QQGROUP;
 let WXGROUP = process.env.REBATE_WXGROUP;
 
-
 if (!JFID) {
     console.log("没有填写JFID环境变量");
     return;
@@ -48,6 +47,11 @@ if (!JFPTPIN) {
         await sendNotify("返利CK失效", true);
         return;
     }
+    while (jd_rebat.indexOf("[CQ:image") > -1) {
+        var e = jd_rebat.indexOf("]")
+        jd_rebat = jd_rebat.substr(e + 1, jd_rebat.length - e)
+    }
+    jd_rebat = jd_rebat.split("?")[0];
     var b = JSON.stringify({
         funName: "getSuperClickUrl",
         param: {
