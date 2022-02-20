@@ -33,7 +33,7 @@ let sn_count = process.env.sn_count;
         }
         result = await addCustomData(sns);
         if (result.Code == 200) {
-            var tt = `创建${sn_count}个卡密，每个${sn_score}积分`;
+            var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
             for (var i = 0; i < result.Data.length; i++) {
                 tt += "\n" + result.Data[i].Data1;
             }
