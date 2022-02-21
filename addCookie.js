@@ -306,7 +306,9 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo
                     if ($.levelName) {
                         beanNum += "\r用户等级：" + $.levelName
                     }
-                    await updateUserInfo(user);
+                    if (ADD_COOKIE_USE_SCORE > 0) {
+                        await updateUserInfo(user);
+                    }
                     await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length) + '\n剩余积分：' + user.MaxEnvCount, false);
                 }
                 else {

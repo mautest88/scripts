@@ -93,11 +93,13 @@ const api = got.extend({
                 await sendNotify(`太太乐提交token 发生异常，Token：${body.user.loginToken}`, true)
                 user.MaxEnvCount += ADD_TTL_USE_SCORE;
             } else {
-                await updateUserInfo(user);
-                sendNotify(`登录成功\n会员等级：${body.user.memberLevel}\n可用积分：${body.user.integral}
-剩余积分：${user.MaxEnvCount}`)
-                sendNotify(`如果是新注册的账号请通过“太太乐餐饮服务”小程序登陆一次账号否则无法自动领取积分
+                if (ADD_TTL_USE_SCORE > 0) {
+                    await updateUserInfo(user);
+                }
+                await sendNotify(`如果是新注册的账号请通过“太太乐餐饮服务”小程序登陆一次账号否则无法自动领取积分
 并且通过公众号菜单“积分商城”，“完善信息”否则无法自动换取话费`)
+                await sendNotify(`登录成功\n会员等级：${body.user.memberLevel}\n可用积分：${body.user.integral}
+剩余积分：${user.MaxEnvCount}`)
             }
         } else {
             sendNotify("登录失败！");
