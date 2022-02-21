@@ -456,3 +456,41 @@ module.exports.updateUserInfo = async (user) => {
     }).json();
     return body;
 }
+
+/**
+ * 查询所有的用户信息
+ * */
+module.exports.getUser = async () => {
+    const body = await api({
+        url: 'api/User',
+        method: 'get',
+        searchParams: {
+            PageIndex: 1,
+            PageSize: 999999999
+        },
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body.Data;
+}
+
+
+/**
+ * 删除用户信息
+ * @param {any} ids
+ */
+module.exports.deleteUser = async (ids) => {
+    const body = await api({
+        url: `api/User`,
+        method: 'delete',
+        body: JSON.stringify(ids),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+
+}

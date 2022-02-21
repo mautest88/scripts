@@ -24,22 +24,26 @@ let sn_count = process.env.sn_count;
     if (sn_score && sn_count) {
         var sns = [];
         for (var i = 0; i < sn_count; i++) {
+            var sss = "QTSN" + uuid(22, 16)
             sns.push({
                 Type: "quantum_sn",
-                Data1: "QTSN" + uuid(22, 16),
+                Data1: sss,
                 Data2: sn_score,
                 Data3: "0"
             });
+            console.log(sss);
         }
         result = await addCustomData(sns);
         if (result.Code == 200) {
             var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
             for (var i = 0; i < result.Data.length; i++) {
                 tt += "\n" + result.Data[i].Data1;
+                if (i % 30 == 0) {
+                    await sendNotify(tt);
+                    tt = "";
+                }
             }
             await sendNotify(tt);
-
-
         } else {
             await sendNotify("创建卡密失败：" + result.Message);
         }
