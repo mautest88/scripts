@@ -8,7 +8,7 @@
 
 const got = require('got');
 const {
-    addEnvs, sendNotify, allEnvs, getUserInfo
+    addEnvs, sendNotify, allEnvs, getUserInfo, updateUserInfo
 } = require('./quantum');
 
 let ttl = process.env.ttl;

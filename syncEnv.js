@@ -1,6 +1,6 @@
 require('./env.js');
 const {
-    addEnvs, getEnvs, sendNotify, allEnvs, getQLPanels, getQLEnvs, deleteQLEnvs, addQLEnvs, syncEnv
+    addEnvs, sendNotify, allEnvs, getQLPanels, getQLEnvs, syncEnv
 } = require('./quantum');
 
 let notifyMessage = "";
@@ -9,7 +9,7 @@ let isSystem = process.env.IsSystem == "true";
 
 !(async () => {
     if (!isSystem) {
-        sendNotify("开始同步环境变量了，可能要点时间，骚等一下。", true)
+        await sendNotify("开始同步环境变量了，可能要点时间，骚等一下。", true)
     }
     console.log("开始同步环境变量。")
     var allQuantumEnvs = await allEnvs();
@@ -37,12 +37,10 @@ let isSystem = process.env.IsSystem == "true";
     for (var i = 0; i < qlPanels.length; i++) {
         var ql = qlPanels[i];
         if (ql.Weight <= 0) {
+            console.log(`青龙容器:${ql.Name}权重小于1跳过同步`);
             continue;
         }
         var qlEnvs = await getQLEnvs(ql);
-
-        //过滤未启用的环境变量
-        //qlPanels[i].QLEnvs = qlEnvs.filter((n) => n.status == 0);
         console.log(`青龙容器:${ql.Name},获取环境变量:${qlEnvs.length}个`);
         var ids = [];
         for (var x = 0; x < qlEnvs.length; x++) {

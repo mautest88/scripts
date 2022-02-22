@@ -22,6 +22,10 @@ let sn_count = process.env.sn_count;
      *
      **/
     if (sn_score && sn_count) {
+        if (sn_count * 1 < 1) {
+            await sendNotify("卡密积分必须大于0")
+            return;
+        }
         var sns = [];
         for (var i = 0; i < sn_count; i++) {
             var sss = "QTSN" + uuid(22, 16)
@@ -48,6 +52,10 @@ let sn_count = process.env.sn_count;
             await sendNotify("创建卡密失败：" + result.Message);
         }
     } else if (sn_count) {
+        if (sn_count * 1 < 1) {
+            await sendNotify("卡密个数必须大于0")
+            return;
+        }
         await sendNotify("请回复每个卡密多少积分：")
     } else {
         await sendNotify("请回复生成卡密个数：")
