@@ -59,7 +59,7 @@ async function help(packetId, cookie) {
     }
 
 
-    var pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
+    var pt_pin = cookie.Value.match(/pt_pin=([^; ]+)(?=;?)/)[1]
     try {
         await api(nm).then(async response => {
             var data = response.body;
