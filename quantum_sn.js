@@ -40,17 +40,20 @@ var custom_data_type = "quantum_sn"
             });
             console.log(sss);
         }
+        try {
+            var dataTitleInfo = await getCustomDataTitle(custom_data_type);
+            if (!dataTitleInfo) {
+                await addCustomDataTitle(new {
+                    Type: custom_data_type,
+                    TypeName: "积分卡密",
+                    Title1: "卡密",
+                    Title2: "积分",
+                    Title3: "是否使用"
+                })
+            }
+        } catch (e) { }
 
-        var dataTitleInfo = await getCustomDataTitle(custom_data_type);
-        if (!dataTitleInfo) {
-            await addCustomDataTitle(new {
-                Type: custom_data_type,
-                TypeName: "积分卡密",
-                Title1: "卡密",
-                Title2: "积分",
-                Title3: "是否使用"
-            })
-        }
+
         result = await addCustomData(sns);
         if (result.Code == 200) {
             var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
