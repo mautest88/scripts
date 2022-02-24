@@ -1,7 +1,7 @@
 ﻿// 生成卡密
 
 const {
-    sendNotify, uuid, addCustomData
+    sendNotify, uuid, addCustomData, getCustomDataTitle, addCustomData, getCustomDataTitle, addCustomDataTitle
 } = require('./quantum');
 
 
@@ -11,6 +11,7 @@ let sn_score = process.env.sn_score;
 //一次生成多少个序列号
 let sn_count = process.env.sn_count;
 
+var custom_data_type = "quantum_sn"
 
 !(async () => {
     /**
@@ -21,6 +22,8 @@ let sn_count = process.env.sn_count;
      * Data3 是否使用
      *
      **/
+
+
     if (sn_score && sn_count) {
         if (sn_count * 1 < 1) {
             await sendNotify("卡密积分必须大于0")
@@ -30,12 +33,23 @@ let sn_count = process.env.sn_count;
         for (var i = 0; i < sn_count; i++) {
             var sss = "QTSN" + uuid(22, 16)
             sns.push({
-                Type: "quantum_sn",
+                Type: custom_data_type,
                 Data1: sss,
                 Data2: sn_score,
-                Data3: "0"
+                Data3: "否"
             });
             console.log(sss);
+        }
+
+        var dataTitleInfo = await getCustomDataTitle(custom_data_type);
+        if (!dataTitleInfo) {
+            await addCustomDataTitle(new {
+                Type: custom_data_type,
+                TypeName: "积分卡密",
+                Title1: "卡密",
+                Title2: "积分",
+                Title3: "是否使用"
+            })
         }
         result = await addCustomData(sns);
         if (result.Code == 200) {

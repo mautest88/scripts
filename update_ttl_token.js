@@ -28,11 +28,11 @@ const api = got.extend({
                 },
             }).json();
             if (body.code == '0000') {
-                console.log(`重新获取${r.mobile} token 成功`);
+                console.log(`更新-------${r.mobile}-------成功`);
                 console.log(body.user.loginToken);
                 t[i].Value = body.user.loginToken;
             } else {
-                sendNotify("登录失败！");
+                sendNotify(`太太乐账号${r.mobile}登录失败！`);
             }
         }
         console.log("更新环境变量到量子");

@@ -2,7 +2,7 @@
 const { createWriteStream } = require('fs');
 const got = require('got');
 //------------- 量子助手系统环境变量部分 -------------
-let serverAddres = process.env.serverAddres || 'http://localhost:5088'; //服务地址
+let serverAddres = process.env.serverAddres || 'http://localhost:5089'; //服务地址
 let CommunicationType = process.env.CommunicationType; //通讯类型
 let CommunicationId = process.env.CommunicationId; //通讯工具ID
 let TextToPicture = process.env.TextToPicture; // 是否文字转图片
@@ -11,12 +11,10 @@ let group_id = process.env.group_id; //群组ID
 let ManagerQQ = process.env.ManagerQQ; //管理员QQ
 let EnableConc = process.env.EnableConc == "True"; //是否开启并发
 let IsSystem = process.env.IsSystem == "true"; //是否系统执行。
-//------------- 量子助手系统环境变量部分 -------------
-let prefixUrl = process.env.serverAddres || 'http://localhost:5089';
 
 
 const api = got.extend({
-    prefixUrl: prefixUrl,
+    prefixUrl: serverAddres,
     retry: { limit: 0 },
 });
 console.log("脚本库更新时间：2022年2月19日 21点30分");
@@ -223,19 +221,25 @@ async function getEnvs(name, key, envType, userId) {
     return body.Data;
 };
 
-
-async function getCustomData(type, startTime, endTime) {
+/**
+ * 获取自定义数据
+ * @param {any} type 数据类型，必填
+ * @param {any} startTime 数据创建时间 开始
+ * @param {any} endTime 数据创建时间 截至
+ * @param {any} dataQuery Data筛选字段
+ */
+async function getCustomData(type, startTime, endTime, dataQuery) {
     if (!type) {
         console.log("未指定type。");
         return;
     }
+    dataQuery.createTimeStart = startTime;
+    dataQuery.createTimeEnd = endTime;
+
     const body = await api({
         url: 'api/CustomData/' + type,
         method: 'get',
-        searchParams: {
-            createTimeStart: startTime,
-            createTimeEnd: endTime
-        },
+        searchParams: dataQuery,
         headers: {
             Accept: 'text/plain',
             "Content-Type": "application/json-patch+json"
@@ -493,4 +497,58 @@ module.exports.deleteUser = async (ids) => {
     }).json();
     return body;
 
+}
+
+/**
+ * 获取自定义数据标题信息
+ * @param {any} type
+ */
+module.exports.getCustomDataTitle = async (type) => {
+    const body = await api({
+        url: 'api/CustomDataTitle/' + type,
+        method: 'get',
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body.Data;
+};
+
+/**
+ * 修改自定义数据标题信息
+ * @param {any} data
+ */
+module.exports.updateCustomDataTitle = async (data) => {
+    const body = await api({
+        url: `api/CustomDataTitle`,
+        method: 'put',
+        body: JSON.stringify(data),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+};
+
+/**
+ * 添加自定义数据标题
+ * @param {any} data 集合
+ */
+module.exports.addCustomDataTitle = async (data) => {
+    const body = await api({
+        url: `api/CustomDataTitle`,
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
+};
+
+module.exports.sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms))
 }

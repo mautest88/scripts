@@ -32,7 +32,7 @@ let sn = process.env.quantum_validate_sn;
         return;
     }
 
-    if (ts[0].Data3 == "1") {
+    if (ts[0].Data3 == "1" || ts[0].Data3 == "是") {
         console.log("该卡密已经使用过了：" + sn);
         await sendNotify("该卡密已经使用过了！")
         return;
@@ -45,12 +45,12 @@ let sn = process.env.quantum_validate_sn;
     }
     var updateInfo = await updateUserInfo(user);
     if (updateInfo) {
-        ts[0].Data3 = "1"
+        ts[0].Data3 = "是"
         var updateSNInfo = await updateCustomData(ts[0]);
         console.log("更新卡密状态：" + updateSNInfo.Code);
         await sendNotify("提交卡密成功，剩余积分：" + user.MaxEnvCount);
     } else {
-        console.log("更新用户信息失败了！" );
+        console.log("更新用户信息失败了！");
         await sendNotify("更新剩余积分失败！");
     }
 })();
