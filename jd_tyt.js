@@ -57,6 +57,9 @@ async function help(packetId, cookie) {
         },
         method: "get"
     }
+
+
+    var pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
     try {
         await api(nm).then(async response => {
             var data = response.body;
@@ -64,7 +67,7 @@ async function help(packetId, cookie) {
                 data = JSON.parse(data);
                 if (data.success == true) {
                     amount = data.data.amount;
-                    console.log("帮砍：" + data.data.amount)
+                    console.log(pt_pin + "帮砍：" + data.data.amount)
                 }
             }
             if (data.msg.indexOf("完成") != -1) {
