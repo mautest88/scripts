@@ -1,7 +1,7 @@
 ﻿// 生成卡密
 
 const {
-    sendNotify, uuid, addCustomData, getCustomDataTitle, addCustomData, getCustomDataTitle, addCustomDataTitle
+    sendNotify, uuid, addCustomData, getCustomDataTitle, addCustomDataTitle
 } = require('./quantum');
 
 
