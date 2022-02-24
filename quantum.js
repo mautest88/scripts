@@ -233,9 +233,10 @@ async function getCustomData(type, startTime, endTime, dataQuery) {
         console.log("未指定type。");
         return;
     }
-    dataQuery.createTimeStart = startTime;
-    dataQuery.createTimeEnd = endTime;
-
+    if (dataQuery) {
+        dataQuery.createTimeStart = startTime;
+        dataQuery.createTimeEnd = endTime;
+    }
     const body = await api({
         url: 'api/CustomData/' + type,
         method: 'get',
