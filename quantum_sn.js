@@ -59,7 +59,7 @@ var custom_data_type = "quantum_sn"
             var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
             for (var i = 0; i < result.Data.length; i++) {
                 tt += "\n" + result.Data[i].Data1;
-                if (i % 30 == 0) {
+                if (i + 1 % 30 == 0) {
                     await sendNotify(tt);
                     tt = "";
                 }
