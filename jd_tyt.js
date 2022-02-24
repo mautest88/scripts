@@ -24,7 +24,9 @@ let status = ''
         return;
     }
     var cookies = await getEnvs("JD_COOKIE", null, 2);
-    cookies = cookies.filter((t) => t.Enable);
+    cookies = cookies.filter((t) => t.Enable).sort(function () {
+        return Math.random() - 0.5;
+    });
     console.log("cookie数量：" + cookies.length);
     await sendNotify("开始推一推了，骚骚的等一下！");
     for (var i = 0; i < cookies.length; i++) {
