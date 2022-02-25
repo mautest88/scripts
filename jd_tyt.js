@@ -40,6 +40,10 @@ let status = ''
             await sendNotify(packetId + "，推一推未完成，帮砍排队放弃吧。");
             return;
         }
+        if (status == 3) {
+            await sendNotify(packetId + "，推一推链接过期了！");
+            return;
+        }
         await sleep(3500);
     }
     await sendNotify(packetId + "，没有推完！")
@@ -73,8 +77,11 @@ async function help(packetId, cookie) {
             if (data.msg.indexOf("完成") != -1) {
                 status = 1
             }
-            if (data.msg == "帮砍排队") {
+            else if (data.msg == "帮砍排队") {
                 status = 2
+            }
+            else if (data.msg.indexOf("过期") > -1) {
+                status = 3
             }
             if (data.success == false) {
                 console.log(data.msg)
