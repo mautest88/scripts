@@ -7,18 +7,42 @@
  **/
 const got = require('got');
 const {
-    sendNotify, getEnvs, sleep, getUserInfo, updateUserInfo
+    sendNotify, getEnvs, sleep, getUserInfo, updateUserInfo, addOrUpdateCustomDataTitle, addCustomData
 } = require('./quantum');
 
+const moment = require('moment');
 const api = got.extend({
     retry: { limit: 0 },
 });
 let tyt_url = process.env.tyt_url;
 let TYT_USE_SCORE = (process.env.TYT_USE_SCORE || 0) * 1;
 let status = ''
+let sort = moment().format("HHmmss");
 
+let customerDataType = "tyt_order_record";
+let CommunicationUserId = process.env.CommunicationUserId;
+let CommunicationUserName = process.env.CommunicationUserName;
 
 !(async () => {
+
+    await addOrUpdateCustomDataTitle({
+        Type: customerDataType,
+        TypeName: "推一推订单记录",
+        Title1: "助力链接",
+        Title2: "推一推结果",
+        Title3: "QQ/WX",
+        Title4: "昵称",
+    })
+
+
+    var tyt_order = {
+        Type: customerDataType,
+        Data1: tyt_url,
+        Data3: CommunicationUserId,
+        Data4: CommunicationUserName
+    }
+
+
 
     var packetId = tyt_url.match(/packetId=([^&]+)(?=&?)/)[1]
     console.log("packetId：" + packetId);
@@ -44,27 +68,33 @@ let status = ''
         return Math.random() - 0.5;
     });
     console.log("cookie数量：" + cookies.length);
-    await sendNotify("开始推一推了，骚骚的等一下！" + m);
+    await sendNotify("开始推一推了，骚骚的等一下！任务编号：" + sort + m);
+    var result = "";
+
     for (var i = 0; i < cookies.length; i++) {
         await help(packetId, cookies[i])
         if (status == 1) {
-            console.log("推完了。");
-            await sendNotify(packetId + "，推一推完成。");
-            return;
+            result = "任务编号：" + sort + "，推一推完成。"
+            break;
         }
         if (status == 2) {
-            await sendNotify(packetId + "，推一推未完成，帮砍排队放弃吧。");
-            return;
+            result = "任务编号：" + sort + "，帮砍排队放弃吧。"
+            break;
         }
         if (status == 3) {
-            await sendNotify(packetId + "，推一推链接过期了！");
-            return;
+            result = "任务编号：" + sort + "，推一推链接过期了。"
+            break;
         }
-        await sleep(3500);
+        await sleep(3000);
     }
-    await sendNotify(packetId + "，没有推完！")
+    if (!result) {
+        result = "任务编号：" + sort + "，没有推完，CK已经跑完了！";
+    }
+    console.log(result);
+    tyt_order.Data2 = result;
+    await addCustomData([tyt_order])
+    await sendNotify(result);
 })();
-
 
 async function help(packetId, cookie) {
     const nm = {
@@ -75,8 +105,6 @@ async function help(packetId, cookie) {
         },
         method: "get"
     }
-
-
     var pt_pin = cookie.Value.match(/pt_pin=([^; ]+)(?=;?)/)[1]
     try {
         await api(nm).then(async response => {

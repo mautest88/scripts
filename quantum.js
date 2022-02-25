@@ -1,5 +1,4 @@
 ﻿
-const { createWriteStream } = require('fs');
 const got = require('got');
 //------------- 量子助手系统环境变量部分 -------------
 let serverAddres = process.env.serverAddres || 'http://localhost:5089'; //服务地址
@@ -246,7 +245,7 @@ async function getCustomData(type, startTime, endTime, dataQuery) {
             "Content-Type": "application/json-patch+json"
         },
     }).json();
-    return body.Data;
+    return body.Data.Data;
 };
 
 
@@ -307,7 +306,6 @@ async function deleteEnvByIds(ids) {
 
 
 function uuid(len, radix) {
-
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     var uuid = [],
         i;
@@ -497,7 +495,6 @@ module.exports.deleteUser = async (ids) => {
         },
     }).json();
     return body;
-
 }
 
 /**
@@ -517,27 +514,10 @@ module.exports.getCustomDataTitle = async (type) => {
 };
 
 /**
- * 修改自定义数据标题信息
- * @param {any} data
- */
-module.exports.updateCustomDataTitle = async (data) => {
-    const body = await api({
-        url: `api/CustomDataTitle`,
-        method: 'put',
-        body: JSON.stringify(data),
-        headers: {
-            Accept: 'text/plain',
-            "Content-Type": "application/json-patch+json"
-        },
-    }).json();
-    return body;
-};
-
-/**
  * 添加自定义数据标题
  * @param {any} data 集合
  */
-module.exports.addCustomDataTitle = async (data) => {
+module.exports.addOrUpdateCustomDataTitle = async (data) => {
     const body = await api({
         url: `api/CustomDataTitle`,
         method: 'post',
