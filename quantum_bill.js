@@ -41,13 +41,12 @@ let customeDataType = "quantum_bill";
         Data2: money,
         Data3: CommunicationUserId,
         Data4: CommunicationUserName,
-        Data5: ttt[0].indexOf("支出") ? "支出" : "收入"
+        Data5: ttt[0].indexOf("支出") > -1 ? "支出" : "收入"
     }
-    await addCustomData([info]);
 
     var zc = 0;
     var sr = 0;
-    var ss = await getCustomData(customeDataType, startTime, endTime);
+    var ss = await getCustomData(customeDataType, startTime, endTime, { Data3: CommunicationUserId });
     for (var i = 0; i < ss.length; i++) {
         if (ss[i].Data5 == "支出") {
             zc += parseFloat(ss[i].Data2);
@@ -55,5 +54,11 @@ let customeDataType = "quantum_bill";
             sr += parseFloat(ss[i].Data2);
         }
     }
+    if (ttt[0].indexOf("支出") > -1) {
+        zc += money;
+    } else {
+        sr += money;
+    }
+    await addCustomData([info]);
     await sendNotify("记账成功！\n" + ChargeAccount + "\n今日统计，收入：" + sr + "，支出：" + zc);
 })();
