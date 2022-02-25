@@ -2,18 +2,21 @@
  * 
  * 推一推
  * 入口 极速版 赚金币
- * 
+ *
+ * TYT_USE_SCORE  推一推需要多少积分。（设置为0或者不设置时则表示不需要积分。）
  **/
 const got = require('got');
 const {
-    sendNotify, getEnvs, sleep
+    sendNotify, getEnvs, sleep, getUserInfo, updateUserInfo
 } = require('./quantum');
 
 const api = got.extend({
     retry: { limit: 0 },
 });
-var tyt_url = process.env.tyt_url;
+let tyt_url = process.env.tyt_url;
+let TYT_USE_SCORE = (process.env.TYT_USE_SCORE || 0) * 1;
 let status = ''
+
 
 !(async () => {
 
@@ -23,12 +26,25 @@ let status = ''
         console.log(tyt_url + "中未取到packetId");
         return;
     }
+    let user = null
+    let m = "";
+    if (TYT_USE_SCORE > 0) {
+        user = await getUserInfo();
+        user.MaxEnvCount = user.MaxEnvCount - TYT_USE_SCORE;
+        if (user.MaxEnvCount < 0) {
+            await sendNotify(`推一推需要${TYT_USE_SCORE}积分，当前积分：${(user.MaxEnvCount + TYT_USE_SCORE)}`);
+            return false;
+        } else {
+            await updateUserInfo(user);
+        }
+        m = `本次扣除${TYT_USE_SCORE}个积分。剩余积分：${user.MaxEnvCount}`;
+    }
     var cookies = await getEnvs("JD_COOKIE", null, 2);
     cookies = cookies.filter((t) => t.Enable).sort(function () {
         return Math.random() - 0.5;
     });
     console.log("cookie数量：" + cookies.length);
-    await sendNotify("开始推一推了，骚骚的等一下！");
+    await sendNotify("开始推一推了，骚骚的等一下！" + m);
     for (var i = 0; i < cookies.length; i++) {
         await help(packetId, cookies[i])
         if (status == 1) {
@@ -48,8 +64,6 @@ let status = ''
     }
     await sendNotify(packetId + "，没有推完！")
 })();
-
-
 
 
 async function help(packetId, cookie) {
