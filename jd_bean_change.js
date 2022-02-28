@@ -8,9 +8,9 @@
 
 const $ = new Env('京东资产变动');
 require('./env.js');
-
-if (!process.env.NO_CK_NOTIFY) {
-    process.env.NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。";
+var NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。"
+if (process.env.NO_CK_NOTIFY) {
+    NO_CK_NOTIFY = process.env.NO_CK_NOTIFY;
 }
 const moment = require('moment');
 const { getEnvs, sendNotify, getCookies
@@ -29,17 +29,14 @@ let intPerSent = 1; //通知分段
 let i = 0;
 let RemainMessage = '';
 
-
-
 let user_id = process.env.user_id; //用户id
+
 !(async () => {
     var cookiesArr = await getCookies();
     console.log("一共有" + (cookiesArr.length) + "个账号\r查询任务正在执行中，请稍后！")
     if (cookiesArr.length == 0) {
         console.log("没有Cookies信息结束任务。");
-        if (process.env.NO_CK_NOTIFY) {
-            await sendNotify(process.env.NO_CK_NOTIFY);
-        }
+        await sendNotify(NO_CK_NOTIFY);
         return;
     }
     if (process.env.CommunicationType == "3") {
@@ -138,12 +135,10 @@ let user_id = process.env.user_id; //用户id
     } else if (allMessage) {
         await sendNotify(`${allMessage}`)
     }
-
     if (allMessage2) {
         allMessage2 += RemainMessage;
         await sendNotify(allMessage2)
     }
-
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')

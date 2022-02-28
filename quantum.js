@@ -262,7 +262,6 @@ async function deleteCustomData(ids) {
     return body;
 }
 
-
 async function updateCustomData(data) {
     const body = await api({
         url: `api/CustomData`,
