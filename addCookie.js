@@ -32,10 +32,11 @@ let VerifyCode = process.env.NVJDCVerifyCode;
 let user_id = process.env.user_id;
 let CardCode = process.env.CardCode;
 let QuickLogin = process.env.QuickLogin;
-let JINGXIANGZHI = (process.env.JINGXIANGZHI || 500) * 1;
+let JINGXIANGZHI = (process.env.JINGXIANGZHI || 0) * 1;
 
 
-let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
+//let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
+let ADD_COOKIE_USE_SCORE = 0;
 
 let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
@@ -68,11 +69,11 @@ if (process.env.JD_COOKIE) {
 }
 
 var cookies = [];
-const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo
+const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
 } = require('./quantum');
 
 !(async () => {
-    user = await getUserInfo();
+    user = (await getUserInfo()) || {};
 
     if (ADD_COOKIE_USE_SCORE > 0) {
         if (!user || user.MaxEnvCount < ADD_COOKIE_USE_SCORE) {
@@ -170,6 +171,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo
     for (let i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
         if (cookie) {
+            //cookie = cookie + "pt_pin=" + uuid(8) + ";"
             try {
                 $.pt_key = cookie.match(/pt_key=([^; ]+)(?=;?)/)[1]
                 $.pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
@@ -309,7 +311,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo
                     if (ADD_COOKIE_USE_SCORE > 0) {
                         await updateUserInfo(user);
                     }
-                    await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length) , false);
+                    await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length), false);
                 }
                 else {
                     await sendNotify(`提交失败，Cookie无效或已过期，请重新获取后发送。`)
@@ -613,7 +615,6 @@ function TotalBean(cookie) {
                     $.NoReturn = `${$.nickName} :` + `${JSON.stringify(err)}\n`;
                 } else {
                     if (data) {
-                        console.log(data)
                         data = JSON.parse(data);
                         if (data['retcode'] === "1001") {
                             console.log("TotalBean 检测 CK 过期");
@@ -623,7 +624,6 @@ function TotalBean(cookie) {
                         }
                         if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
                             console.log("TotalBean 检测有效");
-                            console.log(JSON.stringify(data.data));
                             $.nickName = (data.data.userInfo.baseInfo.nickname) || data.data.userInfo.baseInfo.curPin || $.nickName;
                             $.pt_pin = data.data.userInfo.baseInfo.curPin;
                             $.levelName = data.data.userInfo.baseInfo.levelName;

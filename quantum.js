@@ -57,7 +57,7 @@ module.exports.getCookies = async () => {
             env.Value = `pt_key=${$.pt_key};pt_pin=${$.pt_pin};`
         }
         if (!env.Enable) {
-            var m1 = `帐呺：${env.UserRemark || pt_pin}已经过期了，请重新获取提交吧！`;
+            var m1 = `账号：${env.UserRemark || pt_pin}已经过期了，请重新获取提交吧！`;
             console.log(m1)
             await sendNotify(m1);
         } else {
@@ -232,10 +232,11 @@ async function getCustomData(type, startTime, endTime, dataQuery) {
         console.log("未指定type。");
         return;
     }
-    if (dataQuery) {
-        dataQuery.createTimeStart = startTime;
-        dataQuery.createTimeEnd = endTime;
+    if (!dataQuery) {
+        dataQuery = {};
     }
+    dataQuery.createTimeStart = startTime;
+    dataQuery.createTimeEnd = endTime;
     const body = await api({
         url: 'api/CustomData/' + type,
         method: 'get',
