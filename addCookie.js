@@ -35,8 +35,7 @@ let QuickLogin = process.env.QuickLogin;
 let JINGXIANGZHI = (process.env.JINGXIANGZHI || 0) * 1;
 
 
-//let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
-let ADD_COOKIE_USE_SCORE = 0;
+let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
 
 let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
