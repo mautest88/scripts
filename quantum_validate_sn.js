@@ -7,6 +7,8 @@ const {
 //用户提交的序列号
 let sn = process.env.quantum_validate_sn;
 
+let CommunicationUserId = process.env.CommunicationUserId;
+let CommunicationUserName = process.env.CommunicationUserName;
 
 !(async () => {
     /**
@@ -17,6 +19,7 @@ let sn = process.env.quantum_validate_sn;
      * Data3 是否使用
      *
      **/
+
     if (!sn || sn.length != 26) {
         await sendNotify("错误的卡密。");
         return;
@@ -46,6 +49,8 @@ let sn = process.env.quantum_validate_sn;
     var updateInfo = await updateUserInfo(user);
     if (updateInfo) {
         ts[0].Data3 = "是"
+        ts[0].Data4 = CommunicationUserId;
+        ts[0].Data5 = CommunicationUserName;
         var updateSNInfo = await updateCustomData(ts[0]);
         console.log("更新卡密状态：" + updateSNInfo.Code);
         await sendNotify("提交卡密成功，剩余积分：" + user.MaxEnvCount);

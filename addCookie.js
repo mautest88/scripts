@@ -35,8 +35,7 @@ let QuickLogin = process.env.QuickLogin;
 let JINGXIANGZHI = (process.env.JINGXIANGZHI || 0) * 1;
 
 
-//let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
-let ADD_COOKIE_USE_SCORE = 0;
+let ADD_COOKIE_USE_SCORE = (process.env.ADD_COOKIE_USE_SCORE || 0) * 1;
 
 let JINGXIANGZHI_MSG = process.env.JINGXIANGZHI_MSG || "您的京享值过低，无法自动完成任务！";
 
@@ -171,7 +170,10 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
     for (let i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
         if (cookie) {
-            //cookie = cookie + "pt_pin=" + uuid(8) + ";"
+            if (cookie.indexOf("pt_pin") < 0) {
+                cookie = cookie + "pt_pin=" + uuid(8) + ";"
+            }
+            cookie = cookie.replace(/[\r\n]/g, "");
             try {
                 $.pt_key = cookie.match(/pt_key=([^; ]+)(?=;?)/)[1]
                 $.pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]

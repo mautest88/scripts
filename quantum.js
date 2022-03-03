@@ -287,7 +287,7 @@ async function addCustomData(data) {
             "Content-Type": "application/json-patch+json"
         },
     }).json();
-    return body;
+    return body.Data;
 }
 
 

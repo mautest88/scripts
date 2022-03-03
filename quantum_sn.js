@@ -23,7 +23,6 @@ var custom_data_type = "quantum_sn"
      *
      **/
 
-
     if (sn_score && sn_count) {
         if (sn_count * 1 < 1) {
             await sendNotify("卡密积分必须大于0")
@@ -46,23 +45,20 @@ var custom_data_type = "quantum_sn"
             TypeName: "积分卡密",
             Title1: "卡密",
             Title2: "积分",
-            Title3: "是否使用"
+            Title3: "是否使用",
+            Title4: "QQ/微信",
+            Title5: "昵称",
         })
-
         result = await addCustomData(sns);
-        if (result.Code == 200) {
-            var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
-            for (var i = 0; i < result.Data.length; i++) {
-                tt += "\n" + result.Data[i].Data1;
-                if (i + 1 % 30 == 0) {
-                    await sendNotify(tt);
-                    tt = "";
-                }
+        var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
+        for (var i = 0; i < result.length; i++) {
+            tt += "\n" + result[i].Data1;
+            if (i + 1 % 30 == 0) {
+                await sendNotify(tt);
+                tt = "";
             }
-            await sendNotify(tt);
-        } else {
-            await sendNotify("创建卡密失败：" + result.Message);
         }
+        await sendNotify(tt);
     } else if (sn_count) {
         if (sn_count * 1 < 1) {
             await sendNotify("卡密个数必须大于0")
