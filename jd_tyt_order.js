@@ -21,7 +21,7 @@ let TYT_USE_SCORE = (process.env.TYT_USE_SCORE || 0) * 1;
 let customerDataType = "tyt_order_record";
 let CommunicationUserId = process.env.CommunicationUserId;
 let CommunicationUserName = process.env.CommunicationUserName;
-let ManagerQQ = process.env.ManagerQQ; 
+let ManagerQQ = process.env.ManagerQQ;
 
 let tytCustomerDataType = "tyt_record";
 
@@ -37,7 +37,7 @@ let ckStatus = 0;
     }
     var startTime = moment().format("YYYY-MM-DD")
     var endTime = moment().format("YYYY-MM-DD HH:mm:ss");
-    var ss = await getCustomData(customerDataType, startTime, endTime);
+    var ss = await getCustomData(customerDataType, startTime, endTime, { Data6: process.env.user_id });
     if (ss && ss.length > 0 && ss.filter((t) => t.Data1.indexOf(packetId) > -1).length > 0) {
         var msg = "重复的推一推任务，已自动跳过。";
         console.log(msg);
@@ -97,55 +97,68 @@ let ckStatus = 0;
     await sendNotify("开始推一推任务：" + tytOrder.Data5)
     var tyt_records = await getCustomData(tytCustomerDataType);
     console.log(tyt_records.length);
+
     for (var index = 0; index <= cookies.length; index++) {
-        var cookie = cookies[index];
-        var c = cookie.Value.replace(/[\r\n]/g, "");
-        var pt_pin = c.match(/pt_pin=([^; ]+)(?=;?)/)[1];
-        if (!pt_pin) {
-            continue;
-        }
-        var s1 = tyt_records.filter(n => n.Data1.indexOf(pt_pin) > -1 && (n.Data2 == -1 || moment(n.Data3) > moment(startTime)));
-        if (s1.length > 0) {
-            console.log(pt_pin + "无法助力了。");
-            continue;
-        }
-        ckStatus = 0;
-        await help(packetId, c)
-        if (status == 1) {
-            result = "任务编号：" + tytOrder.Data5 + "，推一推完成。"
-            break;
-        }
-        if (status == 2) {
-            result = "任务编号：" + tytOrder.Data5 + "，帮砍排队放弃吧。"
-            break;
-        }
-        if (status == 3) {
-            result = "任务编号：" + tytOrder.Data5 + "，推一推链接过期了。"
-            break;
-        }
-        if (ckStatus == -1) {
-            await addCustomData([{
-                Type: tytCustomerDataType,
-                Data1: pt_pin,
-                Data2: ckStatus,
-                Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
-                Data4: "火爆了"
-            }])
-        } else if (ckStatus == 99) {
+        try {
+            var cookie = cookies[index];
+            if (!cookie || !cookie.Value) {
+                continue;
+            }
+            var c = cookie.Value.replace(/[\r\n]/g, "");
+            var pt_pin = c.match(/pt_pin=([^; ]+)(?=;?)/)[1];
+            if (!pt_pin) {
+                continue;
+            }
+            var s1 = tyt_records.filter(n => n.Data1.indexOf(pt_pin) > -1 && (n.Data2 == -1 || moment(n.Data3) > moment(startTime)));
             if (s1.length > 0) {
-                s1[0].Data3 = moment().format("YYYY-MM-DD HH:mm:ss");
-                await updateCustomData(s1[0]);
-            } else {
+                continue;
+            }
+            var sss = await getCustomData(tytCustomerDataType, startTime, null, {
+                Data1: pt_pin
+            });
+            if (sss.length > 0) {
+                continue;
+            }
+            ckStatus = 0;
+            await help(packetId, c)
+            if (status == 1) {
+                result = "任务编号：" + tytOrder.Data5 + "，推一推完成。"
+                break;
+            }
+            if (status == 2) {
+                result = "任务编号：" + tytOrder.Data5 + "，帮砍排队放弃吧。"
+                break;
+            }
+            if (status == 3) {
+                result = "任务编号：" + tytOrder.Data5 + "，推一推链接过期了。"
+                break;
+            }
+            if (ckStatus == -1) {
                 await addCustomData([{
                     Type: tytCustomerDataType,
                     Data1: pt_pin,
                     Data2: ckStatus,
                     Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
-                    Data4: "助理次数用完了"
+                    Data4: "火爆了"
                 }])
+            } else if (ckStatus == 99) {
+                if (s1.length > 0) {
+                    s1[0].Data3 = moment().format("YYYY-MM-DD HH:mm:ss");
+                    await updateCustomData(s1[0]);
+                } else {
+                    await addCustomData([{
+                        Type: tytCustomerDataType,
+                        Data1: pt_pin,
+                        Data2: ckStatus,
+                        Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
+                        Data4: "助力次数用完了"
+                    }])
+                }
             }
+        } catch (e) {
+
         }
-        await sleep(4000);
+        await sleep(3000);
     }
     if (!result) {
         result = "任务编号：" + tytOrder.Data5 + "，没有推完，CK已经跑完了！";
@@ -153,12 +166,11 @@ let ckStatus = 0;
     console.log(result);
     tytOrder.Data2 = result;
     await updateCustomData(tytOrder);
-    await sendNotify(result, true);
+    await sendNotify(result + "\n用户：" + CommunicationUserName, true);
     if (tytOrder.Data3 != ManagerQQ) {
         await sendNotify(result, false, tytOrder.Data6);
     }
 })();
-
 
 async function help(packetId, cookie) {
     const nm = {
@@ -206,7 +218,6 @@ async function help(packetId, cookie) {
         ckStatus = 99;
     }
 }
-
 function safeGet(data) {
     try {
         if (typeof JSON.parse(data) == "object") {
