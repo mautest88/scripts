@@ -95,7 +95,8 @@ let ckStatus = 0;
     var result = "";
     var packetId = tytOrder.Data1.match(/packetId=([^&]+)(?=&?)/)[1]
     await sendNotify("开始推一推任务：" + tytOrder.Data5)
-    var tyt_records = await getCustomData(tytCustomerDataType);
+    // var tyt_records = await getCustomData(tytCustomerDataType);
+    var tyt_records = [];
     console.log(tyt_records.length);
 
     for (var index = 0; index <= cookies.length; index++) {
@@ -133,28 +134,28 @@ let ckStatus = 0;
                 result = "任务编号：" + tytOrder.Data5 + "，推一推链接过期了。"
                 break;
             }
-            if (ckStatus == -1) {
-                await addCustomData([{
-                    Type: tytCustomerDataType,
-                    Data1: pt_pin,
-                    Data2: ckStatus,
-                    Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
-                    Data4: "火爆了"
-                }])
-            } else if (ckStatus == 99) {
-                if (s1.length > 0) {
-                    s1[0].Data3 = moment().format("YYYY-MM-DD HH:mm:ss");
-                    await updateCustomData(s1[0]);
-                } else {
-                    await addCustomData([{
-                        Type: tytCustomerDataType,
-                        Data1: pt_pin,
-                        Data2: ckStatus,
-                        Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
-                        Data4: "助力次数用完了"
-                    }])
-                }
-            }
+            // if (ckStatus == -1) {
+            //     await addCustomData([{
+            //         Type: tytCustomerDataType,
+            //         Data1: pt_pin,
+            //         Data2: ckStatus,
+            //         Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
+            //         Data4: "火爆了"
+            //     }])
+            // } else if (ckStatus == 99) {
+            //     if (s1.length > 0) {
+            //         s1[0].Data3 = moment().format("YYYY-MM-DD HH:mm:ss");
+            //         await updateCustomData(s1[0]);
+            //     } else {
+            //         await addCustomData([{
+            //             Type: tytCustomerDataType,
+            //             Data1: pt_pin,
+            //             Data2: ckStatus,
+            //             Data3: moment().format("YYYY-MM-DD HH:mm:ss"),
+            //             Data4: "助力次数用完了"
+            //         }])
+            //     }
+            // }
         } catch (e) {
 
         }
