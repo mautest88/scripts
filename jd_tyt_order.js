@@ -16,7 +16,6 @@ const api = got.extend({
 });
 
 const moment = require('moment');
-const { cwd } = require('process');
 
 let tyt_url = process.env.tyt_url;
 let TYT_USE_SCORE = (process.env.TYT_USE_SCORE || 0) * 1;
@@ -25,7 +24,7 @@ let customerDataType = "tyt_order_record";
 let CommunicationUserId = process.env.CommunicationUserId;
 let CommunicationUserName = process.env.CommunicationUserName;
 let ManagerQQ = process.env.ManagerQQ;
-let group_id = process.env.group_id; //群组ID
+
 let max_thread = (process.env.TYT_MAX_THREAD || 5) * 1; // 同时运行推一推的线程数量
 
 
