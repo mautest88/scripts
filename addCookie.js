@@ -275,15 +275,17 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                             c.Remark = data2[0].Remark;
                             if (UPDATE_COOKIE_NOTIFY) {
                                 await sendNotify(`Cookie更新通知
-用户：${user_id}
-昵称：${$.nickName}`, true)
+用户ID：${process.env.CommunicationUserId}
+用户昵称：${process.env.CommunicationUserName}
+京东昵称：${$.nickName}`, true)
                             }
                         } else {
                             c.Id = null;
                             if (ADD_COOKIE_NOTIFY) {
                                 await sendNotify(`Cookie新增通知
-用户：${user_id}
-昵称：${$.nickName}`, true)
+用户ID：${process.env.CommunicationUserId}
+用户昵称：${process.env.CommunicationUserName}
+京东昵称：${$.nickName}`, true)
                             }
                             jdCookies.push(cookie)
                             console.log("全新韭菜上线拉！");
@@ -302,7 +304,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                     if (data.Code != 200) {
                         console.log("addEnvs Error ：" + JSON.stringify(data));
                         await sendNotify(`提交失败辣，pt_pin=${pt_pin}：发生异常，已通知管理员处理啦！`)
-                        await sendNotify(`用户ID：${user_id}提交CK pt_pin=${pt_pin}
+                        await sendNotify(`用户ID：${process.env.CommunicationUserId}提交CK pt_pin=${pt_pin}
 发生异常，系统错误：${data.Message}。`, true)
                         user.MaxEnvCount += ADD_COOKIE_USE_SCORE;
                         continue;

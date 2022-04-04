@@ -1,6 +1,6 @@
 ﻿/**
  * 
- * 删除所有无效用户信息 (无用户环境变量的用户)
+ * 删除所有无效用户信息 (无用户环境变量，积分为0的用户)
  * 
  * */
 
@@ -20,14 +20,14 @@ const {
     console.log(`获取用户数量${envs.length}个。`);
 
     for (var i = 0; i < envs.length; i++) {
-        users = users.filter((y) => y.Id != envs[i].UserId);
+        users = users.filter((y) => y.Id != envs[i].UserId && n.MaxEnvCount == 0);
     }
     console.log(`待清理用户数量${users.length}个。`);
 
     var ids = [];
     for (var u = 0; u < users.length; u++) {
         ids.push(users[u].Id);
-    }  
+    }
     if (ids.length > 0) {
         var t = await deleteUser(ids);
         await sendNotify("清理过期用户" + ids.length + "个");

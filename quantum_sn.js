@@ -29,13 +29,15 @@ var custom_data_type = "quantum_sn"
             return;
         }
         var sns = [];
+        var nnn = uuid(12);
         for (var i = 0; i < sn_count; i++) {
             var sss = "QTSN" + uuid(22, 16)
             sns.push({
                 Type: custom_data_type,
                 Data1: sss,
                 Data2: sn_score,
-                Data3: "否"
+                Data3: "否",
+                Data6: nnn
             });
             console.log(sss);
         }
@@ -48,9 +50,10 @@ var custom_data_type = "quantum_sn"
             Title3: "是否使用",
             Title4: "QQ/微信",
             Title5: "昵称",
+            Title6: "批次号",
         })
         result = await addCustomData(sns);
-        var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分`;
+        var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分\n卡密批次：` + nnn;
         for (var i = 0; i < result.length; i++) {
             tt += "\n" + result[i].Data1;
             if (i + 1 % 30 == 0) {
