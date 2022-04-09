@@ -60,8 +60,6 @@ let isLogin = true;
                 console.log("自动禁用失效COOKIE！")
                 overdueCKs.push(cookie)
             }
-            else {
-            }
         }
     }
     if (managerNotifyMessage) {
@@ -76,7 +74,6 @@ let isLogin = true;
     .catch((e) => console.log(JSON.stringify(e)))
 
 async function isLoginByX1a0He() {
-    console.log("isLoginByX1a0He")
     const options = {
         url: 'https://plogin.m.jd.com/cgi-bin/ml/islogin',
         headers: {
