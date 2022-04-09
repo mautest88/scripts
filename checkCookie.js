@@ -46,7 +46,11 @@ let isLogin = true;
             var UserName = (cookie.match(/pt_pin=([^; ]+)(?=;?)/) && pt_pin)
             var UserName2 = decodeURI(UserName);
             console.log(`开始检测【京东账号】${UserName2} ....\n`);
-            await isLoginByX1a0He();
+            try {
+                await isLoginByX1a0He();
+            } catch (e) {
+                continue;
+            }
             if (!isLogin) {
                 console.log(cookie + "失效！")
                 await sendNotify(`账号名称：${UserName2}，失效！`, false, cookiesArr[i].UserId);
