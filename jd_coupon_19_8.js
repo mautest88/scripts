@@ -1,7 +1,47 @@
 ﻿/**
  * 
- * 19-8优惠券
+ * 10-2优惠券
  * 环境变量：coupon_19_8_pin， 参与抢券的ck pt_pin，多个用 & 分割
  * 
  * */
-var _0xodt = 'jsjiami.com.v6', _0xodt_ = ['_0xodt'], _0x550c = [_0xodt, 'w7jCp8OKwrbCvR5ww4g8', 'w5vCi0U=', 'w585Iw==', '5b6o5Yi35peo6Za67722', 'DHtfwpvCqQ==', 'exzDmsK0wqwH', 'ATEfw5Md', 'w5gufz7DgA==', 'ZcKPKA==', '5p+R5o6q5L6Fbg/CncOXw4BQQwTCucKRw7cBI8KQwo5Ac+eNheWijeWMmemGm+ODog==', 'w5BfaMOYcg==', 'eV5yD04=', 'SEVtKCE=', 'wotAQ8KNSsK+', 'dMO6wqd/OzQ=', 'w6/Dgn3Drhk=', 'wrrDiHBZMTg2', 'w6zDvzF1w5PCocKV', 'cFDDg8Orw4M=', 'w5bDoMOYwpTDoQ==', 'WATCvDdk', 'fcKIKsOu', 'W0BT', 'MhgXw5MP', 'wqPDh2ZPLA==', 'w7zDisOSwps=', 'wqfDicK8cCt5wqtPOQE=', 'w4sJwoI=', '5p6A5omV5YuXZMKHfjcwwo3kuL7vvoU=', '55u4w40kwqBXwoF4w7LDrHY=', 'w73CiWVJKBkkDVY=', 'w5tzw4cJc0o=', 'bsKPOw==', 'TkXDm8Ouw5XCiVp+IMK0D8KQZcONw7nDkHJBX8KsecOhNkNwVwRpwqzCjMOxwqMNSX4uMlTDlsKkIi7Dt8OzLMOAZ8KsS8ObHBTCksOlcBwpBsKBw64+MEfCj01Tw67DnMKmOGl+w4PCvAdZwodIw57Co1MUThhNJMOLw6x+w5PCpyFzw5LDgsKfeVvDsg3DvcOcTyfCpMKCwqxwOsOGBRHCmAEzQ0Jcw5PDqn4Yw4jDnRrDrFnDnsOFwpBJw5RFS8KqaMOCw7nDj8Kxwq/CncKMwonCs8KTe8OEw6wCOE1Cw69AdEnCncK5w4tOwr8PwrFpw7nCrTDDisOKwrV5w5Jbw5vCp8OjLMK+D1dLwpYDEMKQE8KZblTCqBHDp8OXw5ELw74FGMKRwrnCoT3CkMOURwjCrcKRwr7CoMK2w7TCm8O2GUjCl8KwPClNKjnDq2JDwrFNAMO1w5DCtTs3J8KTNBsNw5DDrB1VcsKxw4bDtsKIwoTDlCDCp8OtHMKfN8KKScOJdsKrw4zDtwfDvAzDpsOtwrjDrcO7Ak/CjsKcwpLCvsOZw4bChMOzwoAwwrsFw4UjwobDgSPDjsK/DcKPw450w6LDtsK/ccKObcOLw60pwogtMMOnw6ZCZMOxJMKAJsOCZMKkwqrCh8KdwqZSdMKsw7BzFsKAwrc+CEJrQk9gw7vDiMOKwrHCkcKUJMO1w6TDhmnDlMO4wqfCuMOBW37DlVXCundgw7zCk8OkwphSwqk0TsOcQMOqBcKcwq7DvkLCvFZPFsO4w6rCscKRwrw9XScBwr4Pc3HCpCzCh2BDw6vCrA03NMOkXsK3acO9wrcMD3BFw71mw5w+J8OVwoIHaHdgOHYfSsO0woTCjR7CpW/CnUk=', 'w7vDncOCwofDtk0=', 'GcOpFg==', 'dBlRwrTCucO4OlBWw6bCsnvCjMKAVA==', 'M1VyLcKQw7XDgUVqMxHCv8KVJFDDtcO1w4DDig==', 'jyslEjiamPiSMgJ.AgLcoKm.v6uy==']; if (function (_0x549359, _0x2108be, _0x46896f) { function _0x305003(_0x2da472, _0x14d638, _0x2af14d, _0x158944, _0x4e3848, _0x400bb3) { _0x14d638 = _0x14d638 >> 0x8, _0x4e3848 = 'po'; var _0x36f826 = 'shift', _0x5dbcb1 = 'push', _0x400bb3 = '0.n3bgn3wpxz'; if (_0x14d638 < _0x2da472) { while (--_0x2da472) { _0x158944 = _0x549359[_0x36f826](); if (_0x14d638 === _0x2da472 && _0x400bb3 === '0.n3bgn3wpxz' && _0x400bb3['length'] === 0xc) { _0x14d638 = _0x158944, _0x2af14d = _0x549359[_0x4e3848 + 'p'](); } else if (_0x14d638 && _0x2af14d['replace'](/[ylEPSMgJAgLKuy=]/g, '') === _0x14d638) { _0x549359[_0x5dbcb1](_0x158944); } } _0x549359[_0x5dbcb1](_0x549359[_0x36f826]()); } return 0xdc3da; }; return _0x305003(++_0x2108be, _0x46896f) >> _0x2108be ^ _0x46896f; }(_0x550c, 0x1e6, 0x1e600), _0x550c) { _0xodt_ = _0x550c['length'] ^ 0x1e6; }; function _0x56ae(_0x7d64a0, _0x16835b) { _0x7d64a0 = ~~'0x'['concat'](_0x7d64a0['slice'](0x0)); var _0x2941ff = _0x550c[_0x7d64a0]; if (_0x56ae['EYOTFr'] === undefined) { (function () { var _0x502e47 = function () { var _0x4bdcd3; try { _0x4bdcd3 = Function('return\x20(function()\x20' + '{}.constructor(\x22return\x20this\x22)(\x20)' + ');')(); } catch (_0x5e9f4f) { _0x4bdcd3 = window; } return _0x4bdcd3; }; var _0x592fa2 = _0x502e47(); var _0x771f61 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='; _0x592fa2['atob'] || (_0x592fa2['atob'] = function (_0x5113de) { var _0x3feb5a = String(_0x5113de)['replace'](/=+$/, ''); for (var _0x1f41b0 = 0x0, _0x9d8525, _0x2f4b89, _0x211e77 = 0x0, _0xe24091 = ''; _0x2f4b89 = _0x3feb5a['charAt'](_0x211e77++); ~_0x2f4b89 && (_0x9d8525 = _0x1f41b0 % 0x4 ? _0x9d8525 * 0x40 + _0x2f4b89 : _0x2f4b89, _0x1f41b0++ % 0x4) ? _0xe24091 += String['fromCharCode'](0xff & _0x9d8525 >> (-0x2 * _0x1f41b0 & 0x6)) : 0x0) { _0x2f4b89 = _0x771f61['indexOf'](_0x2f4b89); } return _0xe24091; }); }()); function _0x2d2d2a(_0x559152, _0x16835b) { var _0x2f981b = [], _0x113382 = 0x0, _0x3b30b9, _0x356d53 = '', _0x254a97 = ''; _0x559152 = atob(_0x559152); for (var _0xf0bd30 = 0x0, _0x37449a = _0x559152['length']; _0xf0bd30 < _0x37449a; _0xf0bd30++) { _0x254a97 += '%' + ('00' + _0x559152['charCodeAt'](_0xf0bd30)['toString'](0x10))['slice'](-0x2); } _0x559152 = decodeURIComponent(_0x254a97); for (var _0x2dba7c = 0x0; _0x2dba7c < 0x100; _0x2dba7c++) { _0x2f981b[_0x2dba7c] = _0x2dba7c; } for (_0x2dba7c = 0x0; _0x2dba7c < 0x100; _0x2dba7c++) { _0x113382 = (_0x113382 + _0x2f981b[_0x2dba7c] + _0x16835b['charCodeAt'](_0x2dba7c % _0x16835b['length'])) % 0x100; _0x3b30b9 = _0x2f981b[_0x2dba7c]; _0x2f981b[_0x2dba7c] = _0x2f981b[_0x113382]; _0x2f981b[_0x113382] = _0x3b30b9; } _0x2dba7c = 0x0; _0x113382 = 0x0; for (var _0x5dc307 = 0x0; _0x5dc307 < _0x559152['length']; _0x5dc307++) { _0x2dba7c = (_0x2dba7c + 0x1) % 0x100; _0x113382 = (_0x113382 + _0x2f981b[_0x2dba7c]) % 0x100; _0x3b30b9 = _0x2f981b[_0x2dba7c]; _0x2f981b[_0x2dba7c] = _0x2f981b[_0x113382]; _0x2f981b[_0x113382] = _0x3b30b9; _0x356d53 += String['fromCharCode'](_0x559152['charCodeAt'](_0x5dc307) ^ _0x2f981b[(_0x2f981b[_0x2dba7c] + _0x2f981b[_0x113382]) % 0x100]); } return _0x356d53; } _0x56ae['YxmTXz'] = _0x2d2d2a; _0x56ae['LPzGKT'] = {}; _0x56ae['EYOTFr'] = !![]; } var _0x5d99fb = _0x56ae['LPzGKT'][_0x7d64a0]; if (_0x5d99fb === undefined) { if (_0x56ae['pRSkGO'] === undefined) { _0x56ae['pRSkGO'] = !![]; } _0x2941ff = _0x56ae['YxmTXz'](_0x2941ff, _0x16835b); _0x56ae['LPzGKT'][_0x7d64a0] = _0x2941ff; } else { _0x2941ff = _0x5d99fb; } return _0x2941ff; }; const { getEnvs, sleep } = require(_0x56ae('0', '02v)')); const moment = require(_0x56ae('1', '[Ziw')); const got = require(_0x56ae('2', '&uxa')); var apiUrl = _0x56ae('3', '^g&Q'); const api = got[_0x56ae('4', 'dQZr')]({ 'retry': { 'limit': 0x0 } }); let coupon_19_8_pin = process[_0x56ae('5', 'j5!#')][_0x56ae('6', 'FTSJ')]; !(async () => { var _0x5c877d = { 'RXOhT': function (_0x15b200, _0x40e7a3) { return _0x15b200 + _0x40e7a3; }, 'njOMx': function (_0x1843b2) { return _0x1843b2(); }, 'aqGhF': _0x56ae('7', 'h)[#'), 'XUJxs': function (_0x563b45, _0x296f41) { return _0x563b45(_0x296f41); }, 'YIHIi': function (_0x2e8759, _0x1dbde2, _0x540530, _0x426950) { return _0x2e8759(_0x1dbde2, _0x540530, _0x426950); }, 'NqFsq': _0x56ae('8', '(YHH'), 'HEnvy': _0x56ae('9', 'P#tL'), 'rfJIq': function (_0x33bdb7, _0x25ce3a) { return _0x33bdb7(_0x25ce3a); } }; console[_0x56ae('a', 'L[eS')](_0x56ae('b', 'h&A0') + _0x5c877d[_0x56ae('c', 'ZR1W')](moment)[_0x56ae('d', 'vCT3')](_0x5c877d[_0x56ae('e', '6Iq#')])); await _0x5c877d[_0x56ae('f', '@R32')](sleep, 0x64); if (!coupon_19_8_pin) { console[_0x56ae('10', '&uxa')](_0x56ae('11', 'h&A0')); return; } var _0x567193 = await _0x5c877d[_0x56ae('12', 'iYx$')](getEnvs, _0x5c877d[_0x56ae('13', '!jV1')], null, 0x2); var _0x4853b1 = coupon_19_8_pin[_0x56ae('14', 's3QD')]('&'); for (var _0x5640eb = 0x0; _0x5640eb < _0x4853b1[_0x56ae('15', '7N0H')]; _0x5640eb++) { var _0x381c37 = _0x567193[_0x56ae('16', '4A*2')](_0x31916f => _0x31916f[_0x56ae('17', 'o(BX')][_0x56ae('18', '02v)')](_0x56ae('19', 'sRx$') + _0x4853b1[_0x5640eb]) > -0x1)[0x0]; if (_0x381c37) { const _0x4c1c0e = { 'url': apiUrl, 'headers': { 'Cookie': _0x381c37[_0x56ae('1a', '^g&Q')] }, 'method': _0x5c877d[_0x56ae('1b', 'dQZr')] }; await _0x5c877d[_0x56ae('1c', ']!l%')](api, _0x4c1c0e)[_0x56ae('1d', '&uxa')](async _0x4b38d9 => { console[_0x56ae('1e', '!jV1')](_0x5c877d[_0x56ae('1f', '6Iq#')](_0x4853b1[_0x5640eb] + '：', JSON[_0x56ae('20', '02v)')](_0x4b38d9[_0x56ae('21', 'dQZr')])[_0x56ae('22', 'N(rV')])); }); } else { console[_0x56ae('23', 'cmLT')](_0x56ae('24', '^eqZ') + _0x4853b1[_0x5640eb] + _0x56ae('25', 'j5!#')); } } })();; _0xodt = 'jsjiami.com.v6';
+const {
+    getEnvs
+} = require('./quantum');
+
+const moment = require('moment');
+const got = require('got');
+
+var apiUrl = "https://api.m.jd.com/client.action?functionId=newBabelAwardCollection&client=wh5&body=%7B%22activityId%22%3A%223H885vA4sQj6ctYzzPVix4iiYN2P%22%2C%22scene%22%3A%221%22%2C%22args%22%3A%22key%3D79F6166D6F9BB11C9ED9696C6E30D9C1D392C277F9B79AB559E9868E1EE0910308189D1B2C9883FC5560EDA0CD002985_bingo%2CroleId%3DC6DCE94E14C0BEE454EA964509F4B26C_bingo%2CstrengthenKey%3D19F512DCD8EE34ABE9C4FB4A92C2F42A3E4F1D227F16BC3264497B20B54D33F5_bingo%22%7D";
+
+const api = got.extend({
+    retry: { limit: 0 },
+});
+
+let coupon_19_8_pin = process.env.coupon_19_8_pin;
+!(async () => {
+
+    console.log("当前时间：" + moment().format("YYYY-MM-DD HH:mm:ss.fff"));
+    if (!coupon_19_8_pin) {
+        console.log("未提供 coupon_19_8_pin 环境变量。");
+        return;
+    }
+    var envs = await getEnvs("JD_COOKIE", null, 2);
+    var coupon_19_8_pins = coupon_19_8_pin.split("&");
+    for (var i = 0; i < coupon_19_8_pins.length; i++) {
+        var c = envs.filter((e) => e.Value.indexOf("pt_pin=" + coupon_19_8_pins[i]) > -1)[0];
+        if (c) {
+            const nm = {
+                url: apiUrl,
+                headers: {
+                    "Cookie": c.Value,
+                },
+                method: "get"
+            }
+            await api(nm).then(async response => {
+                console.log(coupon_19_8_pins[i] + "：" + JSON.parse(response.body).subCodeMsg);
+            });
+        } else {
+            console.log(`未找到pt_pin为：${coupon_19_8_pins[i]}的JD_COOKIE`);
+        }
+    }
+})();

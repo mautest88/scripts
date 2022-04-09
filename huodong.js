@@ -12,9 +12,8 @@ require('./env.js');
 if (!process.env.NO_CK_NOTIFY) {
     process.env.NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。";
 }
-let EnableConc = process.env.EnableConc == "True"; //是否开启并发
 
-const { addEnvs, getEnvs, sendNotify, getCookies
+const { sendNotify, getCookies
 } = require('./quantum');
 
 let allMessage = '';

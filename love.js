@@ -1,6 +1,4 @@
-﻿// 骚话
-
-const got = require('got');
+﻿const got = require('got');
 const {
     sendNotify
 } = require('./quantum');

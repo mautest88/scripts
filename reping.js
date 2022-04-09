@@ -1,4 +1,6 @@
-﻿// 骚话
+﻿/**
+ * 网易云热评
+ * */
 
 const got = require('got');
 const {

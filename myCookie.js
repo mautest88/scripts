@@ -3,7 +3,7 @@
  *
  * NO_CK_NOTIFY ，说明未提交京东CK时提醒信息。
  *
- * */
+ **/
 
 require('./env.js');
 const moment = require('moment');
@@ -26,12 +26,7 @@ let user_id = process.env.user_id; //用户id
         }
         return;
     }
-
-    var message = "";
-    if (cks.length > 0)
-        message = `您一共绑定了${cks.length}个狗东：`;
-    else
-        message = "您没有绑定账号。"
+    var message = `一共绑定了${cks.length}个京东：`;
     for (var i = 0; i < cks.length; i++) {
         var ck = cks[i];
         var name = ck.UserRemark || ck.Value.match(/pt_pin=([^; ]+)(?=;?)/) && ck.Value.match(/pt_pin=([^; ]+)(?=;?)/)[1];

@@ -1,6 +1,5 @@
 /*
- * 给用户推送过期账号提醒
- * 可配置环境变量名称：DELETE_LOG_DAY  (删除指定多少天以前的日志，默认3天)
+ * 定时删除量子日志
  */
 
 require('./env.js');
@@ -10,13 +9,6 @@ const moment = require('moment');
 
 
 let prefixUrl = process.env.serverAddres || 'http://localhost:5088';
-
-
-const {
-    sendNotify, allEnvs
-} = require('./quantum');
-
-
 
 const api = got.extend({
     prefixUrl: prefixUrl,

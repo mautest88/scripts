@@ -1,8 +1,47 @@
 ﻿/**
- *
+ * 
  * 5-2优惠券
  * 环境变量：coupon_5_2_pin， 参与抢券的ck pt_pin，多个用 & 分割
- *
+ * 
  * */
+const {
+    getEnvs
+} = require('./quantum');
 
-var _0xod5 = 'jsjiami.com.v6', _0xod5_ = ['_0xod5'], _0x3527 = [_0xod5, 'wrtKcinCjsK9', 'wotCcijCjg==', 'w7kSwrLCkgrCkX8=', 'fEHClggiGGg=', 'NMKRVcK7w70=', 'w7cZwqI=', 'wrvCnX0W', 'GGvDkQ==', 'w6MICMO4w4k=', 'd8Kjw48v', 'NcOzwqjCowfDksKBAMK1cA==', '5pyp5oih5Ym1awvCosKew5065LuK77yX', '55uDwpjDi1ZEGlAqwojDpA==', 'aMKpwrvClQnDmMKQOMKr', 'w6hGw50Dw4TDiw==', 'ZDAx', 'w5B4w5tew5Aqw5pXM2huAcKbw5EDw6bCnSzDr8KRw5nCl04DJjUsWCkBw5/DjHjCkmdBNAvCksOjwqMeFsKywoDDq8OzUsKhw6bDn8OPwp3DlMO/GMKxw6RCdWN1w4rCqcKlw7RPw7jCl8KBwr7Cl8KhGRoPI8K1w5HCv8KjVW19AsKiEcKQTMOrw7TCncO0wpEdMFxnHwFFw7XCrcK7Y8OBFUMJw6bCsx7DrsKjOsOdKyJGN1cAw5DDkcOkP2wIwrM+OcKOZXUlwoNnw6PCucOTw5EHwpxdasKNGcOOPlPDulN+WcOEeixOw4ASCcOWwqjDkcOJWSHCnzvDu8KqwpsEGSnDqS88w4jCpXTDtGnDuG7CpcKawq8Ywo7Dkj9oGsOnwrrCi8KvV1t7S8O6JcOIAcOmw7F5IyIuw5DDk8KaCsKUfAo1E8K/wrPDjTjDqsOrw5bCohfCtAQGEBnCrxN9cMOpwpsKTGVqNMKdwq9tw7PDtMOnw6PDhyPCtcKiw4UQCDXCusOfw44iIMOXw5nDqcKiw5/CvCvDn8KETcKywpsOw6HCtjbCrybDoMORYTjDqDJiIUszw60cwrxyXU3CnSnDsC0ZSsO2ZcKRdMKzw7/DvHwVH8KUNV/CjkfDo17DssOAwpDCv8KZwrkcwqdjw5A4wpEXO03CkBPChW7DumfCgcKaw6s1DB3CtSfDmcKCw7p4dQXDqlItwrg1w70GAcKVw65Ow5jCmi4yw5g8wpTCvjLDscKXIMKpD8Oww6E4RsOTw7rCrcKEwo7DpR7DgnUYwqIQXxEAwozDlB7CvQfDrAXCrMO5HMOiej0XwrfDniTCpn7Dh8OuMcOADQB8LMKHwoTDqkrCrcKfwqPCpBU=', 'OX7Cv8OqU8Of', 'ZjEz', 'fcK6wprDuicXJ8Okw4HCiVPCmcO+eg==', '5b+D5Yix5pSg6ZSD772o', '5p2H5oy25L25wrdQfMOGw4dOJiklw69HSMO/w5LDtmXnjanlo5Dljo/phaXjgoc=', 'woDDtsOCwpbDicOLw6vDlGw=', 'YFrCrg==', 'wrhfwqwCw6w=', 'VwgQbRo=', 'w6taw55Cw4o=', 'w7YTwqTCmhPCqg==', 'ZFTDpsKXwqvClkIewrXCuDdUHcO1FWNvIMKI', 'w6EPD8OJw4E=', 'Bhx+', 'TxvDqx3Cgg==', 'wpZRw45Ow5s=', 'PsK3wpfDvH4=', 'w7ZZw5wPw54=', 'O8OYwrp+wrQ=', 'w7wZwrjCkAbCtg==', 'CjSsjiami.GhxcSoggml.v6XVqxuAp==']; if (function (_0x12fba4, _0x3176b2, _0x2e5a22) { function _0x1426bd(_0x34686d, _0x2a8ed3, _0x1f3ac1, _0x59d92c, _0xd8011c, _0x57f341) { _0x2a8ed3 = _0x2a8ed3 >> 0x8, _0xd8011c = 'po'; var _0x12fff6 = 'shift', _0xd7ba00 = 'push', _0x57f341 = '0.orr3vu0d58q'; if (_0x2a8ed3 < _0x34686d) { while (--_0x34686d) { _0x59d92c = _0x12fba4[_0x12fff6](); if (_0x2a8ed3 === _0x34686d && _0x57f341 === '0.orr3vu0d58q' && _0x57f341['length'] === 0xd) { _0x2a8ed3 = _0x59d92c, _0x1f3ac1 = _0x12fba4[_0xd8011c + 'p'](); } else if (_0x2a8ed3 && _0x1f3ac1['replace'](/[CSGhxSgglXVqxuAp=]/g, '') === _0x2a8ed3) { _0x12fba4[_0xd7ba00](_0x59d92c); } } _0x12fba4[_0xd7ba00](_0x12fba4[_0x12fff6]()); } return 0xdc3d4; }; return _0x1426bd(++_0x3176b2, _0x2e5a22) >> _0x3176b2 ^ _0x2e5a22; }(_0x3527, 0xc6, 0xc600), _0x3527) { _0xod5_ = _0x3527['length'] ^ 0xc6; }; function _0xba78(_0x5eb969, _0x5c5d23) { _0x5eb969 = ~~'0x'['concat'](_0x5eb969['slice'](0x0)); var _0x43ab47 = _0x3527[_0x5eb969]; if (_0xba78['EYIUJJ'] === undefined) { (function () { var _0x582ab9; try { var _0x3f94f4 = Function('return\x20(function()\x20' + '{}.constructor(\x22return\x20this\x22)(\x20)' + ');'); _0x582ab9 = _0x3f94f4(); } catch (_0x53bc36) { _0x582ab9 = window; } var _0x1a1a5b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='; _0x582ab9['atob'] || (_0x582ab9['atob'] = function (_0x97ab3) { var _0x50a21b = String(_0x97ab3)['replace'](/=+$/, ''); for (var _0x3c3d4a = 0x0, _0x1b9699, _0x20b68c, _0x5dea64 = 0x0, _0x791eb1 = ''; _0x20b68c = _0x50a21b['charAt'](_0x5dea64++); ~_0x20b68c && (_0x1b9699 = _0x3c3d4a % 0x4 ? _0x1b9699 * 0x40 + _0x20b68c : _0x20b68c, _0x3c3d4a++ % 0x4) ? _0x791eb1 += String['fromCharCode'](0xff & _0x1b9699 >> (-0x2 * _0x3c3d4a & 0x6)) : 0x0) { _0x20b68c = _0x1a1a5b['indexOf'](_0x20b68c); } return _0x791eb1; }); }()); function _0x281276(_0x5de092, _0x5c5d23) { var _0x3cc2c9 = [], _0x2dcad1 = 0x0, _0x51ec53, _0x329f2e = '', _0x2aaf5c = ''; _0x5de092 = atob(_0x5de092); for (var _0x1889e7 = 0x0, _0x3ca270 = _0x5de092['length']; _0x1889e7 < _0x3ca270; _0x1889e7++) { _0x2aaf5c += '%' + ('00' + _0x5de092['charCodeAt'](_0x1889e7)['toString'](0x10))['slice'](-0x2); } _0x5de092 = decodeURIComponent(_0x2aaf5c); for (var _0x445621 = 0x0; _0x445621 < 0x100; _0x445621++) { _0x3cc2c9[_0x445621] = _0x445621; } for (_0x445621 = 0x0; _0x445621 < 0x100; _0x445621++) { _0x2dcad1 = (_0x2dcad1 + _0x3cc2c9[_0x445621] + _0x5c5d23['charCodeAt'](_0x445621 % _0x5c5d23['length'])) % 0x100; _0x51ec53 = _0x3cc2c9[_0x445621]; _0x3cc2c9[_0x445621] = _0x3cc2c9[_0x2dcad1]; _0x3cc2c9[_0x2dcad1] = _0x51ec53; } _0x445621 = 0x0; _0x2dcad1 = 0x0; for (var _0x407c91 = 0x0; _0x407c91 < _0x5de092['length']; _0x407c91++) { _0x445621 = (_0x445621 + 0x1) % 0x100; _0x2dcad1 = (_0x2dcad1 + _0x3cc2c9[_0x445621]) % 0x100; _0x51ec53 = _0x3cc2c9[_0x445621]; _0x3cc2c9[_0x445621] = _0x3cc2c9[_0x2dcad1]; _0x3cc2c9[_0x2dcad1] = _0x51ec53; _0x329f2e += String['fromCharCode'](_0x5de092['charCodeAt'](_0x407c91) ^ _0x3cc2c9[(_0x3cc2c9[_0x445621] + _0x3cc2c9[_0x2dcad1]) % 0x100]); } return _0x329f2e; } _0xba78['EphnAs'] = _0x281276; _0xba78['KoCeor'] = {}; _0xba78['EYIUJJ'] = !![]; } var _0x519075 = _0xba78['KoCeor'][_0x5eb969]; if (_0x519075 === undefined) { if (_0xba78['yoLVvO'] === undefined) { _0xba78['yoLVvO'] = !![]; } _0x43ab47 = _0xba78['EphnAs'](_0x43ab47, _0x5c5d23); _0xba78['KoCeor'][_0x5eb969] = _0x43ab47; } else { _0x43ab47 = _0x519075; } return _0x43ab47; }; const { getEnvs, sleep } = require(_0xba78('0', 'dhqo')); const moment = require(_0xba78('1', '%J@#')); const got = require(_0xba78('2', '4lNV')); var apiUrl = _0xba78('3', 'qPz$'); const api = got[_0xba78('4', '!c[I')]({ 'retry': { 'limit': 0x0 } }); let coupon_5_2_pin = process[_0xba78('5', '4lNV')][_0xba78('6', '75om')]; !(async () => { var _0x220f55 = { 'AbcFi': function (_0x1dfb4a, _0x46aec1) { return _0x1dfb4a + _0x46aec1; }, 'TWUve': _0xba78('7', 'FC&A'), 'SVqli': function (_0x4d5acd) { return _0x4d5acd(); }, 'rfuBm': function (_0x4a2ff1, _0x238bdf) { return _0x4a2ff1(_0x238bdf); }, 'tqHvS': _0xba78('8', 'L4pw'), 'ssemU': function (_0x4c9bec, _0x3b7376, _0x21cd50, _0x1c8fa3) { return _0x4c9bec(_0x3b7376, _0x21cd50, _0x1c8fa3); }, 'SQukM': _0xba78('9', 'cN5A'), 'bMjCi': function (_0x55ce18, _0x1901dc) { return _0x55ce18 < _0x1901dc; } }; console[_0xba78('a', 'Z@a%')](_0x220f55[_0xba78('b', 'DAO2')](_0x220f55[_0xba78('c', '4lNV')], _0x220f55[_0xba78('d', 'qPz$')](moment)[_0xba78('e', 'FC&A')](_0xba78('f', 'kwm0')))); await _0x220f55[_0xba78('10', ']V(H')](sleep, 0x64); if (!coupon_5_2_pin) { console[_0xba78('11', 'l*!z')](_0x220f55[_0xba78('12', 'VsAB')]); return; } var _0x442538 = await _0x220f55[_0xba78('13', 'Y)u!')](getEnvs, _0x220f55[_0xba78('14', 'L4pw')], null, 0x2); var _0x2f85df = coupon_5_2_pin[_0xba78('15', '%J@#')]('&'); for (var _0x22b191 = 0x0; _0x220f55[_0xba78('16', '^iLm')](_0x22b191, _0x2f85df[_0xba78('17', 'FC&A')]); _0x22b191++) { var _0x791016 = _0x2f85df[_0x22b191]; var _0x53ca71 = _0x442538[_0xba78('18', '1$w2')](_0x2f2ee7 => _0x2f2ee7[_0xba78('19', '1$w2')][_0xba78('1a', 'FC&A')](_0xba78('1b', 'Z@a%') + _0x791016) > -0x1)[0x0]; if (_0x53ca71) { const _0x38aed1 = { 'url': apiUrl, 'headers': { 'Cookie': _0x53ca71[_0xba78('1c', 'd%$B')] }, 'method': _0xba78('1d', 'FC&A') }; await api(_0x38aed1)[_0xba78('1e', 'qj&V')](async _0x463ca1 => { console[_0xba78('1f', 'qZ@t')](_0x791016 + '：' + JSON[_0xba78('20', ']V(H')](_0x463ca1[_0xba78('21', '(6nF')])[_0xba78('22', 'dhqo')]); }); } else { console[_0xba78('1f', 'qZ@t')](_0xba78('23', '4lNV') + _0x791016 + _0xba78('24', '8oGK')); } } })();; _0xod5 = 'jsjiami.com.v6';
+const moment = require('moment');
+const got = require('got');
+
+var apiUrl = "https://api.m.jd.com/client.action?functionId=newBabelAwardCollection&client=wh5&body=%7B%22activityId%22%3A%223H885vA4sQj6ctYzzPVix4iiYN2P%22%2C%22scene%22%3A%221%22%2C%22args%22%3A%22key%3D64616D6FB9F745A939AEBE59B5331E98A02F7F3EBE7E2A8C6BC39900A5FB433C383A3885B1901C0036F186675FDB6B40_bingo%2CroleId%3D454CDE7D149EE1DA28FDC5C9AD4D3FF6_bingo%2CstrengthenKey%3D19F512DCD8EE34ABE9C4FB4A92C2F42AD9B1F4308CB2085C9DAE51ED67591679_bingo%22%7D";
+
+const api = got.extend({
+    retry: { limit: 0 },
+});
+
+let coupon_5_2_pin = process.env.coupon_5_2_pin;
+!(async () => {
+    console.log("当前时间：" + moment().format("YYYY-MM-DD HH:mm:ss.fff"));
+    if (!coupon_5_2_pin) {
+        console.log("未提供 coupon_5_2_pin 环境变量。");
+        return;
+    }
+    var envs = await getEnvs("JD_COOKIE", null, 2);
+    var coupon_5_2_pins = coupon_5_2_pin.split("&");
+    for (var i = 0; i < coupon_5_2_pins.length; i++) {
+        var pin = coupon_5_2_pins[i];
+        var c = envs.filter((e) => e.Value.indexOf("pt_pin=" + pin) > -1)[0];
+        if (c) {
+            const nm = {
+                url: apiUrl,
+                headers: {
+                    "Cookie": c.Value,
+                },
+                method: "get"
+            }
+            await api(nm).then(async response => {
+                console.log(pin + "：" + JSON.parse(response.body).subCodeMsg);
+            });
+        } else {
+            console.log(`未找到pt_pin为：${pin}的JD_COOKIE`);
+        }
+    }
+})();

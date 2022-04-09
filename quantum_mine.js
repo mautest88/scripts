@@ -2,7 +2,6 @@
     sendNotify, getUserInfo
 } = require('./quantum');
 
-
 !(async () => {
     var user = await getUserInfo();
     await sendNotify(`绑定QQ：${user.qq || '未绑定'}

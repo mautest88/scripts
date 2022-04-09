@@ -10,7 +10,6 @@ const api = got.extend({
 });
 
 !(async () => {
-    var len = 20;
     await api({
         url: 'https://api.vvhan.com/api/en',
         headers: {
@@ -19,9 +18,7 @@ const api = got.extend({
         method: 'get',
     }).then(async response => {
         var body = JSON.parse(response.body)
-        console.log(body);
         var message = body.data.zh + "\n" + body.data.en;
         await sendNotify(message)
-        console.log(message)
     });
 })();

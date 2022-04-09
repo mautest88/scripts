@@ -1,5 +1,6 @@
-﻿// enen
-
+﻿/**
+ * enen
+ * */
 const {
     getEnvs
 } = require('./quantum');

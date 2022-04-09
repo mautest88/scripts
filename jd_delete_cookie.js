@@ -10,7 +10,6 @@ const {
 } = require('./quantum');
 
 let CommunicationUserId = process.env.CommunicationUserId;
-let CommunicationUserName = process.env.CommunicationUserName;
 let user_id = process.env.user_id; //用户id
 let command = process.env.command;
 !(async () => {
@@ -23,8 +22,8 @@ let command = process.env.command;
     }
     var cks = await getEnvs("JD_COOKIE", p, 2, user_id)
     console.log("CK个数：" + cks.length);
+    await sendNotify("删除账号成功！\n感谢使用，有缘再见！")
     if (cks.length == 0) {
-        await sendNotify("您已经没有可以删除的帐号了！");
         return;
     } else {
         var ids = [];
@@ -34,7 +33,6 @@ let command = process.env.command;
             ids.push(item.Id);
         });
         await deleteEnvByIds(ids)
-        await sendNotify("删除账号成功！\n感谢使用，有缘再见！")
         await sendNotify("有人删除账号跑路了，用户：" + CommunicationUserId, true);
     }
 })().catch((e) => {

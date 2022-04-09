@@ -36,63 +36,31 @@ const api = got.extend({
 let isLogin = true;
 
 !(async () => {
-
-
-    if (cookiesArr.length == 0) {
-        console.log("没有Cookies信息结束任务。");
-        if (process.env.NO_CK_NOTIFY) {
-            await sendNotify(process.env.NO_CK_NOTIFY);
-        }
-        return;
-    }
-    var userNotifyMessage = "";
+    var cookiesArr = await getEnvs("JD_COOKIE", null, 2);
     var managerNotifyMessage = "";
     var overdueCKs = [];
-
     for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
+        if (cookiesArr[i].Value && cookiesArr[i].Enable) {
+            cookie = cookiesArr[i].Value;
             var pt_pin = cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
             var UserName = (cookie.match(/pt_pin=([^; ]+)(?=;?)/) && pt_pin)
             var UserName2 = decodeURI(UserName);
-            var t = (await getEnvs("JD_COOKIE", pt_pin, 2, null));
-            if (t.length > 0) {
-                t = t[0];
-                UserName2 = t.UserRemark || UserName2;
-                if (!t.Enable) {
-                    console.log("账号：" + UserName2 + "本身就失效，不检查状态。");
-                    if (!IsSystem) {
-                        userNotifyMessage += `【账号名称】：${UserName2}，过期了！请重新获取提交。\n`
-                    }
-                    continue;
-                }
-            }
             console.log(`开始检测【京东账号】${UserName2} ....\n`);
             await isLoginByX1a0He();
-            if (isLogin) {
-                console.log("cookie有效！")
-                if (!IsSystem) {
-                    var overdueDate = moment(t.UpdateTime).add(30, 'days');
-                    var day = overdueDate.diff(new Date(), 'day');
-                    userNotifyMessage += `【东东账号】：${UserName2}，有效！
-【预计失效】${day}天后，${moment(t.overdueDate).format("MM月DD日")}失效。\n`
-                }
-            }
-            else {
+            if (!isLogin) {
                 console.log(cookie + "失效！")
-                userNotifyMessage += `账号名称：${UserName2}，失效！\n`
+                await sendNotify(`账号名称：${UserName2}，失效！`, false, cookiesArr[i].UserId);
                 if (CK_Failure_Notify) {
                     managerNotifyMessage += `pt_pin：${pt_pin || '-'}，账号名：${UserName2}，过期！\n`
                 }
                 console.log("自动禁用失效COOKIE！")
                 overdueCKs.push(cookie)
             }
+            else {
+            }
         }
     }
-    if (userNotifyMessage) {
-        await sendNotify(userNotifyMessage);
-    }
-    if (userNotifyMessage) {
+    if (managerNotifyMessage) {
         await sendNotify(managerNotifyMessage, true);
     }
     if (overdueCKs && overdueCKs.length > 0) {

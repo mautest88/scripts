@@ -8,6 +8,7 @@
  * JINGXIANGZHI_MSG (京享值过低提醒)
  * QuickSMS (量子短信服务)
  * ADD_COOKIE_USE_SCORE  添加CK需要多少积分。（设置为0 或者 不设置时则表示不需要积分。）
+ * 
  **/
 
 const $ = new Env('添加并验证Cookie');
@@ -276,7 +277,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                             if (UPDATE_COOKIE_NOTIFY) {
                                 await sendNotify(`Cookie更新通知
 用户ID：${process.env.CommunicationUserId}
-用户昵称：${process.env.CommunicationUserName}
+用户昵称：${process.env.CommunicationUserName || ""}
 京东昵称：${$.nickName}`, true)
                             }
                         } else {
@@ -284,7 +285,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                             if (ADD_COOKIE_NOTIFY) {
                                 await sendNotify(`Cookie新增通知
 用户ID：${process.env.CommunicationUserId}
-用户昵称：${process.env.CommunicationUserName}
+用户昵称：${process.env.CommunicationUserName || ""}
 京东昵称：${$.nickName}`, true)
                             }
                             jdCookies.push(cookie)
