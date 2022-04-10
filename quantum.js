@@ -1,7 +1,7 @@
 ﻿
 const got = require('got');
 //------------- 量子助手系统环境变量部分 -------------
-let serverAddres = process.env.serverAddres || 'http://localhost:5089'; //服务地址
+let serverAddres = process.env.serverAddres || 'http://localhost:5088'; //服务地址
 let CommunicationType = process.env.CommunicationType; //通讯类型
 let CommunicationId = process.env.CommunicationId; //通讯工具ID
 let TextToPicture = process.env.TextToPicture; // 是否文字转图片

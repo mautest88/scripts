@@ -1,6 +1,8 @@
 /*
+ * 
  * 给用户推送过期账号提醒
  * 可配置环境变量名称：OVERDUE_NOTIFY_MSG  (过期提醒文字)
+ * 
  */
 
 require('./env.js');

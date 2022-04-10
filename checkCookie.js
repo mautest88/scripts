@@ -13,21 +13,16 @@ const got = require('got');
 if (!process.env.NO_CK_NOTIFY) {
     process.env.NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。";
 }
-const moment = require('moment');
-// const $ = new Env('京东CK检测');
-
-let IsSystem = process.env.IsSystem == "true";
-let cookiesArr = [];
-//是否开启并发
-if (process.env.JD_COOKIE) {
-    cookiesArr = process.env.JD_COOKIE.split("&");
-}
-
-let CK_Failure_Notify = process.env.CK_Failure_Notify != "false"; //失效CK是否通知管理员
+/**
+ * 
+ * 京东CK失效检查
+ * 可用环境变量CK_Failure_Notify  失效CK是否通知管理员， 默认不通知，如果需要通知请设置量子变量CK_Failure_Notify，值为true
+ * 
+ * */
+let CK_Failure_Notify = process.env.CK_Failure_Notify == "true"; //失效CK是否通知管理员
 
 const { disableEnvs, sendNotify, getEnvs
 } = require('./quantum');
-
 
 const api = got.extend({
     retry: { limit: 0 },
@@ -49,20 +44,24 @@ let isLogin = true;
             try {
                 await isLoginByX1a0He();
             } catch (e) {
+                console.log("检测CK出现异常，" + cookie);
+                console.log("异常信息，" + JSON.stringify(e));
                 continue;
             }
             if (!isLogin) {
-                console.log(cookie + "失效！")
-                await sendNotify(`账号名称：${UserName2}，失效！`, false, cookiesArr[i].UserId);
+                console.log(cookie + "失效，自动禁用失效COOKIE！")
+
+                //向用户发送失效通知
+                await sendNotify(`账号：${UserName2}，失效了，请重新提交！`, false, cookiesArr[i].UserId);
+
                 if (CK_Failure_Notify) {
                     managerNotifyMessage += `pt_pin：${pt_pin || '-'}，账号名：${UserName2}，过期！\n`
                 }
-                console.log("自动禁用失效COOKIE！")
                 overdueCKs.push(cookie)
             }
         }
     }
-    if (managerNotifyMessage) {
+    if (CK_Failure_Notify && managerNotifyMessage) {
         await sendNotify(managerNotifyMessage, true);
     }
     if (overdueCKs && overdueCKs.length > 0) {
