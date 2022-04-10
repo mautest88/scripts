@@ -50,10 +50,10 @@ let isLogin = true;
             }
             if (!isLogin) {
                 console.log(cookie + "失效，自动禁用失效COOKIE！")
-
                 //向用户发送失效通知
-                await sendNotify(`账号：${UserName2}，失效了，请重新提交！`, false, cookiesArr[i].UserId);
-
+                if (cookiesArr[i].UserId) {
+                    await sendNotify(`账号：${UserName2}，失效了，请重新提交！`, false, cookiesArr[i].UserId);
+                }
                 if (CK_Failure_Notify) {
                     managerNotifyMessage += `pt_pin：${pt_pin || '-'}，账号名：${UserName2}，过期！\n`
                 }
