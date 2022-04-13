@@ -154,7 +154,7 @@ var error = false;
         }
     }
     await getProxy();
-    for (var index = 0; index <= cookies.length; index++) {
+    for (var index = 0; index < cookies.length; index++) {
         try {
             var cookie = cookies[index];
             if (!cookie || !cookie.Value) {
@@ -207,8 +207,11 @@ var error = false;
                 }
             });
             threadCount++;
-            while (threadCount >= maxCount - count && threadCount > threadCompleteCount) {
+            while ((threadCount >= maxCount - count && threadCount > threadCompleteCount)) {
                 await sleep(100);
+            }
+            if (index == cookies.length - 1) {
+                await sleep(5000);
             }
             if (error) {
                 break;
