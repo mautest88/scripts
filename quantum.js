@@ -306,7 +306,7 @@ async function deleteEnvByIds(ids) {
 
 
 function uuid(len, radix) {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_*&^%$#@!.'.split('');
     var uuid = [],
         i;
     radix = radix || chars.length;
@@ -317,8 +317,12 @@ function uuid(len, radix) {
 
 /**
  * 发送通知消息
- * @param {any} content 发送消息内容
- * @param {any} isManager 是否发送给管理员
+ * @param {*} content 发送消息内容
+ * @param {*} isManager 是否发送给管理员
+ * @param {*} userId 指定发送给某人 （不@时传入字符串 NULL）
+ * @param {*} groupId 发送到群 
+ * @param {*} communicationType 
+ * @returns 
  */
 async function sendNotify(content, isManager, userId, groupId, communicationType) {
     var uuid = user_id;
@@ -339,6 +343,8 @@ ${content}
     }
     if (groupId) {
         group_id = groupId;
+    } else if (groupId == "NULL") {
+        group_id = null;
     } else {
         group_id = process.env.group_id
     }

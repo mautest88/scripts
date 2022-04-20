@@ -1,6 +1,6 @@
-﻿/**
+/**
  * 
- * 10-2优惠券
+ * 19-8优惠券
  * 环境变量：coupon_19_8_pin， 参与抢券的ck pt_pin，多个用 & 分割
  * 
  * */
@@ -45,3 +45,4 @@ let coupon_19_8_pin = process.env.coupon_19_8_pin;
         }
     }
 })();
+
