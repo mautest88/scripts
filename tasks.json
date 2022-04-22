@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "Name": "推一推",
         "Command": "49f40d2f40b3470e8d6c39aa4866c7ff",
@@ -1428,5 +1428,35 @@
         "Remark": null,
         "TaskSubs": [],
         "Id": "ba92f8ca670d4072bc3c39f01f7966e0"
+    },
+    {
+        "Name": "生成随机密码",
+        "Command": "随机密码",
+        "ConcCount": 0,
+        "CommandEnv": null,
+        "Cron": null,
+        "FileName": "quantum_passwod.js",
+        "TextToPicture": false,
+        "EnableRegex": true,
+        "FileCache": false,
+        "EnableConc": false,
+        "Enable": true,
+        "DayLimit": 0,
+        "EnablePush": true,
+        "PushGroup": false,
+        "EnableAll": false,
+        "EnableLog": true,
+        "Revocation": false,
+        "ConcEnvName": null,
+        "Manager": false,
+        "WaitTime": 0,
+        "CreateTime": "2022-04-14T11:58:46",
+        "TaskStatus": 0,
+        "TaskThreadId": null,
+        "TaskStartNotify": null,
+        "TaskEndNotify": null,
+        "Remark": null,
+        "TaskSubs": [],
+        "Id": "dcdd4541f1fc491786b873874f17754c"
     }
 ]
