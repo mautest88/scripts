@@ -117,24 +117,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
             console.log(`收到${user_id}手机号,${Phone}，开始请求nvjdc 服务`);
             await sendNotify("收到，稍等。");
             await SendSMS();
-            for (var i = 0; i < 5; i++) {
-                console.log("请求验证滑块第" + (i + 1) + "次。")
-                if ($.AutoCaptchaSuccess) {
-                    break;
-                } else {
-                    await AutoCaptcha();
-                }
-                if ($.NVJDCMessage) {
-                    await sendNotify($.NVJDCMessage);
-                    return false;
-                }
-            }
-            if (!$.AutoCaptchaSuccess) {
-                await sendNotify("获取失败了，可能是配置的NVJDC_URL不正常。");
-            }
-            else {
-                await sendNotify("很好，请回复6位验证码：");
-            }
+            await sendNotify("如收到验证码请回复：");
             return false;
         } else {
             await sendNotify("OK，请输入您的手机号码：");
@@ -1081,5 +1064,6 @@ function Env(t, e) {
     }
         (t, e)
 }
+
 
 
