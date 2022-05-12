@@ -9,16 +9,10 @@ const {
 } = require('./quantum');
 const { ks_query
 } = require("./ks_base")
-
-
 let user_id = process.env.user_id; //用户id
-
 !(async () => {
     console.log("user_id:" + user_id);
     var cks = await getEnvs("ksjsbCookie", "kuaishou.api_st", 2, user_id)
-
-    /* var cks = [{ Value: "kuaishou.h5_st=Cg5rdWFpc2hvdS5oNS5zdBKQAefV9TcpDzd8Ecb7Ny02aiO1VcjTYvqyKytlEKNDMjHD_sbActNJAJuUgGGcpNpQkZv9KaAYoeC5uguraZ27Vq4eaMuSDy7EdKPQdCL0XZGVFn4lTWP2PVqF9TnO5UGqsnO7I6EDshb8e6HXyOMyrUwg8TU1bL7j4X3irp5a89OsUA2G2hKnfUGOecyPgJx8nRoSrE_OY4xUotYnH3RFBqZOA6ThIiBh-vMvTPZipCaKDsEi6womJDAq_GXJnzkqx0UjSO5q_SgFMAE" }];*/
-
     if (cks.length == 0) {
         console.log("没有提交过快手极速版CK，结束任务。");
         return;
@@ -30,8 +24,8 @@ let user_id = process.env.user_id; //用户id
         if (body.result == 1 && body.data.userData) {
             await sendNotify("金币：" + body.data.totalCoin + "\n" + "现金：" + body.data.totalCash + "\n" + "昵称：" + body.data.userData.nickname)
         } else {
-            console.log(ck + "已失效，从量子中删除该CK");
-            await deleteEnvByIds([ck.Id])
+            console.log(ck + "已失效");
+            await sendNotify(`快手账号：${ck.UserRemark}已失效，重新获取提交。`)
         }
     }
 })();

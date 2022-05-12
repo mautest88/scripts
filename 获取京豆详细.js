@@ -41,9 +41,6 @@ if (!process.env.NO_CK_NOTIFY) {
             await showMsg();
         }
     }
-    // allMessage += `\n今日全部账号收入：${allBean}个京豆\n`
-    // console.log(`${allMessage}`)
-    // await sendNotify(`${allMessage}`);
 })()
     .catch((e) => {
     })

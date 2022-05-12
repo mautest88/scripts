@@ -1,4 +1,3 @@
-
 /*
  * 删除过期账号提醒
  * 可配置环境变量名称：OVERDUE_DEL_NOTIFY_MSG  (删除过期提醒文字)
@@ -14,8 +13,6 @@ var message = process.env.OVERDUE_DEL_NOTIFY_MSG || "您的以下京东账号已
     console.log("获取过期环境变量" + envs.length + "个");
     var ts = [];
     var ids = [];
-
-
     for (var i = 0; i < envs.length; i++) {
         ids.push(envs[i].Id);
         if (envs[i].UserId) {
@@ -44,5 +41,4 @@ var message = process.env.OVERDUE_DEL_NOTIFY_MSG || "您的以下京东账号已
     } else {
         await sendNotify("没有过期的账号。", true);
     }
-
 })();
