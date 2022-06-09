@@ -72,8 +72,8 @@ let pin = '';
 剩余红包：${userInfo.data.assetInfo.redBalance}`;
         await sendNotify(msg);
         await addOrUpdateWskey(key, pin, userInfo.data.userInfo.baseInfo.nickname)
-        console.log("开始将转换的ck提交到环境变量中")
-        await addOrUpdateJDCookie();
+        console.log("开始处理提交JDCOOKIE：" + convertResult.data)
+        await addOrUpdateJDCookie(convertResult.data, user_id, userInfo.data.userInfo.baseInfo.nickname);
     }
 })();
 

@@ -42,10 +42,8 @@ var failedCount = 0;
             return;
         } else {
             successCount += 1;
-            console.log("开始处理提交ck：" + convertResult.data)
-            var pt_key = convertResult.data.match(/pt_key=([^; ]+)(?=;?)/)[1]
-            var pt_pin = convertResult.data.match(/pt_pin=([^; ]+)(?=;?)/)[1]
-            await addOrUpdateJDCookie(pt_key, pt_pin, data.Data1, data.Data6);
+            console.log("开始处理提交JDCOOKIE：" + convertResult.data)
+            await addOrUpdateJDCookie(convertResult.data, data.Data1, data.Data6);
         }
         await sendNotify(`wskey转换完成，有效：${successCount}，失效：${overdueCount}，转换失败：${failedCount}。`, true)
     }
