@@ -8,7 +8,7 @@ var custom_data_type = "quantum_password"
 
 !(async () => {
     var sns = [];
-    var nnn = uuid(18);
+    var nnn = uuid(18,null,"!@#$%^&*()-=_+,.;':");
     sns.push({
         Type: custom_data_type,
         Data1: process.env.command.replace("随机密码", ""),

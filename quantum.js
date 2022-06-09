@@ -4,6 +4,11 @@ const got = require('got');
 let serverAddres = process.env.serverAddres || 'http://localhost:5088'; //服务地址
 let CommunicationType = process.env.CommunicationType; //通讯类型
 let CommunicationId = process.env.CommunicationId; //通讯工具ID
+
+let CommunicationUserId = process.env.CommunicationUserId; //用户通讯id，qq/wx
+let CommunicationUserName = process.env.CommunicationUserName; //用户昵称
+
+
 let TextToPicture = process.env.TextToPicture; // 是否文字转图片
 let user_id = process.env.user_id; //用户id
 let group_id = process.env.group_id; //群组ID
@@ -276,14 +281,17 @@ async function updateCustomData(data) {
     return body;
 }
 
-
+/**
+ * 添加自定义数据
+ * @param {any} data 数组
+ */
 async function addCustomData(data) {
     const body = await api({
         url: `api/CustomData`,
         method: 'post',
         body: JSON.stringify(data),
         headers: {
-            Accept: 'text/plain',
+            Accept: '*/*',
             "Content-Type": "application/json-patch+json"
         },
     }).json();
@@ -305,8 +313,8 @@ async function deleteEnvByIds(ids) {
 }
 
 
-function uuid(len, radix) {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_*&^%$#@!.'.split('');
+function uuid(len, radix, append) {
+    var chars = ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' + append).split('');
     var uuid = [],
         i;
     radix = radix || chars.length;
