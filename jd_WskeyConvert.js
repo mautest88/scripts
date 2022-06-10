@@ -45,8 +45,8 @@ var failedCount = 0;
             console.log("开始处理提交JDCOOKIE：" + convertResult.data)
             await addOrUpdateJDCookie(convertResult.data, data.Data1, data.Data6);
         }
-        await sendNotify(`wskey转换完成，有效：${successCount}，失效：${overdueCount}，转换失败：${failedCount}。`, true)
     }
+    await sendNotify(`wskey转换完成，有效：${successCount}，失效：${overdueCount}，转换失败：${failedCount}。`, true)
 })();
 
 /**
