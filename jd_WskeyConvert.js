@@ -9,7 +9,6 @@
  * */
 
 const { sendNotify, getCustomData, updateCustomData } = require('./quantum');
-
 const { convertWskey, addOrUpdateJDCookie } = require('./jd_base');
 
 /**
@@ -21,13 +20,13 @@ var overdueCount = 0;
 var failedCount = 0;
 !(async () => {
     var datas = await getWskey();
+    console.log(`开始转换，有效wskey：${datas.length}个。`)
     for (var i = 0; i < datas.length; i++) {
         var data = datas[i];
         var wskey = `pin=${data.Data5};wskey=${data.Data4};`
         var convertResult = await convertWskey(wskey);
         if (!convertResult.success) {
             failedCount += 1;
-
             console.log(`wskey：【${wskey}】，转换失败。`)
             continue
         }
