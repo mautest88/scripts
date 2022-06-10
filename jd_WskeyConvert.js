@@ -20,7 +20,9 @@ var overdueCount = 0;
 var failedCount = 0;
 !(async () => {
     var datas = await getWskey();
-    console.log(`开始转换，有效wskey：${datas.length}个。`)
+    var m1 = `开始转换，有效wskey：${datas.length}个。`
+    console.log(m1)
+    await sendNotify(m1, true)
     for (var i = 0; i < datas.length; i++) {
         var data = datas[i];
         var wskey = `pin=${data.Data5};wskey=${data.Data4};`
