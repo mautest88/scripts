@@ -137,15 +137,14 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
 京东昵称：${nickname}`, true)
         }
     } else {
+        console.log("全新韭菜上线拉！");
         c.Id = null;
-        console.log("新增ck'")
         if (process.env.ADD_COOKIE_NOTIFY) {
             await sendNotify(`Cookie新增通知
 用户ID：${process.env.CommunicationUserId}
 用户昵称：${process.env.CommunicationUserName || ""}
-京东昵称：${$.nickName}`, true)
+京东昵称：${nickname}`, true)
         }
-        console.log("全新韭菜上线拉！");
     }
     var data = await addEnvs([c]);
     console.log("环境变量提交结果：" + JSON.stringify(data));
