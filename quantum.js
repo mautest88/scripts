@@ -21,7 +21,7 @@ const api = got.extend({
     prefixUrl: serverAddres,
     retry: { limit: 0 },
 });
-console.log("脚本库更新时间：2022年2月19日 21点30分");
+console.log("脚本库更新时间：2022年6月10日");
 // 获取青龙面板信息
 module.exports.getQLPanels = async () => {
     const body = await api({
@@ -313,16 +313,6 @@ async function deleteEnvByIds(ids) {
 }
 
 
-function uuid(len, radix, append) {
-    var chars = ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' + append).split('');
-    var uuid = [],
-        i;
-    radix = radix || chars.length;
-    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
-    return uuid.join('');
-}
-
-
 /**
  * 发送通知消息
  * @param {*} content 发送消息内容
@@ -436,19 +426,21 @@ module.exports.deleteCustomData = deleteCustomData;
 
 
 /**
- * 修改数据
- * @param {any} data
+ * 修改自定义数据
+ * @param {any} data 
  */
 module.exports.updateCustomData = updateCustomData;
 
 /**
  * 添加自定义数据
- * @param {any} data 集合
+ * @param {any} data 数组
  */
 module.exports.addCustomData = addCustomData;
 
-module.exports.uuid = uuid;
 
+/**
+ * 获取用户信息
+ * */
 module.exports.getUserInfo = async () => {
     const body = await api({
         url: 'api/User/' + user_id,
@@ -461,6 +453,10 @@ module.exports.getUserInfo = async () => {
     return body.Data;
 }
 
+/**
+ * 更新用户信息
+ * @param {any} user
+ */
 module.exports.updateUserInfo = async (user) => {
     const body = await api({
         url: 'api/User',
@@ -544,6 +540,43 @@ module.exports.addOrUpdateCustomDataTitle = async (data) => {
     return body;
 };
 
+/**
+ * 线程等待
+ * @param {any} ms 毫秒
+ */
 module.exports.sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+/**
+ * 获取一个随机字符串
+ * @param {any} len 字符串长度
+ * @param {any} radix 
+ * @param {any} append 在随机字符串中追加自定义字符
+ */
+module.exports.uuid = function (len, radix, append) {
+    var chars = ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' + append).split('');
+    var uuid = [],
+        i;
+    radix = radix || chars.length;
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+    return uuid.join('');
+};
+
+/**
+ * 设置群全员禁言
+ * @param {any} groups 群号，多个用&隔开
+ * @param {boolean} enable 是否禁言
+ * @param {any} 通知消息
+ */
+module.exports.set_group_whole_ban = async (groups, enable,notify) => {
+    const body = await api({
+        url: `api/GroupManagement/set_group_whole_ban/${groups}/${enable}?notify=${notify}`,
+        method: 'get',
+        headers: {
+            Accept: 'text/plain',
+            "Content-Type": "application/json-patch+json"
+        },
+    }).json();
+    return body;
 }
