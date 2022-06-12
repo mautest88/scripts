@@ -42,16 +42,16 @@ var custom_data_type = "quantum_sn"
             console.log(sss);
         }
 
-        await addOrUpdateCustomDataTitle({
-            Type: custom_data_type,
-            TypeName: "积分卡密",
-            Title1: "卡密",
-            Title2: "积分",
-            Title3: "是否使用",
-            Title4: "QQ/微信",
-            Title5: "昵称",
-            Title6: "批次号",
-        })
+        //await addOrUpdateCustomDataTitle({
+        //    Type: custom_data_type,
+        //    TypeName: "积分卡密",
+        //    Title1: "卡密",
+        //    Title2: "积分",
+        //    Title3: "是否使用",
+        //    Title4: "QQ/微信",
+        //    Title5: "昵称",
+        //    Title6: "批次号",
+        //})
         result = await addCustomData(sns);
         var tt = `[CQ:face,id=66]创建${sn_count}个卡密，每个${sn_score}积分\n卡密批次：` + nnn;
         for (var i = 0; i < result.length; i++) {

@@ -1,5 +1,6 @@
 ﻿
 const got = require('got');
+
 //------------- 量子助手系统环境变量部分 -------------
 let serverAddres = process.env.serverAddres || 'http://localhost:5088'; //服务地址
 let CommunicationType = process.env.CommunicationType; //通讯类型
@@ -16,14 +17,19 @@ let ManagerQQ = process.env.ManagerQQ; //管理员QQ
 let EnableConc = process.env.EnableConc == "True"; //是否开启并发
 let IsSystem = process.env.IsSystem == "true"; //是否系统执行。
 
-
 const api = got.extend({
     prefixUrl: serverAddres,
     retry: { limit: 0 },
 });
 console.log("脚本库更新时间：2022年6月10日");
-// 获取青龙面板信息
-module.exports.getQLPanels = async () => {
+
+/**
+ * 
+ * 获取所有的青龙面板
+ * 
+ * */
+async function getQLPanels() {
+
     const body = await api({
         url: 'api/QLPanel',
         headers: {
@@ -31,7 +37,65 @@ module.exports.getQLPanels = async () => {
         },
     }).json();
     return body.Data;
-};
+}
+
+/**
+ * 获取青龙容器中的环境变量
+ * @param {any} ql 青龙ID
+ * @param {any} searchValue 搜索关键字
+ */
+async function getQLEnvs(ql, searchValue) {
+    const body = await api({
+        url: 'api/qlPanel/envs/' + ql.Id,
+        method: 'get',
+        searchParams: {
+            searchValue: searchValue,
+            t: Date.now(),
+        },
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).json();
+    return body.Data.data;
+}
+
+/**
+ * 删除青龙中的环境变量
+ * @param {any} ql 青龙id
+ * @param {any} ids 环境变量id 数组
+ */
+async function deleteQLEnvs(ql, ids) {
+    const body = await api({
+        url: 'api/qlPanel/envs/' + ql.Id,
+        method: 'delete',
+        body: JSON.stringify(ids),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).json();
+    return body.Data.data;
+}
+
+/**
+ * 添加青龙环境变量
+ * @param {any} ql
+ * @param {any} envs
+ */
+async function addQLEnvs(ql, envs) {
+    const body = await api({
+        url: 'api/qlPanel/envs/' + ql.Id,
+        method: 'delete',
+        body: JSON.stringify(envs),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).json();
+    return body.Data.data;
+}
+
+
+// 获取青龙面板信息
+module.exports.getQLPanels = getQLPanels;
 
 module.exports.getCookies = async () => {
     var envs = await getEnvs("JD_COOKIE", "pt_key", 2, null);
@@ -76,20 +140,7 @@ module.exports.getCookies = async () => {
  * 获取青龙容器中的环境变量
  * @param {any} qlPanel
  */
-module.exports.getQLEnvs = async (ql, searchValue) => {
-    const body = await api({
-        url: 'api/qlPanel/envs/' + ql.Id,
-        method: 'get',
-        searchParams: {
-            searchValue: searchValue,
-            t: Date.now(),
-        },
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }).json();
-    return body.Data.data;
-};
+module.exports.getQLEnvs = getQLEnvs;
 
 
 // 同步环境变量
@@ -569,7 +620,7 @@ module.exports.uuid = function (len, radix, append) {
  * @param {boolean} enable 是否禁言
  * @param {any} 通知消息
  */
-module.exports.set_group_whole_ban = async (groups, enable,notify) => {
+module.exports.set_group_whole_ban = async (groups, enable, notify) => {
     const body = await api({
         url: `api/GroupManagement/set_group_whole_ban/${groups}/${enable}?notify=${notify}`,
         method: 'get',
@@ -579,4 +630,49 @@ module.exports.set_group_whole_ban = async (groups, enable,notify) => {
         },
     }).json();
     return body;
+}
+
+/**
+ * 
+ * 青龙相关封装接口
+ * 
+ * */
+module.exports.qinglong = {
+
+    /**
+     * 查找所有青龙指定任务信息
+     * @param {any} taskName 任务名称
+     */
+    getTask: async function (taskName) {
+        const body = await api({
+            url: `api/QLTask?Key=${taskName}&PageIndex=1&PageSize=999`,
+            method: 'get',
+            headers: {
+                "Content-Type": "application/json-patch+json"
+            },
+        }).json();
+        return body.Data;
+    },
+    /**
+     * 运行青龙任务
+     * @param {any} data 运行的任务信息，参数形式请参照方法内
+     */
+    runTask: async function (data) {
+        const body = await api({
+            url: `api/QLTask/run`,
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).json();
+        return body.Data;
+    },
+    /**
+     * 搜索青龙中的环境变量
+     * @param {any} name
+     */
+    getEnvs: getQLEnvs,
+    deleteEnvs: deleteQLEnvs,
+    addEnvs: addQLEnvs
 }

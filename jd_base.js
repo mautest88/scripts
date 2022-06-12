@@ -106,11 +106,8 @@ module.exports.GetJDUserInfoUnion = async (jdCookie) => {
  * @param {any} nickname 京东账号昵称
  */
 module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
-
     var pt_key = jdCookie.match(/pt_key=([^; ]+)(?=;?)/)[1]
     var pt_pin = jdCookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
-
-
     if (!pt_key || !pt_pin) {
         return;
     }

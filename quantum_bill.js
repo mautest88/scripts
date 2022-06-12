@@ -34,7 +34,7 @@ let customeDataType = "quantum_bill";
     var stamp1 = new Date(new Date().setHours(0, 0, 0, 0))
     var startTime = moment(stamp1).format("YYYY-MM-DD HH:mm:ss")
     var endTime = moment().format("YYYY-MM-DD HH:mm:ss");
-    await addOrUpdateCustomDataTitle(titleInfo)
+    //await addOrUpdateCustomDataTitle(titleInfo)
     var info = {
         Type: "quantum_bill",
         Data1: ttt[1],
