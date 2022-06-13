@@ -40,7 +40,7 @@ var failedCount = 0;
             data.Data7 = "否";
             overdueCount += 1;
             await updateCustomData(data);
-            return;
+            continue;
         } else {
             successCount += 1;
             console.log("开始处理提交JDCOOKIE：" + convertResult.data)
