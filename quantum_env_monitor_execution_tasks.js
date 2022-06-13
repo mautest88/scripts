@@ -93,12 +93,16 @@ console.log("isManager" + isManager)
     }
     console.log("开始检查环境变量是否重复。")
     var sameCount = 0;
+
+
     for (var i = 0; i < envs.length; i++) {
-        var env = await getEnvs(envs[i].Name, envs[i].Value, 1);
+        var env = await getEnvs(envs[i].Name, null, 1);
         if (env && env.length > 0) {
-            console.log(`变量名：【${envs[i].Name}】，值：【${envs[i].Value}】`);
+            if (env[0].Value == envs[0].Value) {
+                console.log(`变量名：【${envs[i].Name}】，值：【${envs[i].Value}】`);
+                sameCount++;
+            }
             envs[i].Id = env[0].Id;
-            sameCount++;
         }
     }
 
@@ -112,6 +116,7 @@ console.log("isManager" + isManager)
         return;
     }
     console.log("同步环境变量到量子中。");
+
     await addEnvs(envs);
 
     console.log("青龙量子环境变量双向同步");
