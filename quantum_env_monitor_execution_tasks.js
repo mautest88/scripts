@@ -34,10 +34,7 @@ var customType = "quantum_env_monitor_execution_tasks"
 var ManagerQQ = process.env.ManagerQQ
 var CommunicationUserId = process.env.CommunicationUserId; //用户通讯id，qq/wx
 
-console.log("ManagerQQ" + ManagerQQ)
-console.log("CommunicationUserId" + CommunicationUserId)
 var isManager = (ManagerQQ == CommunicationUserId);
-console.log("isManager" + isManager)
 
 !(async () => {
     console.log("接收指令信息：" + command);
@@ -61,7 +58,6 @@ console.log("isManager" + isManager)
         for (var x = 0; x < task.Data3.split("&").length; x++) {
             var envName = task.Data3.split("&")[x];
             var reg = `var pattern =/export ${envName}="(.+?)"/`;
-            console.log(reg);
             eval(reg);
             if (pattern.test(command)) {
                 sf = true;
@@ -91,14 +87,14 @@ console.log("isManager" + isManager)
         }
         return;
     }
+
     console.log("开始检查环境变量是否重复。")
+
     var sameCount = 0;
-
-
     for (var i = 0; i < envs.length; i++) {
         var env = await getEnvs(envs[i].Name, null, 1);
         if (env && env.length > 0) {
-            if (env[0].Value == envs[0].Value) {
+            if (env[0].Value == envs[i].Value) {
                 console.log(`变量名：【${envs[i].Name}】，值：【${envs[i].Value}】`);
                 sameCount++;
             }
