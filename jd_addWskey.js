@@ -27,7 +27,7 @@ let pin = '';
     let wskeys = command.split("&");
     addCustomDataTile();
     for (var i = 0; i < wskeys.length; i++) {
-        var wskey = wskeys[i];
+        var wskey = wskeys[i]+";";
         if (!wskey) {
             continue;
         }
