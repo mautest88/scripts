@@ -57,6 +57,16 @@ const {
     console.log("初始化量子环境变量监听任务执行基础信息。");
 
 
+    await addOrUpdateCustomDataTitle({
+        Type: "quantum_env_monitor_execution_tasks_records",
+        TypeName: "环境变量监控记录",
+        Title1: "任务名称",
+        Title2: "青龙脚本名",
+        Title3: "变量名（多个&隔开）",
+        Title4: "变量数据",
+        Title5: "线报信息"
+    })
+    console.log("初始化环境变量监控记录。");
 
     await sendNotify("初始化量子自定义数据标题标题信息完成\r该通知来源脚本：quantum_custom_data_title_init.js")
 })();
