@@ -7,7 +7,7 @@
 
 require('./env.js');
 const {
-    sendNotify, allEnvs
+    sendNotify, allEnvs,sleep
 } = require('./quantum');
 
 var message = process.env.OVERDUE_NOTIFY_MSG || "您的以下京东账号已经过期，请重更新提交CK：";
@@ -28,6 +28,7 @@ var message = process.env.OVERDUE_NOTIFY_MSG || "您的以下京东账号已经�
     }
     if (ts.length > 0) {
         for (var i = 0; i < ts.length; i++) {
+            await sleep(5000);
             await sendNotify(message + "\n" + ts[i].List.join(","), false, ts[i].UserId);
         }
     }
