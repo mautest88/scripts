@@ -1,4 +1,3 @@
-
 /**
  * 可用环境变量 请通过环境变量添加量子变量
  * 
@@ -7,7 +6,6 @@
  * */
 
 const $ = new Env('京东资产变动');
-require('./env.js');
 var NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。"
 if (process.env.NO_CK_NOTIFY) {
     NO_CK_NOTIFY = process.env.NO_CK_NOTIFY;
@@ -29,8 +27,6 @@ let intPerSent = 1; //通知分段
 let i = 0;
 let RemainMessage = '';
 
-let user_id = process.env.user_id; //用户id
-
 !(async () => {
     var cookiesArr = await getCookies();
     console.log("一共有" + (cookiesArr.length) + "个账号\r查询任务正在执行中，请稍后！")
@@ -45,9 +41,9 @@ let user_id = process.env.user_id; //用户id
     for (i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i].Value;
         $.overdue = "";
-        var overdueDate = moment(cookiesArr[i].UpdateTime).add(30, 'days');
-        var day = overdueDate.diff(new Date(), 'day');
-        $.overdue = `【预计失效】${day}天后，${overdueDate.format("MM月DD日")}失效。`
+        var overdueDate = moment(cookiesArr[i].CreateTime);
+        var day = moment(new Date()).diff(overdueDate, 'day');
+        $.overdue = `【挂机天数】${day}天`
         $.pt_pin = (cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
         $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;

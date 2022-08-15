@@ -227,7 +227,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                     if (reg2.test($.pt_pin)) {
                         $.pt_pin = encodeURI($.pt_pin);
                     }
-                    cookie = `pt_pin=${$.pt_pin};pt_key=${$.pt_key};`
+                    cookie = `pt_key=${$.pt_key};pt_pin=${$.pt_pin};`
                     var beanNum = ($.beanNum && $.beanNum > 0) ? "\r剩余豆豆：" + $.beanNum : "";
                     var data1 = await allEnvs($.pt_key, 2);
                     var c = {
@@ -239,6 +239,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                         EnvType: 2,
                         CommunicationType: CommunicationType
                     }
+                    var dayInfo = "";
                     if (data1.length > 0) {
                         console.log("pt_key重复，更新用户信息。");
                         if (c.Id != data1[0].Id) {
@@ -257,6 +258,11 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                             c.UserRemark = $.nickName;
                             c.QLPanelEnvs = data2[0].QLPanelEnvs;
                             c.Remark = data2[0].Remark;
+
+                            var CreateTime = moment(data2[0].CreateTime);
+                            var day = moment(new Date()).diff(CreateTime, 'day');
+                            dayInfo = `\r【挂机天数】${day}天`
+
                             if (UPDATE_COOKIE_NOTIFY) {
                                 await sendNotify(`Cookie更新通知
 用户ID：${process.env.CommunicationUserId}
@@ -299,7 +305,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
                     if (ADD_COOKIE_USE_SCORE > 0) {
                         await updateUserInfo(user);
                     }
-                    await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + '\r京东数量：' + (jdCookies.length), false);
+                    await sendNotify("提交成功啦！\r京东昵称：" + $.nickName + beanNum + dayInfo + '\r京东数量：' + (jdCookies.length), false);
                 }
                 else {
                     await sendNotify(`提交失败，Cookie无效或已过期，请重新获取后发送。`)
