@@ -12,6 +12,7 @@
  **/
 
 const $ = new Env('添加并验证Cookie');
+const moment = require('moment');
 let ADD_COOKIE = process.env.ADD_COOKIE || "";
 
 //用户提交新CK是否通知管理员，默认通知，如果不想通知，添加量子环境变量：ADD_COOKIE_NOTIFY 值 false
