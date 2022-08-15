@@ -30,12 +30,9 @@ let user_id = process.env.user_id; //用户id
     for (var i = 0; i < cks.length; i++) {
         var ck = cks[i];
         var name = ck.UserRemark || ck.Value.match(/pt_pin=([^; ]+)(?=;?)/) && ck.Value.match(/pt_pin=([^; ]+)(?=;?)/)[1];
-        console.log(name);
-        var overdueDate = moment(ck.UpdateTime).add(30, 'days');
-        console.log(overdueDate);
-        var day = overdueDate.diff(new Date(), 'day');
-        console.log(day);
-        message += `\n${(i + 1)}：${name}，${(ck.Enable ? `有效✅，${day}天后失效。` : '失效❌，请重新获取提交。')}`
+        var overdueDate = moment(ck.CreateTime);
+        var day = moment(new Date()).diff(overdueDate, 'day');
+        message += `\n${(i + 1)}：${name}，${(ck.Enable ? `有效✅，挂机${day}天。` : '失效❌，请重新获取提交。')}`
         console.log(message);
     }
     console.log(message);
