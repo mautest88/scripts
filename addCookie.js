@@ -262,7 +262,7 @@ const { addEnvs, allEnvs, sendNotify, getUserInfo, updateUserInfo, uuid
 
                             var CreateTime = moment(data2[0].CreateTime);
                             var day = moment(new Date()).diff(CreateTime, 'day');
-                            dayInfo = `\r【挂机天数】${day}天`
+                            dayInfo = `\r挂机天数：${day}天`
 
                             if (UPDATE_COOKIE_NOTIFY) {
                                 await sendNotify(`Cookie更新通知
