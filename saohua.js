@@ -1,6 +1,5 @@
 ﻿// 骚话
 
-require('./env.js');
 const got = require('got');
 const {
     sendNotify

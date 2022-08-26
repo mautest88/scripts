@@ -8,7 +8,7 @@
 let jdSignUrl = 'https://jd.smiek.tk/jdcleancatr_21102717' // 算法url
 let cleancartRun = 'true'
 let cleancartProducts = '*@&@'
-const $ = new Env('清空购物车'); require('./env.js');
+const $ = new Env('清空购物车'); 
 
 if (!process.env.NO_CK_NOTIFY) {
     process.env.NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。";

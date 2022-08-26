@@ -5,7 +5,6 @@
  * 
  */
 
-require('./env.js');
 const {
     sendNotify, allEnvs,sleep
 } = require('./quantum');

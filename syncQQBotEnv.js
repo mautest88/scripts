@@ -5,9 +5,6 @@
  * QQBotUserName QQBot 用户名名 如：admin
  * QQBotPassWord QQBot 密码 如： admin123
  **/
-
-
-require('./env.js');
 const got = require('got');
 const {
     addEnvs, sendNotify
@@ -77,7 +74,7 @@ const api = got.extend({
             envs.push({
                 Name: "JD_COOKIE",
                 Enable: true,
-                Value: `pt_pin=${ck.PTPin};pt_key=${ck.PTKey};`,
+                Value: `pt_key=${ck.PTKey};pt_pin=${ck.PTPin};`,
                 Remark: ck.Remark,
                 UserRemark: ck.nickname,
                 Weight: ck.Priority,

@@ -1,8 +1,6 @@
 // 一言
 
-require('./env.js'); 
 const got = require('got'); // http 请求封装库。
-
 
 const {
     sendNotify

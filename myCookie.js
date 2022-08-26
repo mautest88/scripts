@@ -5,7 +5,6 @@
  *
  **/
 
-require('./env.js');
 const moment = require('moment');
 const {
     sendNotify, getEnvs

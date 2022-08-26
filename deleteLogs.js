@@ -5,7 +5,6 @@
  * 
  */
 
-require('./env.js');
 const got = require('got');
 
 const moment = require('moment');

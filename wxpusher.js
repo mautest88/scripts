@@ -1,4 +1,3 @@
-require('./env.js');
 const got = require('got');
 let prefixUrl = process.env.serverAddres || 'http://localhost:5088';
 const api = got.extend({

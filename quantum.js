@@ -207,7 +207,7 @@ module.exports.addEnvs = async (env) => {
 };
 
 /**
- * 禁用环境变量，数组
+ * 禁用环境变量值，数组
  * @param {any} envs
  */
 module.exports.disableEnvs = async (envs) => {
@@ -334,7 +334,7 @@ async function updateCustomData(data) {
 
 /**
  * 添加自定义数据
- * @param {any} data 数组
+ * @param {[{}]} data 数组
  */
 async function addCustomData(data) {
     const body = await api({
@@ -364,9 +364,12 @@ async function deleteEnvByIds(ids) {
 }
 
 
+
 /**
  * 发送通知消息
- * @param {*} content 发送消息内容
+ * @param {*} content 发送消息内容 可以是 文本，
+ * 或者 {msg:"",MessageType:1}  MessageType=1 即文本，2 为图片，如果是图片地址必须是完整的http 地址。 
+ * 或者是[{msg:"",MessageType:1},{msg:"",MessageType:2}] 数组时，会根据通讯工具选择是否合并消息发送或者分开发送。 
  * @param {*} isManager 是否发送给管理员
  * @param {*} userId 指定发送给某人 （不@时传入字符串 NULL）
  * @param {*} groupId 发送到群 
@@ -403,7 +406,7 @@ ${content}
         } else if (userId == "NULL") {
             uuid = null
         }
-        var b = JSON.stringify({
+        var body = {
             message: `${content}`,
             title: "小助手通知",
             CommunicationType: CommunicationType,
@@ -411,21 +414,58 @@ ${content}
             TextToPicture: TextToPicture,
             user_id: uuid,
             group_id: isManager ? "" : group_id
-        });
-        const body = await api({
-            url: `api/Notifiy`,
-            method: 'post',
-            body: b,
-            headers: {
-                Accept: 'text/plain',
-                "Content-Type": "application/json-patch+json"
-            },
-        }).json();
-        if (body.Data) {
-            console.log('发送通知消息成功🎉！');
+        };
+
+        var bodys = [];
+        if (content instanceof Array) {
+            if (CommunicationType == 1) {
+                var msg = ""
+                for (var i = 0; i < content.length; i++) {
+                    if (content[i].MessageType == 1) {
+                        msg += content[i].msg + "\r";
+                    } else if (content[i].MessageType == 2) {
+                        msg += `[CQ:image,file=${content[i].msg},type=show,id=40000,cache=0]` + "\r";
+                    }
+                }
+                body.message = msg;
+                body.MessageType = 1;
+                bodys.push(body);
+            }
+            if (CommunicationType == 2) {
+                for (var i = 0; i < content.length; i++) {
+                    var b = JSON.parse(JSON.stringify(body));
+                    b.message = content[i].msg;
+                    b.MessageType = content[i].MessageType;
+                }
+            }
+        } else if (Object.prototype.toString.call(content) === '[object Object]') {
+            body.message = content.msg;
+            body.MessageType = content.MessageType || 1
+            bodys.push(body);
+        } else {
+            body.message = content;
+            body.MessageType = 1;
+            bodys.push(body);
         }
-        else {
-            console.log(`发送通知消息异常\n${JSON.stringify(body)}`,);
+
+        for (var i = 0; i < bodys.length; i++) {
+            var b = JSON.stringify(bodys[i]);
+            const body = await api({
+                url: `api/Notifiy`,
+                method: 'post',
+                body: b,
+                headers: {
+                    Accept: 'text/plain',
+                    "Content-Type": "application/json-patch+json"
+                },
+            }).json();
+
+            if (body.Data) {
+                console.log('发送通知消息成功🎉！');
+            }
+            else {
+                console.log(`发送通知消息异常\n${JSON.stringify(body)}`,);
+            }
         }
     }
 }

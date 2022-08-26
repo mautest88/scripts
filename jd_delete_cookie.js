@@ -4,7 +4,6 @@
  * 可用指令：删除账号 或者 删除账号 xxxxx
  *
  **/
-require('./env.js');
 const {
     sendNotify, getEnvs, deleteEnvByIds
 } = require('./quantum');

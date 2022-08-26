@@ -6,8 +6,6 @@
  *
  * */
 
-require('./env.js');
-
 const got = require('got');
 
 if (!process.env.NO_CK_NOTIFY) {
@@ -50,8 +48,7 @@ let isLogin = true;
             }
             if (!isLogin) {
                 console.log(cookie + "失效，自动禁用失效COOKIE！")
-                //向用户发送失效通知
-                if (cookiesArr[i].UserId) {
+                if (cookiesArr[i].UserId && cookie.indexOf("app_open") == -1) {
                     await sendNotify(`账号：${UserName2}，失效了，请重新提交！`, false, cookiesArr[i].UserId);
                 }
                 if (CK_Failure_Notify) {
