@@ -417,6 +417,9 @@ ${content}
         };
 
         var bodys = [];
+        console.log("content instanceof Array : " + (content instanceof Array))
+
+        console.log("Object.prototype.toString.call(content) === '[object Object]' : " + (Object.prototype.toString.call(content) === '[object Object]'))
         if (content instanceof Array) {
             if (CommunicationType == 1) {
                 var msg = ""
@@ -430,12 +433,14 @@ ${content}
                 body.message = msg;
                 body.MessageType = 1;
                 bodys.push(body);
+                console.log(bodys)
             }
-            if (CommunicationType == 2) {
+            else {
                 for (var i = 0; i < content.length; i++) {
                     var b = JSON.parse(JSON.stringify(body));
                     b.message = content[i].msg;
                     b.MessageType = content[i].MessageType;
+                    bodys.push(b);
                 }
             }
         } else if (Object.prototype.toString.call(content) === '[object Object]') {
@@ -461,7 +466,7 @@ ${content}
             }).json();
 
             if (body.Data) {
-                console.log('发送通知消息成功🎉！');
+                console.log('发送通知消息成功！');
             }
             else {
                 console.log(`发送通知消息异常\n${JSON.stringify(body)}`,);

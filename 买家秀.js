@@ -20,17 +20,13 @@ const api = got.extend({
         },
         method: 'get',  // 通常有get，post，put，delete 请求。
     }).then(async response => {
-
         //  请求接口后数据处理部分，
-
         console.log(response.body);
         // 将body 转换成 JSON 对象
         var t = JSON.parse(response.body);
 
         if (t) {
-            // 将消息体发送给用户
-           await sendNotify(`${t.title || "用户没有评价"}
-[CQ:image,file=${t.pic},type=show,id=40004]`)
+            await sendNotify([{ msg: t.title, MessageType: 1 }, { msg: t.pic, MessageType: 2 }])
         }
     });
     // --------------------逻辑代码结束--------------------
