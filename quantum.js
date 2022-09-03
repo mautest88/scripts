@@ -21,7 +21,8 @@ const api = got.extend({
     prefixUrl: serverAddres,
     retry: { limit: 0 },
 });
-console.log("脚本库更新时间：2022年6月10日");
+
+console.log("脚本库更新时间：2022年8月28日");
 
 /**
  * 
@@ -417,9 +418,7 @@ ${content}
         };
 
         var bodys = [];
-        console.log("content instanceof Array : " + (content instanceof Array))
 
-        console.log("Object.prototype.toString.call(content) === '[object Object]' : " + (Object.prototype.toString.call(content) === '[object Object]'))
         if (content instanceof Array) {
             if (CommunicationType == 1) {
                 var msg = ""
@@ -433,7 +432,6 @@ ${content}
                 body.message = msg;
                 body.MessageType = 1;
                 bodys.push(body);
-                console.log(bodys)
             }
             else {
                 for (var i = 0; i < content.length; i++) {

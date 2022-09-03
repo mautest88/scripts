@@ -1,7 +1,13 @@
 /**
  * 京东基础方法脚本
- *
  * */
+
+/**
+ * 
+ * 自动enen 旧ck，包含wskey 转 app_open 的
+ * 
+ * */
+const enen_old_jdCookie = !process.env.NO_CK_NOTIFY || process.env.enen_old_jdCookie != "false";
 
 const got = require('got');
 if (!process.env.NO_CK_NOTIFY) {
@@ -20,9 +26,10 @@ const api = got.extend({
  * 检查京东ck登录状态
  * @param {any} jdCookie
  */
-module.exports.islogin = async (jdCookie) => {
-    try {
+module.exports.islogin = islogin;
 
+async function islogin(jdCookie) {
+    try {
         const options = {
             url: 'https://plogin.m.jd.com/cgi-bin/ml/islogin',
             headers: {
@@ -46,10 +53,16 @@ module.exports.islogin = async (jdCookie) => {
  * @param {any} wskey
  */
 module.exports.convertWskey = async (wskey) => {
-    const convertService = "http://114.215.146.116:8015/api/open/ConvertWskey";
+    var convertServiceUrl = "http://114.215.146.116:8015/api/open/ConvertWskey";
+    if (process.env.WskeyConvertService) {
+        convertServiceUrl = process.env.WskeyConvertService;
+        console.log("使用自定义的Wskey转换服务！");
+    }
+
+    console.log("Wskey 转换服务地址：" + convertServiceUrl);
     try {
         const options = {
-            url: convertService,
+            url: convertServiceUrl,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -68,7 +81,7 @@ module.exports.convertWskey = async (wskey) => {
         }
     }
     catch (e) {
-        console.log("wskey转化app_open出现了异常！");
+        console.log("wskey转换 app_open出现了异常！");
         console.log(e);
     }
     return {
@@ -114,7 +127,7 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
     var c = {
         Name: "JD_COOKIE",
         Enable: true,
-        Value: `pt_pin=${pt_pin};pt_key=${pt_key};`,
+        Value: `pt_key=${pt_key};pt_pin=${pt_pin}`,
         UserRemark: nickname,
         UserId: user_id,
         EnvType: 2
@@ -127,6 +140,12 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
         c.UserRemark = nickname;
         c.QLPanelEnvs = data2[0].QLPanelEnvs;
         c.Remark = data2[0].Remark;
+
+
+        if (jdCookie != data2[0].Value && enen_old_jdCookie) {
+            //await enen(data2[0].Value);
+        }
+
         if (process.env.UPDATE_COOKIE_NOTIFY) {
             await sendNotify(`Cookie更新通知
 用户ID：${process.env.CommunicationUserId}
@@ -145,4 +164,26 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
     }
     var data = await addEnvs([c]);
     console.log("环境变量提交结果：" + JSON.stringify(data));
+}
+
+
+/**
+ * 注销登录
+ * 
+ * @param {any} jdCookie jdCookie
+ */
+module.exports.enen = enen;
+
+async function enen(jdCookie) {
+    console.log("开始enen：" + jdCookie);
+    var options = {
+        url: `https://plogin.m.jd.com/cgi-bin/ml/mlogout?appid=300&returnurl=https%3A%2F%2Fm.jd.com%2F`,
+        headers: {
+            'authority': 'plogin.m.jd.com',
+            "User-Agent": "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
+            'cookie': jdCookie
+        }
+    }
+    await api(options);
+    console.log("enen 结束尝试查询是否失效：" + await islogin(jdCookie))
 }
