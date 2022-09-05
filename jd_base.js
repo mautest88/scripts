@@ -127,7 +127,7 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
     var c = {
         Name: "JD_COOKIE",
         Enable: true,
-        Value: `pt_key=${pt_key};pt_pin=${pt_pin}`,
+        Value: `pt_key=${pt_key};pt_pin=${pt_pin};`,
         UserRemark: nickname,
         UserId: user_id,
         EnvType: 2
