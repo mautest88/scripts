@@ -22,7 +22,7 @@ const api = got.extend({
     retry: { limit: 0 },
 });
 
-console.log("脚本库更新时间：2022年8月28日");
+console.log("脚本库更新时间：2022年9月9日");
 
 /**
  * 

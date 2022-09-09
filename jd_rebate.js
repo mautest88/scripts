@@ -11,7 +11,7 @@
 
 const got = require('got');
 const {
-    sendNotify, getEnvs
+    sendNotify, getEnvs, sleep
 } = require('./quantum');
 
 const api = got.extend({
@@ -88,6 +88,8 @@ if (!JFPTPIN) {
                 } else {
                     console.log("未指定转发微信群");
                 }
+                console.log("回复转链结果");
+                await sendNotify(body.data.formatContext);
             } else {
                 console.log(response.body);
             }
@@ -96,5 +98,4 @@ if (!JFPTPIN) {
         console.log("请求京东接口异常");
         console.log(JSON.stringify(e));
     }
-
 })();
