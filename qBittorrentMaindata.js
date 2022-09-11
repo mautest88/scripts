@@ -26,7 +26,7 @@ const api = got.extend({
         await sendNotify("未设置qBittorrent服务地址，请添加量子变量 ：qBittorrentURL。")
         return;
     }
-    if (qBittorrentURL.startsWith("http") == -1) {
+    if (!qBittorrentURL.startsWith("http")) {
         qBittorrentURL = "http://" + qBittorrentURL;
     }
     qBittorrentURL = qBittorrentURL.trimEnd("/");
