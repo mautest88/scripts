@@ -15,9 +15,9 @@ const {
     console.log(`获取用户数量${users.length}个。`);
     console.log("获取所有用户环境变量");
     var envs = await getEnvs("", "", 2);
-    console.log(`获取用户数量${envs.length}个。`);
+    console.log(`获取环境变量数量${envs.length}个。`);
     for (var i = 0; i < envs.length; i++) {
-        users = users.filter((y) => y.Id != envs[i].UserId && n.MaxEnvCount == 0);
+        users = users.filter((y) => y.Id != envs[i].UserId && y.MaxEnvCount == 0);
     }
     console.log(`待清理用户数量${users.length}个。`);
     var ids = [];
