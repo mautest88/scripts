@@ -32,6 +32,7 @@ let isLogin = true;
     var cookiesArr = await getEnvs("JD_COOKIE", null, 2);
     var managerNotifyMessage = "";
     var overdueCKs = [];
+    process.env.CommunicationType = "";
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i].Value && cookiesArr[i].Enable) {
             cookie = cookiesArr[i].Value;
