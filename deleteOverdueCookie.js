@@ -34,6 +34,7 @@ var message = process.env.OVERDUE_DEL_NOTIFY_MSG || "您的以下京东账号已
         sendNotify(`删除过期CK${envs.length}个。`, true);
         console.log("开始给韭菜发通知了。");
         if (ts.length > 0) {
+            process.env.CommunicationType = "";
             for (var i = 0; i < ts.length; i++) {
                 await sendNotify(message + "\n" + ts[i].List.join(","), false, ts[i].UserId);
             }

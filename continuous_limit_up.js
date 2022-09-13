@@ -1,6 +1,7 @@
-﻿/**
- * 连板天梯
+/**
+ * 连扳天梯
  * */
+
 const got = require('got');
 const {
     sendNotify
@@ -25,7 +26,7 @@ var command = process.env.command;
         //let d = new Date()
         //var m = (d.getMonth() + 1);
         //var day = d.getDate();
-        //date = n d.getFullYear().toString() + (m > 9 ? m.toString() : "0" + m) + (day > 9 ? day.toString() : "0" + day)
+        //date = d.getFullYear().toString() + (m > 9 ? m.toString() : "0" + m) + (day > 9 ? day.toString() : "0" + day)
     }
     console.log(date)
     if (moment(date, 'YYYYMMDD') > moment()) {
@@ -42,10 +43,12 @@ var command = process.env.command;
         await sendNotify("周日休市！")
         return;
     }
+
     var config = {
         method: 'get',
         url: 'https://data.10jqka.com.cn/dataapi/limit_up/continuous_limit_up?filter=HS,GEM2STAR&date=' + date
     };
+
     await api(config).then(async response => {
         console.log(response.body)
         var body = JSON.parse(response.body)
@@ -56,11 +59,11 @@ var command = process.env.command;
                     message += `高度：${body.data[i].height}
 `
                     for (var x = 0; x < body.data[i].code_list.length; x++) {
-                        message += `${body.data[i].code_list[x].name}（${body.data[i].code_list[x].code}），`
+                        message += `${body.data[i].code_list[x].code} ${body.data[i].code_list[x].name}，`
                     }
                     message = message.trim("，") + "\r";
                 }
-                await sendNotify(message);
+                await sendNotify("连板天梯" + "\n" + "当前查询日期：" + date + "\n" + message);
             } else {
                 await sendNotify("接口未返回数据。")
             }
