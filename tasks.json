@@ -1591,5 +1591,60 @@
         "Remark": null,
         "TaskSubs": [],
         "Id": "f929463521bf4df2a58389e12796bcb6"
+    },
+    {
+        "Name": "公共服务短信登录",
+        "Command": "登录|登陆|短信",
+        "ConcCount": 0,
+        "CommandEnv": "QuickLogin",
+        "Cron": null,
+        "FileName": "addCookie.js",
+        "TextToPicture": false,
+        "EnableRegex": true,
+        "FileCache": false,
+        "EnableConc": false,
+        "Enable": true,
+        "DayLimit": 0,
+        "EnablePush": true,
+        "PushGroup": false,
+        "EnableAll": false,
+        "EnableLog": true,
+        "Revocation": false,
+        "ConcEnvName": null,
+        "Manager": false,
+        "WaitTime": 0,
+        "CreateTime": "2022-09-20T12:23:25",
+        "TaskStatus": 0,
+        "TaskThreadId": null,
+        "TaskStartNotify": null,
+        "TaskEndNotify": null,
+        "Remark": null,
+        "TaskSubs": [
+            {
+                "Name": "手机号码",
+                "EnableRegex": true,
+                "Command": "^1[3|4|5|6|7|8|9][0-9]{9}$",
+                "Sort": 1,
+                "TaskId": "6a8946ac231940ec81b71912f5709923",
+                "CommandEnv": "NVJDCPhone",
+                "Revocation": false,
+                "WaitTime": 0,
+                "Remark": "",
+                "Id": "459da7799df9446a8dbf53ec98a4ba3f"
+            },
+            {
+                "Name": "验证码",
+                "EnableRegex": true,
+                "Command": "\\d{6}",
+                "Sort": 2,
+                "TaskId": "6a8946ac231940ec81b71912f5709923",
+                "CommandEnv": "NVJDCVerifyCode",
+                "Revocation": false,
+                "WaitTime": 0,
+                "Remark": "",
+                "Id": "da215ab19cdb45d5859bc3702ee5c0e0"
+            }
+        ],
+        "Id": "6a8946ac231940ec81b71912f5709923"
     }
 ]
