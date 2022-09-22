@@ -1646,5 +1646,35 @@
             }
         ],
         "Id": "6a8946ac231940ec81b71912f5709923"
+    },
+    {
+        "Name": "扭一扭",
+        "Command": "扭一扭",
+        "ConcCount": 0,
+        "CommandEnv": null,
+        "Cron": null,
+        "FileName": "nyn.js",
+        "TextToPicture": false,
+        "EnableRegex": false,
+        "FileCache": false,
+        "EnableConc": false,
+        "Enable": true,
+        "DayLimit": 0,
+        "EnablePush": true,
+        "PushGroup": false,
+        "EnableAll": false,
+        "EnableLog": true,
+        "Revocation": false,
+        "ConcEnvName": null,
+        "Manager": false,
+        "WaitTime": 0,
+        "CreateTime": "2022-09-22T17:29:29",
+        "TaskStatus": 0,
+        "TaskThreadId": null,
+        "TaskStartNotify": null,
+        "TaskEndNotify": null,
+        "Remark": null,
+        "TaskSubs": [],
+        "Id": "804064ff6a244ac191b08c692e9c5763"
     }
 ]
