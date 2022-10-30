@@ -2,27 +2,27 @@
 const got = require('got');
 
 //------------- 量子助手系统环境变量部分 -------------
-let serverAddres = process.env.serverAddres || 'http://localhost:5088/'; //服务地址
+let serverAddres = process.env.serverAddres; //服务地址
 let CommunicationType = process.env.CommunicationType; //通讯类型
 let CommunicationId = process.env.CommunicationId; //通讯工具ID
 
-let CommunicationUserId = process.env.CommunicationUserId; //用户通讯id，qq/wx
-let CommunicationUserName = process.env.CommunicationUserName; //用户昵称
-
-
-let TextToPicture = process.env.TextToPicture; // 是否文字转图片
-let user_id = process.env.user_id; //用户id
 let group_id = process.env.group_id; //群组ID
-let ManagerQQ = process.env.ManagerQQ; //管理员QQ
-let EnableConc = process.env.EnableConc == "True"; //是否开启并发
-let IsSystem = process.env.IsSystem == "true"; //是否系统执行。
-
+console.log(process.env.serverAddres);
+if (!process.env.serverAddres.endsWith("/")) {
+    serverAddres = serverAddres + "/";
+}
 const api = got.extend({
-    prefixUrl: serverAddres,
     retry: { limit: 0 },
+    hooks: {
+        beforeRequest: [
+            options => {
+                options.headers.Authorization = "Bearer " + process.env.QuantumAssistantTemporaryToken;
+            }
+        ]
+    }
 });
 
-console.log("脚本库更新时间：2022年9月9日");
+console.log("脚本库更新时间：2022年10月29日");
 
 /**
  * 
@@ -30,9 +30,8 @@ console.log("脚本库更新时间：2022年9月9日");
  * 
  * */
 async function getQLPanels() {
-
     const body = await api({
-        url: 'api/QLPanel',
+        url: serverAddres + 'api/QLPanel',
         headers: {
             Accept: 'text/plain',
         },
@@ -47,7 +46,7 @@ async function getQLPanels() {
  */
 async function getQLEnvs(ql, searchValue) {
     const body = await api({
-        url: 'api/qlPanel/envs/' + ql.Id,
+        url: serverAddres + 'api/qlPanel/envs/' + ql.Id,
         method: 'get',
         searchParams: {
             searchValue: searchValue,
@@ -67,7 +66,7 @@ async function getQLEnvs(ql, searchValue) {
  */
 async function deleteQLEnvs(ql, ids) {
     const body = await api({
-        url: 'api/qlPanel/envs/' + ql.Id,
+        url: serverAddres + 'api/qlPanel/envs/' + ql.Id,
         method: 'delete',
         body: JSON.stringify(ids),
         headers: {
@@ -84,7 +83,7 @@ async function deleteQLEnvs(ql, ids) {
  */
 async function addQLEnvs(ql, envs) {
     const body = await api({
-        url: 'api/qlPanel/envs/' + ql.Id,
+        url: serverAddres + 'api/qlPanel/envs/' + ql.Id,
         method: 'delete',
         body: JSON.stringify(envs),
         headers: {
@@ -94,13 +93,17 @@ async function addQLEnvs(ql, envs) {
     return body.Data.data;
 }
 
+module.exports.api = api;
 
 // 获取青龙面板信息
 module.exports.getQLPanels = getQLPanels;
 
+/**
+ * 获取当前用户的环境变量
+ * */
 module.exports.getCookies = async () => {
     var envs = await getEnvs("JD_COOKIE", "pt_key", 2, null);
-    console.log(`用户id：${user_id}`);
+    console.log(`用户id：${process.env.user_id}`);
     var cookies = [];
     var envCookies = [];
     if (process.env.JD_COOKIE) {
@@ -147,7 +150,7 @@ module.exports.getQLEnvs = getQLEnvs;
 // 同步环境变量
 module.exports.syncEnv = async () => {
     const body = await api({
-        url: 'api/env/sync',
+        url: serverAddres + 'api/env/sync',
         method: "get",
         headers: {
             Accept: 'text/plain',
@@ -164,7 +167,7 @@ module.exports.syncEnv = async () => {
  */
 module.exports.deleteQLEnvs = async (ql, ids) => {
     const body = await api({
-        url: 'api/qlPanel/envs/' + ql.Id,
+        url: serverAddres + 'api/qlPanel/envs/' + ql.Id,
         body: JSON.stringify(ids),
         method: 'delete',
         headers: {
@@ -182,7 +185,7 @@ module.exports.deleteQLEnvs = async (ql, ids) => {
 
 module.exports.addQLEnvs = async (ql, envs) => {
     const body = await api({
-        url: 'api/qlPanel/envs/' + ql.Id,
+        url: serverAddres + 'api/qlPanel/envs/' + ql.Id,
         body: JSON.stringify(envs),
         method: 'post'
     }).json();
@@ -196,7 +199,7 @@ module.exports.addQLEnvs = async (ql, envs) => {
  */
 module.exports.addEnvs = async (env) => {
     const body = await api({
-        url: 'api/env',
+        url: serverAddres + 'api/env',
         method: 'post',
         body: JSON.stringify(env),
         headers: {
@@ -214,7 +217,7 @@ module.exports.addEnvs = async (env) => {
 module.exports.disableEnvs = async (envs) => {
     if (envs && envs.length > 0) {
         const body = await api({
-            url: 'api/env/DisableEnvs',
+            url: serverAddres + 'api/env/DisableEnvs',
             method: 'put',
             body: JSON.stringify(envs),
             headers: {
@@ -237,7 +240,7 @@ module.exports.disableEnvs = async (envs) => {
  */
 module.exports.allEnvs = async (key, envType, enable, qlPanelId, userId) => {
     const body = await api({
-        url: 'api/env',
+        url: serverAddres + 'api/env',
         method: 'get',
         searchParams: {
             key: key,
@@ -253,12 +256,13 @@ module.exports.allEnvs = async (key, envType, enable, qlPanelId, userId) => {
             "Content-Type": "application/json-patch+json"
         },
     }).json();
+    console.log(body)
     return body.Data.Data;
 };
 
 async function getEnvs(name, key, envType, userId) {
     const body = await api({
-        url: 'api/env/Query',
+        url: serverAddres + 'api/env/Query',
         method: 'get',
         searchParams: {
             key: key,
@@ -295,7 +299,7 @@ async function getCustomData(type, startTime, endTime, dataQuery) {
     dataQuery.createTimeStart = startTime;
     dataQuery.createTimeEnd = endTime;
     const body = await api({
-        url: 'api/CustomData/' + type,
+        url: serverAddres + 'api/CustomData/' + type,
         method: 'get',
         searchParams: dataQuery,
         headers: {
@@ -309,7 +313,7 @@ async function getCustomData(type, startTime, endTime, dataQuery) {
 
 async function deleteCustomData(ids) {
     const body = await api({
-        url: `api/CustomData`,
+        url: serverAddres + `api/CustomData`,
         method: 'delete',
         body: JSON.stringify(ids),
         headers: {
@@ -322,7 +326,7 @@ async function deleteCustomData(ids) {
 
 async function updateCustomData(data) {
     const body = await api({
-        url: `api/CustomData`,
+        url: serverAddres + `api/CustomData`,
         method: 'put',
         body: JSON.stringify(data),
         headers: {
@@ -339,7 +343,7 @@ async function updateCustomData(data) {
  */
 async function addCustomData(data) {
     const body = await api({
-        url: `api/CustomData`,
+        url: serverAddres + `api/CustomData`,
         method: 'post',
         body: JSON.stringify(data),
         headers: {
@@ -353,7 +357,7 @@ async function addCustomData(data) {
 
 async function deleteEnvByIds(ids) {
     const body = await api({
-        url: `api/env/deletes`,
+        url: serverAddres + `api/env/deletes`,
         method: 'delete',
         body: JSON.stringify(ids),
         headers: {
@@ -369,26 +373,25 @@ async function deleteEnvByIds(ids) {
 /**
  * 发送通知消息
  * @param {*} content 发送消息内容 可以是 文本，
- * 或者 {msg:"",MessageType:1}  MessageType=1 即文本，2 为图片，如果是图片地址必须是完整的http 地址。 
+ * 或者 {msg:"",MessageType:1}  MessageType=1 即文本，2 为图片，3 为视频，如果是图片地址必须是完整的http 地址。 
  * 或者是[{msg:"",MessageType:1},{msg:"",MessageType:2}] 数组时，会根据通讯工具选择是否合并消息发送或者分开发送。 
  * @param {*} isManager 是否发送给管理员
  * @param {*} userId 指定发送给某人 （不@时传入字符串 NULL）
  * @param {*} groupId 发送到群 
- * @param {*} communicationType 
+ * @param {*} communicationType   QQ = 1,  公众号 = 2,  WxPusher = 3, VLW = 4, Web = 5
  * @returns 
  */
 async function sendNotify(content, isManager, userId, groupId, communicationType) {
-    var uuid = user_id;
-    if (isManager && !ManagerQQ) {
+    var uuid = process.env.user_id;
+    if (isManager && !process.env.ManagerQQ) {
         console.log(`消息内容：
 ${content}
 指定发送给管理员，但似乎没有配置管理员QQ？`);
         return;
     }
     if (isManager) {
-        uuid = ManagerQQ;
+        uuid = process.env.ManagerQQ;
     }
-
     if (communicationType) {
         CommunicationType = communicationType;
     } else {
@@ -412,7 +415,7 @@ ${content}
             title: "小助手通知",
             CommunicationType: CommunicationType,
             CommunicationId: CommunicationId,
-            TextToPicture: TextToPicture,
+            TextToPicture: process.env.TextToPicture,
             user_id: uuid,
             group_id: isManager ? "" : group_id
         };
@@ -454,7 +457,7 @@ ${content}
         for (var i = 0; i < bodys.length; i++) {
             var b = JSON.stringify(bodys[i]);
             const body = await api({
-                url: `api/Notifiy`,
+                url: serverAddres + `api/Notifiy`,
                 method: 'post',
                 body: b,
                 headers: {
@@ -537,7 +540,7 @@ module.exports.addCustomData = addCustomData;
  * */
 module.exports.getUserInfo = async () => {
     const body = await api({
-        url: 'api/User/' + user_id,
+        url: serverAddres + 'api/User/' + process.env.user_id,
         method: 'get',
         headers: {
             Accept: 'text/plain',
@@ -553,7 +556,7 @@ module.exports.getUserInfo = async () => {
  */
 module.exports.updateUserInfo = async (user) => {
     const body = await api({
-        url: 'api/User',
+        url: serverAddres + 'api/User',
         method: 'put',
         body: JSON.stringify(user),
         headers: {
@@ -569,7 +572,7 @@ module.exports.updateUserInfo = async (user) => {
  * */
 module.exports.getUser = async () => {
     const body = await api({
-        url: 'api/User',
+        url: serverAddres + 'api/User',
         method: 'get',
         searchParams: {
             PageIndex: 1,
@@ -590,7 +593,7 @@ module.exports.getUser = async () => {
  */
 module.exports.deleteUser = async (ids) => {
     const body = await api({
-        url: `api/User`,
+        url: serverAddres + `api/User`,
         method: 'delete',
         body: JSON.stringify(ids),
         headers: {
@@ -607,7 +610,7 @@ module.exports.deleteUser = async (ids) => {
  */
 module.exports.getCustomDataTitle = async (type) => {
     const body = await api({
-        url: 'api/CustomDataTitle/' + type,
+        url: serverAddres + 'api/CustomDataTitle/' + type,
         method: 'get',
         headers: {
             Accept: 'text/plain',
@@ -623,7 +626,7 @@ module.exports.getCustomDataTitle = async (type) => {
  */
 module.exports.addOrUpdateCustomDataTitle = async (data) => {
     const body = await api({
-        url: `api/CustomDataTitle`,
+        url: serverAddres + `api/CustomDataTitle`,
         method: 'post',
         body: JSON.stringify(data),
         headers: {
@@ -665,7 +668,7 @@ module.exports.uuid = function (len, radix, append) {
  */
 module.exports.set_group_whole_ban = async (groups, enable, notify) => {
     const body = await api({
-        url: `api/GroupManagement/set_group_whole_ban/${groups}/${enable}?notify=${notify}`,
+        url: serverAddres + `api/GroupManagement/set_group_whole_ban/${groups}/${enable}?notify=${notify}`,
         method: 'get',
         headers: {
             Accept: 'text/plain',
@@ -688,7 +691,7 @@ module.exports.qinglong = {
      */
     getTask: async function (taskName) {
         const body = await api({
-            url: `api/QLTask?Key=${taskName}&PageIndex=1&PageSize=999`,
+            url: serverAddres + `api/QLTask?Key=${taskName}&PageIndex=1&PageSize=999`,
             method: 'get',
             headers: {
                 "Content-Type": "application/json-patch+json"
@@ -702,7 +705,7 @@ module.exports.qinglong = {
      */
     runTask: async function (data) {
         const body = await api({
-            url: `api/QLTask/run`,
+            url: serverAddres + `api/QLTask/run`,
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
