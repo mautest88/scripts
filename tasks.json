@@ -1480,15 +1480,28 @@
         "ConcEnvName": null,
         "Manager": false,
         "WaitTime": 0,
-        "CreateTime": "2022-09-05T19:45:08",
+        "CreateTime": "2022-09-05T19:46:31",
         "TaskStatus": 0,
         "TaskThreadId": null,
         "TaskStartNotify": null,
         "TaskEndNotify": null,
         "Remark": null,
-        "TaskSubs": [],
-        "Id": "f7b4da23d5324114a1c4c825065cd2a7"
-    },
+        "TaskSubs": [
+            {
+                "Name": "密码",
+                "EnableRegex": true,
+                "Command": "^.{8,16}$",
+                "Sort": 1,
+                "TaskId": "736e6be3d2c84da7b8a481df6267da22",
+                "CommandEnv": "password",
+                "Revocation": false,
+                "WaitTime": 0,
+                "Remark": "",
+                "Id": "c3a8e5d42b464fbda85563e0c9ef99ab"
+            }
+        ],
+        "Id": "736e6be3d2c84da7b8a481df6267da22"
+    }
     {
         "Name": "生成随机密码",
         "Command": "随机密码",
