@@ -5,17 +5,11 @@
  * 
  */
 
-const got = require('got');
+const {
+    api
+} = require('./quantum');
 
 const moment = require('moment');
-
-
-let prefixUrl = process.env.serverAddres || 'http://localhost:5088';
-
-const api = got.extend({
-    prefixUrl: prefixUrl,
-    retry: { limit: 0 },
-});
 
 var day = process.env.DELETE_LOG_DAY || 3;
 try {
@@ -58,5 +52,3 @@ catch {
         console.log("删除日志返回结果：" + JSON.stringify(body));
     }
 })();
-
-

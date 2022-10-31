@@ -4,15 +4,10 @@
  * 
  * */
 
-const got = require('got');
 const {
-    sendNotify
+    sendNotify, api
 } = require('./quantum');
 
-const api = got.extend({
-    prefixUrl: process.env.serverAddres,
-    retry: { limit: 0 },
-});
 
 let user_id = process.env.user_id;
 let password = process.env.password
