@@ -11,6 +11,9 @@ console.log(process.env.serverAddres);
 if (!process.env.serverAddres.endsWith("/")) {
     serverAddres = serverAddres + "/";
 }
+
+
+module.exports.serverAddres = serverAddres;
 const api = got.extend({
     retry: { limit: 0 },
     hooks: {

@@ -5,7 +5,7 @@
  * */
 
 const {
-    sendNotify, api
+    sendNotify, api,serverAddres
 } = require('./quantum');
 
 
@@ -18,7 +18,7 @@ let password = process.env.password
         return;
     }
     var body = await api({
-        url: 'api/User/setPassword',
+        url: serverAddres+'api/User/setPassword',
         method: 'post',
         body: JSON.stringify({
             UserId: user_id,
