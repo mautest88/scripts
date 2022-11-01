@@ -1,13 +1,13 @@
 ﻿// 每日英语
 
 const got = require('got');
+const api = got.extend({
+    retry: { limit: 0 },
+});
 const {
     sendNotify
 } = require('./quantum');
 
-const api = got.extend({
-    retry: { limit: 0 },
-});
 
 !(async () => {
     await api({
@@ -21,4 +21,4 @@ const api = got.extend({
         var message = body.data.zh + "\n" + body.data.en;
         await sendNotify(message)
     });
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

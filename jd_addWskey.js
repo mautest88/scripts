@@ -75,7 +75,7 @@ let pin = '';
         console.log("开始处理提交JDCOOKIE：" + convertResult.data)
         await addOrUpdateJDCookie(convertResult.data, user_id, userInfo.data.userInfo.baseInfo.nickname);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
 
 /**
  * 添加或更新wskey 到自定义数据表中

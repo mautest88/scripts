@@ -34,4 +34,4 @@ var user_id = process.env.user_id;
     catch (e) {
         console.log(JSON.stringify(e))
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

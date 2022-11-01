@@ -30,4 +30,4 @@ const {
     } else {
         await sendNotify("没有可清理的用户。")
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

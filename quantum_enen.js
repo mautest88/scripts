@@ -25,4 +25,4 @@ const api = got.extend({
         }
         api(nm).then(async response => { });
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

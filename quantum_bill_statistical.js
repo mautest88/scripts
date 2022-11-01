@@ -52,4 +52,4 @@ let customeDataType = "quantum_bill";
         }
     }
     await sendNotify(command + "\n" + "\n收入：" + sr + "\n支出：" + zc);
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

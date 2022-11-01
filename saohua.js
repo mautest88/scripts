@@ -33,4 +33,4 @@ const api = got.extend({
         await sendNotify(message)
         console.log(message)
     });
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

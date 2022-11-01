@@ -93,4 +93,4 @@ const api = got.extend({
     } else {
         console.log(jdCookies.Message);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

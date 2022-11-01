@@ -44,5 +44,5 @@ let coupon_19_8_pin = process.env.coupon_19_8_pin;
             console.log(`未找到pt_pin为：${coupon_19_8_pins[i]}的JD_COOKIE`);
         }
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
 

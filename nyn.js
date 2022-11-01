@@ -19,4 +19,4 @@ const api = got.extend({
         console.log(body.video)
         await sendNotify({ msg: body.video, MessageType: 3 })
     });
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

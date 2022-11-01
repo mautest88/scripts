@@ -31,4 +31,4 @@ var message = process.env.OVERDUE_NOTIFY_MSG || "您的以下京东账号已经�
             await sendNotify(message + "\n" + ts[i].List.join(","), false, ts[i].UserId);
         }
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

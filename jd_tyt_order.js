@@ -25,8 +25,10 @@ let CommunicationUserName = process.env.CommunicationUserName;
 let ManagerQQ = process.env.ManagerQQ;
 let group_id = process.env.group_id; //群组ID
 let max_thread = (process.env.TYT_MAX_THREAD || 5) * 1; // 同时运行推一推的线程数量
-let kaka = group_id == "25323399674@chatroom";
-let kaka498 = group_id == "24987411342@chatroom";
+
+
+let tytCustomerDataType = "tyt_record";
+
 let status = 0;
 
 !(async () => {
@@ -37,33 +39,18 @@ let status = 0;
         console.log(tyt_url + "中未取到packetId");
         return;
     }
-
-    if (kaka || kaka498) {
-        if (moment().hours() > 2) {
-            return;
-        }
-        TYT_USE_SCORE = 0;
-    }
-
     var startTime = moment().format("YYYY-MM-DD")
     var endTime = moment().format("YYYY-MM-DD HH:mm:ss");
-    var ss = await getCustomData(customerDataType, startTime, endTime, {
-        Data6: kaka || kaka498 ? group_id : process.env.user_id
-    });
+    var ss = await getCustomData(customerDataType, startTime, endTime, { Data6: process.env.user_id });
 
-
-    if (ss.length > 120) {
-        return false;
-    }
-    if (ss.length == 120) {
-        await sendNotify("该群推一推已到达120单，不在自动推一推。")
-    }
     if (ss && ss.length > 0 && ss.filter((t) => t.Data1.indexOf(packetId) > -1).length > 0) {
         var msg = "重复的推一推任务，已自动跳过。";
         console.log(msg);
         await sendNotify(msg)
         return;
     }
+
+
     var m = "";
     if (TYT_USE_SCORE > 0) {
         user = await getUserInfo();
@@ -76,6 +63,16 @@ let status = 0;
         }
         m = `\n本次扣除${TYT_USE_SCORE}个积分。剩余积分：${user.MaxEnvCount}`;
     }
+
+
+    await addOrUpdateCustomDataTitle({
+        Type: tytCustomerDataType,
+        TypeName: "推一推JD_COOKIE记录",
+        Title1: "PIN",
+        Title2: "CK状态",
+        Title3: "更新时间",
+        Title4: "说明"
+    });
     await addOrUpdateCustomDataTitle({
         Type: customerDataType,
         TypeName: "推一推订单记录",
@@ -92,7 +89,7 @@ let status = 0;
         Data2: "未开始",
         Data3: CommunicationUserId,
         Data4: CommunicationUserName,
-        Data6: kaka ? group_id : process.env.user_id
+        Data6: process.env.user_id
     }
     var no = (ss.length + 1)
     tytOrder.Data5 = no;
@@ -105,7 +102,7 @@ let status = 0;
     console.log("cookie数量：" + cookies.length);
     var result = "";
     var packetId = tytOrder.Data1.match(/packetId=([^&]+)(?=&?)/)[1]
-    await sendNotify("开始推一推任务：" + tytOrder.Data5 + m + (kaka498 ? "，该任务只推到4.98。" : ""))
+    await sendNotify("开始推一推任务：" + tytOrder.Data5 + m)
 
     var currentTaskCount = 0;
 
@@ -131,6 +128,12 @@ let status = 0;
             if (!pt_pin) {
                 continue;
             }
+            var sss = await getCustomData(tytCustomerDataType, startTime, null, {
+                Data1: pt_pin
+            });
+            if (sss.length > 0) {
+                continue;
+            }
             ckStatus = 0;
             await help(packetId, c, cookie.Id);
             if (status == 1) {
@@ -145,17 +148,13 @@ let status = 0;
                 result = "任务编号：" + tytOrder.Data5 + "，推一推链接过期了。"
                 break;
             }
-            if (status == 498) {
-                result = "任务编号：" + tytOrder.Data5 + "，已推4.98。"
-                break;
-            }
         } catch (e) {
 
         }
         await sleep(3000 + (Math.floor((Math.random() * 1500) + 500)));
     }
     if (!result) {
-        result = "任务编号：" + tytOrder.Data5 + "，没有推完，CK已经跑完了！";
+        result = "任务编号：" + tytOrder.Data5 + "，推不完了！";
     }
     console.log(result);
     tytOrder.Data2 = result;
@@ -164,7 +163,7 @@ let status = 0;
     if (tytOrder.Data3 != ManagerQQ) {
         await sendNotify(result, false, process.env.user_id);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
 
 async function help(packetId, cookie, id) {
     const nm = {
@@ -183,16 +182,13 @@ async function help(packetId, cookie, id) {
                 if (data.success == true) {
                     amount = data.data.amount;
                     dismantledAmount = data.data.dismantledAmount;
-                    if (kaka498 && data.data.dismantledAmount == 4.98) {
-                        status = 498;
-                    }
                     console.log("助力成功：" + amount + "，已砍：" + dismantledAmount);
                 }
             }
-            // if (data.msg.indexOf("未登录") > -1 || data.msg.indexOf("火爆") > -1) {
-            //     console.log("");
-            //     //await deleteEnvByIds([id]);
-            // }
+            if (data.msg.indexOf("未登录") > -1 || data.msg.indexOf("火爆") > -1) {
+                //console.log("失效或者火爆，删除环境变量");
+                //await deleteEnvByIds([id]);
+            }
             if (data.msg.indexOf("完成") != -1) {
                 status = 1
             }
@@ -218,6 +214,7 @@ async function help(packetId, cookie, id) {
         ckStatus = 99;
     }
 }
+
 function safeGet(data) {
     try {
         if (typeof JSON.parse(data) == "object") {

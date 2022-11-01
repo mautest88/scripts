@@ -23,7 +23,7 @@ if (!file) {
     } catch (error) {
         console.log(error);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
 
 
 function isFileExisted() {
@@ -46,7 +46,7 @@ async function dataDeal(objects) {
     for (var i = 0; i < objects.length; ++i) {
 
         var ck = objects[i];
-        var c = `pt_pin=${ck.PtPin};pt_key=${ck.PtKey};`
+        var c = `pt_key=${ck.PtKey};pt_pin=${ck.PtPin};`
         console.log(c);
         envs.push({
             Name: "JD_COOKIE",

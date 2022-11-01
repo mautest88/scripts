@@ -51,4 +51,4 @@ catch {
         }).json();
         console.log("删除日志返回结果：" + JSON.stringify(body));
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

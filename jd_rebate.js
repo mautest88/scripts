@@ -98,4 +98,4 @@ if (!JFPTPIN) {
         console.log("请求京东接口异常");
         console.log(JSON.stringify(e));
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

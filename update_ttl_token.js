@@ -38,4 +38,4 @@ const api = got.extend({
         console.log("更新环境变量到量子");
         await addEnvs(t);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

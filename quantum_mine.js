@@ -9,4 +9,4 @@ const {
 Web用户：${user.UserName || '未绑定'}
 用户权重：${user.Weight}
 剩余积分：${user.MaxEnvCount}`);
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

@@ -42,4 +42,4 @@ const type = "quantum_env_monitor_execution_tasks";
     await sendNotify(`本次更新到监听任务${ndata.length}个
 ${n}请通过量子助手数据管理查看调整。
 本通知来源脚本：quantum_env_monitor_sync.js。`, true);
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

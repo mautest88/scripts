@@ -53,4 +53,4 @@ const api = got.extend({
             }
         }
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

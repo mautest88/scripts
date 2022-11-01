@@ -109,4 +109,4 @@ const api = got.extend({
     } else if (ttl) {
         sendNotify("请回复太太乐账号：");
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

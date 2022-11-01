@@ -9,7 +9,6 @@
  * 
  * 需要量子变量：
  * 
- * QUANTUM_AUTH_CODE  量子授权码，月卡每天可用转链服务3次，年可用10次，永久50次。
  * 
  * WB_USE_SCORE 挖宝需要多少积分 （整数）
  * 
@@ -28,8 +27,8 @@
  **/
 const got = require('got');
 var HttpsProxyAgent = require("https-proxy-agent");
-const http = require("http");
-const https = require("https");
+
+var CryptoJS = require('crypto-js');
 const {
     sendNotify, getUserInfo, updateUserInfo, addOrUpdateCustomDataTitle, addCustomData, getCustomData, sleep, getEnvs, updateCustomData, deleteEnvByIds
 } = require('./quantum');
@@ -47,7 +46,6 @@ let customerDataType = "wabao_order";
 let CommunicationUserId = process.env.CommunicationUserId;
 let CommunicationUserName = process.env.CommunicationUserName;
 let ManagerQQ = process.env.ManagerQQ;
-let QUANTUM_AUTH_CODE = process.env.QUANTUM_AUTH_CODE;
 let XM_PROXY = process.env.XM_PROXY;
 
 //最大助力次数
@@ -56,14 +54,13 @@ let count = 0;
 
 var xmProxy = null;
 var error = false;
-!(async () => {
-    if (!QUANTUM_AUTH_CODE) {
-        console.log("未指定QUANTUM_AUTH_CODE 量子变量。");
-        console.log("QUANTUM_AUTH_CODE变量值为你的量子授权码。");
-        console.log("量子授权码可以通过系统设置查看，或者管理员给机器人发“授权”。");
-        return;
-    }
+var appId = "63d78";
+var genKey = null;
+var token;
+var fp;
 
+
+!(async () => {
     var inviterId = wabao_url.match(/inviterId=([^&]+)(?=&?)/)[1]
     var inviterCode = wabao_url.match(/inviterCode=([^&]+)(?=&?)/)[1]
     console.log("inviterId：" + inviterId);
@@ -124,18 +121,13 @@ var error = false;
 
     var cookies = await getEnvs("JD_COOKIE", null, 2);
     if (cookies.length == 0) {
-        var message = "未提供JD_COOKIE 无法执行任务！"
+        var message = "未提供JD_COOKIE无法执行任务！"
         console.log(message);
         await sendNotify(message)
         return;
     }
-    var convertResult = await convertUrl(url);
-    if (convertResult && convertResult.success) {
-        wbOrder.Data1 = convertResult.data;
-    } else {
-        await sendNotify("挖宝转链失败：" + convertResult.data);
-        return;
-    }
+    await requestAlgo();
+    wbOrder.Data1 = `https://api.m.jd.com/?functionId=happyDigHelp&appid=activities_platform&client=H5&clientVersion=1.0.0&body={"linkId":"${ActivityId}","inviter":"${inviterId}","inviteCode":"${inviterCode}"}&t=1649865711362&h5st=` + geth5st();
     var sss = await addCustomData([wbOrder])
     wbOrder = sss[0];
     cookies = cookies.filter((t) => t.Enable).sort(function () {
@@ -240,39 +232,108 @@ var error = false;
     if (wbOrder.Data3 != ManagerQQ) {
         await sendNotify(result, false, process.env.user_id);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
 
-/**
- * 
- * 这里是调用我的挖宝转链服务。
- * 没有post任何CK信息，要黑，带节奏的请带上你全家的骨灰盒
- * 
- * @param {any} url
- */
-async function convertUrl(url) {
-    console.log("开始获取挖宝助力地址：");
-    var result = null;
-    try {
-        var options = {
-            'method': 'POST',
-            'url': 'http://47.107.105.249:8002/api/open/ConvertWabaoUrl',
-            'headers': {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "Url": url,
-                "AuthCode": QUANTUM_AUTH_CODE
-            })
-        };
-        var response = await api(options);
-        console.log("挖宝转链返回结果信息：");
-        console.log(response.body);
-        result = JSON.parse(response.body);
-    } catch (e) {
-        console.log("转链失败：");
-        console.log(JSON.stringify(e));
+
+
+async function requestAlgo() {
+    var s = "", a = "0123456789", u = a, c = (Math.random() * 10) | 0;
+    do {
+        ss = getRandomIDPro({ size: 1, customDict: a }) + ""
+        if (s.indexOf(ss) == -1) s += ss
+    } while (s.length < 3)
+    for (let i of s.slice()) u = u.replace(i, '')
+    fp = getRandomIDPro({ size: c, customDict: u }) + "" + s + getRandomIDPro({ size: (14 - (c + 3)) + 1, customDict: u }) + c + ""
+    let opts = {
+        url: `https://cactus.jd.com/request_algo?g_ty=ajax`,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            'Origin': 'https://prodev.m.jd.com',
+            'Referer': 'https://prodev.m.jd.com/'
+        },
+        method: "post",
+        body: `{"version":"3.0","fp":"${fp}","appId":"${appId}","timestamp":${Date.now()},"platform":"web","expandParams":""}`
     }
-    return result;
+    var response = await api(opts);
+    data = response.body;
+    const { data: { result } = {} } = JSON.parse(data);
+    token = result.tk
+    genKey = new Function(`return ${result.algo}`)();
+}
+
+function getRandomIDPro() {
+    var e,
+        t,
+        a = void 0 === (n = (t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}).size) ? 10 : n,
+        n = void 0 === (n = t.dictType) ? 'number' : n,
+        i = '';
+    if ((t = t.customDict) && 'string' == typeof t) e = t;
+    else
+        switch (n) {
+            case 'alphabet':
+                e = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                break;
+            case 'max':
+                e = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
+                break;
+            case 'number':
+            default:
+                e = '0123456789';
+        }
+
+    for (; a--;) i += e[(Math.random() * e.length) | 0];
+    return i;
+}
+
+
+function geth5st() {
+    let t = [{ "key": "City", "value": "City" }]
+    let a = t.map(function (e) {
+        return e["key"] + ":" + e["value"]
+    })
+    let time = Date.now()
+    let timestamp = format("yyyyMMddhhmmssSSS", time);
+    hash1 = genKey(token, fp.toString(), timestamp.toString(), appId.toString(), CryptoJS).toString();
+    const hash2 = CryptoJS.HmacSHA256(a, hash1.toString()).toString();
+    let h5st = ["".concat(timestamp.toString()), "".concat(fp.toString()), "".concat(appId.toString()), "".concat(token), "".concat(hash2), "3.0", "".concat(time)].join(";")
+    return h5st
+}
+
+function format(a, time) {
+    if (!a) a = 'yyyy-MM-dd';
+    var t;
+    if (!time) {
+        t = Date.now();
+    } else {
+        t = new Date(time);
+    }
+    var e,
+        n = new Date(t),
+        d = a,
+        l = {
+            'M+': n.getMonth() + 1,
+            'd+': n.getDate(),
+            'D+': n.getDate(),
+            'h+': n.getHours(),
+            'H+': n.getHours(),
+            'm+': n.getMinutes(),
+            's+': n.getSeconds(),
+            'w+': n.getDay(),
+            'q+': Math.floor((n.getMonth() + 3) / 3),
+            'S+': n.getMilliseconds(),
+        };
+    /(y+)/i.test(d) && (d = d.replace(RegExp.$1, ''.concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
+    Object.keys(l).forEach(e => {
+        if (new RegExp('('.concat(e, ')')).test(d)) {
+            var t,
+                a = 'S+' === e ? '000' : '00';
+            d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[e] : ''.concat(a).concat(l[e]).substr(''.concat(l[e]).length));
+        }
+    });
+    return d;
 }
 
 /**
@@ -305,7 +366,7 @@ async function getProxy() {
         xmProxy = result.obj[0];
     } else if (result.code == "-102") {
         console.log(result.msg)
-        await sleep(1000);
+        await sleep(1050);
         await getProxy();
     }
 }

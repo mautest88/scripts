@@ -71,4 +71,4 @@ ${error.name}
 ${error.code}`)
         console.log(error)
     });
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

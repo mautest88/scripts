@@ -63,4 +63,4 @@ let subscribe_params = process.env.subscribe_params;
 
 
 
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

@@ -69,4 +69,4 @@ const {
     console.log("初始化环境变量监控记录。");
 
     await sendNotify("初始化量子自定义数据标题标题信息完成\r该通知来源脚本：quantum_custom_data_title_init.js")
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

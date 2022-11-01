@@ -35,7 +35,7 @@ ${body.info.tip}`
                 sendNotify(city.split(" ")[1] + " 天气查询失败。")
             }
         });
-    })();
+    })().catch((e) => {console.log("脚本异常：" + e);});
 } else {
     sendNotify("天气查询指令：天气 北京。")
 }

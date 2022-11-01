@@ -42,4 +42,4 @@ var message = process.env.OVERDUE_DEL_NOTIFY_MSG || "您的以下京东账号已
     } else {
         await sendNotify("没有过期的账号。", true);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

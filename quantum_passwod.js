@@ -31,4 +31,4 @@ var custom_data_type = "quantum_password"
         await sendNotify("该密码不会被保存，请妥善保管。")
     }
     await sendNotify(nnn);
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

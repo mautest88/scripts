@@ -29,4 +29,4 @@ var command = process.env.command;
         message+=`\r${element.Data1}，密码：${element.Data2}，备注：${element.Data3}`;
     }
     await sendNotify(message);
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

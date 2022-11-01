@@ -71,4 +71,4 @@ var custom_data_type = "quantum_sn"
     } else {
         await sendNotify("请回复生成卡密个数：")
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

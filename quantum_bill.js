@@ -61,4 +61,4 @@ let customeDataType = "quantum_bill";
     }
     await addCustomData([info]);
     await sendNotify("记账成功！\n" + ChargeAccount + "\n今日统计，收入：" + sr + "，支出：" + zc);
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

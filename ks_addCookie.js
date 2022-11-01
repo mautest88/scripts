@@ -78,4 +78,4 @@ let command = process.env.command;
 	} else {
 		await sendNotify('提交失败！');
 	}
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

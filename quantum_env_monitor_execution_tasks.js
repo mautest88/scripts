@@ -29,7 +29,7 @@ const {
     syncEnvs
 } = require('./quantum_syncEnv');
 
-var command = process.env.command;
+var command = process.env.command+'"';
 var customType = "quantum_env_monitor_execution_tasks"
 
 /**
@@ -65,10 +65,6 @@ var runTask = null;
     var envs = [];
     var scriptName = "";
     console.log(`获取到【${tasks.length}】个环境变量触发任务，开始匹配信息。`)
-
-
-
-
     for (var i = 0; i < tasks.length; i++) {
         var task = tasks[i];
         if (!task.Data1 || !task.Data2 || !task.Data3) {
@@ -138,11 +134,11 @@ var runTask = null;
     var keyValueString = JSON.stringify(envKeyValue);
     console.log("开始检查历史执行记录。");
 
-    var records =await getCustomData(recordCustomType, null, null, {
+    var records = await getCustomData(recordCustomType, null, null, {
         Data4: keyValueString
     });
 
-    console.log("keyValueString：" + keyValueString +"，records："+JSON.stringify(records))
+    console.log("keyValueString：" + keyValueString + "，records：" + JSON.stringify(records))
 
     if (records.length > 0) {
         var tmsg = `线报：【${command}】
@@ -167,12 +163,12 @@ var runTask = null;
         Data5: command,
     }])
     if (tt.Running) {
-        await sendNotify(`【${scriptName}】正在执行中，任务加入执行队列！`,true);
+        await sendNotify(`【${scriptName}】正在执行中，任务加入执行队列！`, true);
         await WaitTask(scriptName, envs);
     } else {
         await RunTask(tt.runTasks, envs, tt.qlName);
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
 
 /**
  * 获取启用的任务
@@ -185,24 +181,23 @@ async function GetTasks() {
 
 async function isRunning(scriptName) {
     var QLTasks = await qinglong.getTask(scriptName);
-    console.log(`在【${QLTasks.Data[0].QLTasks.length}】个青龙中找到脚本任务：【${scriptName}】`);
     var running = false;
     var runTasks = [];
     var qlName = "";
     var notifyMessage = null;
-    if (QLTasks.Data.length == 0) {
+    if (!QLTasks.Data || QLTasks.Data.length == 0) {
         notifyMessage = `青龙面板中未找到脚本：【${scriptName}】`
         console.log(notifyMessage);
     } else {
+        console.log(`在【${QLTasks.Data[0].QLTasks.length}】个青龙中找到脚本任务：【${scriptName}】`);
         QLTasks = QLTasks.Data[0].QLTasks;
         for (var i = 0; i < QLTasks.length; i++) {
             qlName += QLTasks[i].QLName + "，";
             if (QLTasks[i].status == 0) {
                 if (awaitCount > enforceCount) {
-                    console.log(`【${QLTasks[i].QLName}】还在执行任务，等久了强制执行脚本：【${scriptName}】！`)
+                    console.log(`【${QLTasks[i].QLName}】还在执行任务，等了他妈这么久还没跑完，强制执行脚本：【${scriptName}】！`)
                 }
                 else {
-
                     console.log(`【${QLTasks[i].QLName}】正在执行脚本：【${scriptName}】！`)
                     running = true;
                     break;

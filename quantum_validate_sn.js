@@ -58,4 +58,4 @@ let CommunicationUserName = process.env.CommunicationUserName;
         console.log("更新用户信息失败了！");
         await sendNotify("更新剩余积分失败！");
     }
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});

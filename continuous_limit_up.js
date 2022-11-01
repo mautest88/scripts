@@ -71,4 +71,4 @@ var command = process.env.command;
             console.log(response.body);
         }
     });
-})();
+})().catch((e) => {console.log("脚本异常：" + e);});
