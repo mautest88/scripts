@@ -25,7 +25,7 @@ const api = got.extend({
     }
 });
 
-console.log("脚本库更新时间：2022年10月29日");
+console.log("脚本库更新时间：2022年11月02日");
 
 /**
  * 

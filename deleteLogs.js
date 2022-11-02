@@ -6,7 +6,7 @@
  */
 
 const {
-    api
+    api,serverAddres
 } = require('./quantum');
 
 const moment = require('moment');
@@ -22,7 +22,7 @@ catch {
     var start = "2022-01-01 1:00:00"
     var end = moment().add(-day, 'day').format('YYYY-MM-DD HH:00:00')
     const body = await api({
-        url: 'api/Logs',
+        url:serverAddres+ 'api/Logs',
         method: 'get',
         searchParams: {
             PageIndex: 1,
