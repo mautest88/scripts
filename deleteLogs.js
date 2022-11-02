@@ -6,7 +6,7 @@
  */
 
 const {
-    api,serverAddres
+    api, serverAddres
 } = require('./quantum');
 
 const moment = require('moment');
@@ -22,7 +22,7 @@ catch {
     var start = "2022-01-01 1:00:00"
     var end = moment().add(-day, 'day').format('YYYY-MM-DD HH:00:00')
     const body = await api({
-        url:serverAddres+ 'api/Logs',
+        url: serverAddres + 'api/Logs',
         method: 'get',
         searchParams: {
             PageIndex: 1,
@@ -42,7 +42,7 @@ catch {
     }
     if (logs.length > 0) {
         const body = await api({
-            url: 'api/logs',
+            url: serverAddres + 'api/logs',
             body: JSON.stringify(logIds),
             method: 'delete',
             headers: {
@@ -51,4 +51,4 @@ catch {
         }).json();
         console.log("删除日志返回结果：" + JSON.stringify(body));
     }
-})().catch((e) => {console.log("脚本异常：" + e);});
+})().catch((e) => { console.log("脚本异常：" + e); });

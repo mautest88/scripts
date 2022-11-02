@@ -7,12 +7,10 @@ let CommunicationType = process.env.CommunicationType; //通讯类型
 let CommunicationId = process.env.CommunicationId; //通讯工具ID
 
 let group_id = process.env.group_id; //群组ID
-console.log(process.env.serverAddres);
 if (!process.env.serverAddres.endsWith("/")) {
     serverAddres = serverAddres + "/";
 }
-
-
+console.log(process.env.serverAddres,"serverAddres");
 module.exports.serverAddres = serverAddres;
 const api = got.extend({
     retry: { limit: 0 },
