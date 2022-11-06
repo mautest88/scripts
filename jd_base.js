@@ -2,13 +2,6 @@
  * 京东基础方法脚本
  * */
 
-/**
- * 
- * 自动enen 旧ck，包含wskey 转 app_open 的
- * 
- * */
-const enen_old_jdCookie = !process.env.NO_CK_NOTIFY || process.env.enen_old_jdCookie != "false";
-
 const got = require('got');
 if (!process.env.NO_CK_NOTIFY) {
     process.env.NO_CK_NOTIFY = "您没有提交CK。请按照教程获取CK发送给机器人。";
@@ -77,12 +70,11 @@ module.exports.convertWskey = async (wskey) => {
                 data: body.data[0]
             }
         } else {
-            console.log("wskey 转换失败：" + data.msg);
+            console.log("wskey 转换失败，可能是黑IP了");
         }
     }
     catch (e) {
         console.log("wskey转换 app_open出现了异常！");
-        console.log(e);
     }
     return {
         success: false
@@ -141,11 +133,6 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
         c.QLPanelEnvs = data2[0].QLPanelEnvs;
         c.Remark = data2[0].Remark;
 
-
-        if (jdCookie != data2[0].Value && enen_old_jdCookie) {
-            //await enen(data2[0].Value);
-        }
-
         if (process.env.UPDATE_COOKIE_NOTIFY) {
             await sendNotify(`Cookie更新通知
 用户ID：${process.env.CommunicationUserId}
@@ -166,24 +153,59 @@ module.exports.addOrUpdateJDCookie = async (jdCookie, user_id, nickname) => {
     console.log("环境变量提交结果：" + JSON.stringify(data));
 }
 
+/**
+ * 京东口令
+ * @param {any} command
+ */
+module.exports.jCommand = async (command) => {
+    var result = null;
+    try {
+        var options = {
+            'method': 'POST',
+            'url': 'http://119.3.233.105:8080/JDSign/jCommand',
+            'headers': {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: JSON.stringify({
+                code: command
+            })
+        };
+        var response = await api(options);
+        console.log(`${command}
+解析结果：${response.body}`);
+        return JSON.parse(response.body);
+    } catch (e) {
+        console.log("转链失败：" + JSON.stringify(e));
+    }
+    return result;
+}
+
 
 /**
- * 注销登录
- * 
- * @param {any} jdCookie jdCookie
- */
-module.exports.enen = enen;
+ * 自定义卡密天数
+ * key 能不重复
+ * name 为提示标题
+ * value 为天数
+ * */
 
-async function enen(jdCookie) {
-    console.log("开始enen：" + jdCookie);
-    var options = {
-        url: `https://plogin.m.jd.com/cgi-bin/ml/mlogout?appid=300&returnurl=https%3A%2F%2Fm.jd.com%2F`,
-        headers: {
-            'authority': 'plogin.m.jd.com',
-            "User-Agent": "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
-            'cookie': jdCookie
-        }
-    }
-    await api(options);
-    console.log("enen 结束尝试查询是否失效：" + await islogin(jdCookie))
-}
+module.exports.sntypes = [{
+    "name": "1天",
+    "value": 1,
+    "key": "1"
+}, {
+    "name": "7天",
+    "value": 7,
+    "key": "2"
+}, {
+    "name": "1月",
+    "value": 30,
+    "key": "3"
+}, {
+    "name": "1年",
+    "value": 365,
+    "key": "4"
+}, {
+    "name": "永久",
+    "value": 99 * 365,
+    "key": "5"
+}];
